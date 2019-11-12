@@ -14,11 +14,11 @@ Class UserController extends CI_Controller{
 	}
 
 	function Login(){
-
+		$this->load->view('home_page');
 	}
 
 	function Register(){
-
+		$this->load->view('register');
 	}
 
 	function Tasks(){

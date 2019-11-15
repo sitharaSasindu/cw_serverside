@@ -1,5 +1,5 @@
 <?php
-include 'User.php';
+include 'user.php';
 
 class UserManager extends CI_Model{
 
@@ -7,11 +7,15 @@ class UserManager extends CI_Model{
 
 	}
 
-	function userRegistration($firstName, $lastName){
+	function userRegistration($firstName, $lastName, $email, $password, $musicGenres){
+//		$this->load->model('user');
+//		$userId = $this->User->getUserId();
+
+		$userActive = 0;
 		$this->load->database();
-		$data = array('firstName'=>$firstName, 'lastName' => $lastName, 'active' => 'false');
-		$this->db->insert('users', $data);
+		$userDetails = array('userId' => 42, 'firstName'=>$firstName, 'lastName' => $lastName, 'email' =>$email, 'password' => $password, 'musicGenre' => 1);
+		$this->db->insert('user', $userDetails);
 	}
 
-	fucntion
+
 }

@@ -6,69 +6,114 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-	<link rel="stylesheet" href="C:\xampp\htdocs\2016372\cw_serverside\application\views\css\main.css">
-
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
+	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+	<style>
+		.background {
+			background-image: url("<?php echo base_url('assets/image/login_back.jpg'); ?>");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment: fixed;
+			height: 100%;
+		}
+	</style>
 </head>
 <body>
+<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+	<div class="container"><a class="navbar-brand logo"><h1>Musically</h1></a>
+	</div>
+</nav>
 
-<div class="container">
-	<h1>Musically</h1>
-	<form class="form-horizontal" action="/2016372/cw_serverside/index.php/UserController/Login" method="post">
-		<div class="form-group">
-			<label class="control-label col-sm-2" >First Name</label>
-			<div class="col-sm-3">
-				<input type="text" class="form-control" id="firstName" placeholder="First Name" name="firstName">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="pwd">Last Name</label>
-			<div class="col-sm-3">
-				<input type="Text" class="form-control" id="lastName" placeholder="Last Name" name="lastName">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="email">Email</label>
-			<div class="col-sm-3">
-				<input type="email" class="form-control" id="email" placeholder="Enter Your Email" name="email">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="pwd">Password</label>
-			<div class="col-sm-3">
-				<input type="password" class="form-control" id="pwd" placeholder="Enter Password" name="password">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-sm-2" for="pwd">Verify Password</label>
-			<div class="col-sm-3">
-				<input type="password" class="form-control" id="pwdVerify" placeholder="Reenter Password" name="passwordVerify">
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-10">
-				<div class="dropdown">
-					<button class="dropbtn">Dropdown</button>
-					<div class="dropdown-content">
-						<a href="#">Link 1</a>
-						<a href="#">Link 2</a>
-						<a href="#">Link 3</a>
-					</div>
+<div class="background">
+	<div class="container">
+		<div class="row" style="margin-top: 62px">
+			<div class="col-lg-9"></div>
+			<div class="col-lg-3" style="background-color: white">
+				<div class="login-form">
+<!--					<div class="logo-container" align="center"><img-->
+<!--							src="--><?php //echo base_url('assets/image/logo1.jpg'); ?><!--" width="100" height="150">-->
+<!--					</div>-->
+					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/Login"
+						  method="post">
+						<div class="form-group">
+							<br> <span class="form-title">Sign Up<br><br></span>
+							<label class="label">First Name</label>
+							<div class="wrap-input">
+								<input id="firstName" class="input" type="text" name="firstName"
+									   placeholder="First Name">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="label">Last Name</label>
+							<div class="wrap-input">
+								<input type="text" class="input" name="lastName" id="lastName"
+									   placeholder="Last Name">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="label">email</label>
+							<div class="wrap-input">
+								<input type="email" class="input" name="email" id="email"
+									   placeholder="Email">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="label">password</label>
+							<div class="wrap-input">
+								<input type="Password" class="input" name="password" id="password"
+									   placeholder="Password">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="label">Verify password</label>
+							<div class="wrap-input">
+								<input type="Password" class="input" name="passwordVerify" id="passwordVerify"
+									   placeholder="Password">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+<!--						<div class="form-group">-->
+<!--							<div class="col-sm-offset-2 col-sm-10">-->
+<!--								<div class="dropdown">-->
+<!--									<button class="dropbtn">Dropdown</button>-->
+<!--									<div class="dropdown-content">-->
+<!--										<a href="#">Link 1</a>-->
+<!--										<a href="#">Link 2</a>-->
+<!--										<a href="#">Link 3</a>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+
+						<center>
+							<input type="submit" id="loginbtn" value="Sign Up"
+								   class="btn btn-xs btn-success btn-block">
+						</center>
+					</form>
+
 				</div>
 			</div>
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-10">
-				<div class="checkbox">
-					<label><input type="checkbox" name="remember">Remember me</label>
-				</div>
-			</div>
+			<!--		<div class="col-lg-1"></div>-->
 		</div>
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-10">
-				<button type="submit" class="btn btn-default">Submit</button>
-			</div>
-		</div>
-	</form>
+	</div>
 </div>
+
+
+<footer class="page-footer">
+	<div class="footer-copyright">
+		<p>© 2019 Copyright</p>
+	</div>
+</footer>
+
+
 </body>
 </html>

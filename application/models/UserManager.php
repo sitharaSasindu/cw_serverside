@@ -2,20 +2,23 @@
 include 'user.php';
 
 class UserManager extends CI_Model{
-
-	function genarateUserId(){
-
-	}
+	
 
 	function userRegistration($firstName, $lastName, $email, $password, $musicGenres){
 //		$this->load->model('user');
+//		$this->User->setUserId();
 //		$userId = $this->User->getUserId();
+//		$userActive = 0;
 
-		$userActive = 0;
-		$this->load->database();
-		$userDetails = array('userId' => 42, 'firstName'=>$firstName, 'lastName' => $lastName, 'email' =>$email, 'password' => $password, 'musicGenre' => 1);
-		$this->db->insert('user', $userDetails);
+		$userId = uniqid('usr', true);
+		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+		
+		$userDetails = array('userId' => $userId, 'firstName'=>$firstName, 'lastName' => $lastName, 'email' =>$email, 'password' => $hashedPassword, 'musicGenre' => 1);
+		$this->db->insert('users', $userDetails);
 	}
 
+	
+	
+	
 
 }

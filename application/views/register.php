@@ -34,10 +34,15 @@
 <!--					<div class="logo-container" align="center"><img-->
 <!--							src="--><?php //echo base_url('assets/image/logo1.jpg'); ?><!--" width="100" height="150">-->
 <!--					</div>-->
+
 					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/Login"
 						  method="post">
+
 						<div class="form-group">
 							<br> <span class="form-title">Sign Up<br><br></span>
+							<div class="alert alert-warning">
+								<?php echo validation_errors(); ?>
+							</div>
 							<label class="label">First Name</label>
 							<div class="wrap-input">
 								<input id="firstName" class="input" type="text" name="firstName"
@@ -82,22 +87,22 @@
 							</div>
 						</div>
 
-<!--						<div class="form-group">-->
-<!--							<div class="col-sm-offset-2 col-sm-10">-->
-<!--								<div class="dropdown">-->
-<!--									<button class="dropbtn">Dropdown</button>-->
-<!--									<div class="dropdown-content">-->
-<!--										<a href="#">Link 1</a>-->
-<!--										<a href="#">Link 2</a>-->
-<!--										<a href="#">Link 3</a>-->
-<!--									</div>-->
-<!--								</div>-->
-<!--							</div>-->
+						<div class="form-group">
+								<div class="dropdown">
+									<button class="dropbtn">Dropdown</button>
+									<div class="dropdown-content">
+										<a href="#">Link 1</a>
+										<a href="#">Link 2</a>
+										<a href="#">Link 3</a>
+									</div>
+							</div> 
+							<br>
 
+							<div class="form-group">
 						<center>
-							<input type="submit" id="loginbtn" value="Sign Up"
+						<br><input type="submit" id="loginbtn" value="Sign Up"
 								   class="btn btn-xs btn-success btn-block">
-						</center>
+						</center></div>
 					</form>
 
 				</div>

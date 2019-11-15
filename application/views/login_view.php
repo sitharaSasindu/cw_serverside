@@ -30,7 +30,7 @@
 		<div class="row" style="margin-top: 62px">
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
-				Not a Member<input type="button" id="signIn" value="Sign In"
+				Not a Member<input type="button" onclick="location.replace('Register')" id="signUp" value="Sign Up"
 					   class="btn btn-xs btn-block">
 				<div class="login-form">
 					<div class="logo-container" align="center"><img
@@ -40,6 +40,7 @@
 						  method="post">
 						<div class="form-group">
 
+						
 							<br> <span class="form-title">Sign In<br><br></span>
 							<div class="wrap-input">
 								<input id="email" class="input" type="email" name="email"
@@ -56,7 +57,7 @@
 							</div>
 						</div>
 
-						<div class="pw-reset"><a href="">Forget Password?</a></div><br>
+						<?php echo anchor('register', 'Forget Password'); ?>
 
 						<center>
 							<input type="button" id="loginbtn" value="Login"

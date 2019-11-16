@@ -10,10 +10,10 @@
 	<style>
 		.container {
 			background-image: url("<?php echo base_url('assets/image/login_back.jpg'); ?>");
-			/*background-position: center;*/
-			/*background-repeat: no-repeat;*/
-			/*background-size: cover;*/
-			/*background-attachment:fixed;*/
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment:fixed;
 		}
 	</style>
 </head>
@@ -21,7 +21,13 @@
 
 <div class="container">
 	<h1>Musically</h1>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	Not a Member<input type="submit" action="/2016372/cw_serverside/index.php/UserController/logout"
+					    id="signUp" value="Sign Up"
+					   class="btn btn-xs btn-block">
+
+	<form method="POST" action="/2016372/cw_serverside/index.php/UserController/logout">
+		<input type="submit" name="button1"  value="My Button">
+	</form>
 </div>
 </body>
 </html>

@@ -13,12 +13,25 @@ class UserManager extends CI_Model{
 		$userId = uniqid('usr', true);
 		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 		
-		$userDetails = array('userId' => $userId, 'firstName'=>$firstName, 'lastName' => $lastName, 'email' =>$email, 'password' => $hashedPassword, 'musicGenre' => 1);
+		$userDetails = array('userId' => $userId, 'firstName'=>$firstName, 'lastName' => $lastName, 'email' =>$email, 'password' => $password, 'musicGenre' => $musicGenres);
 		$this->db->insert('users', $userDetails);
 	}
 
-	
-	
-	
+
+	function __construct(){
+		parent::__construct();
+	}
+
+
+	function validate($email,$password){
+
+		$this->db->where('email',$email);
+		$pass = $this->db->where('password',$password);
+		if($pass == "S2e23ed3qfsssccccccs"){
+			$result = $this->db->get('users',1);
+			return $result;
+		}
+
+	}
 
 }

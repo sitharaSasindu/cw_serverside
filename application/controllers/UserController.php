@@ -7,28 +7,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Date: 10/26/2019
  * Time: 10:10 AM
  */
+
+
 Class UserController extends CI_Controller
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper('url');
-	}
+		$this->load->library('session');
+		$this->load->model('UserManager');
+//		if($this->session->userdata('logged_in') !== TRUE){
+//			redirect('home');
+		}
 
-	public function Index()
-	{
-		$this->load->view('login_view');
-
-
-	}
-
-	function ValidateRegistration()
-	{
-
-	}
-
-	function Login()
+	
+	
+	function Registration()
 	{
 		if ($this->input->post()) {
 			$rules = array(
@@ -57,7 +52,6 @@ Class UserController extends CI_Controller
 				)
 			);
 
-
 			$this->form_validation->set_rules('passwordVerify', 'Confirm Password', 'required|matches[password]');
 			$this->form_validation->set_rules($rules);
 
@@ -68,23 +62,17 @@ Class UserController extends CI_Controller
 				$lastName = $this->input->post('lastName');
 				$email = $this->input->post('email');
 				$password = $this->input->post('password');
-//				$musicGenres = $this->input->post('musicGenres');
+				$musicGenresUnedited = $this->input->post('selectedGenres');
+				$musicGenres = rtrim($musicGenresUnedited, ", ");
 
 				$this->load->model('UserManager', 'newUser');
-				$newUser = $this->newUser->userRegistration($firstName, $lastName, $email, $password, 23);
+				$newUser = $this->newUser->userRegistration($firstName, $lastName, $email, $password, $musicGenres);
+				$this->form_validation->set_message('AA', 'XXX');
 				$this->load->view('home_page');
-//				redirect(base_url('contacts'));
 			}
 		}
 	}
-
-
-	function Register()
-	{
-		$this->load->view('register');
-	}
-
-
+	
 	/**
 	 * Validate the password
 	 *
@@ -125,5 +113,52 @@ Class UserController extends CI_Controller
 		}
 	}
 
+
+
+//	public function Process(){
+//		// Load the model
+//		// Validate the user can login
+//		$result = $this->UserManager->validate();
+//		// Now we verify the result
+//
+//		if(! $result){
+////			$this->load->view('register');
+//			// If user did not validate, then show them login page again
+//			$msg = '<font color=red>Invalid username and/or password.</font><br />';
+//			$this->index($msg);
+//		}else{
+//			$this->load->view('home_page');
+//			// If user did validate,
+//			// Send them to members area
+////			redirect('home');
+//		}
+//	}
+
+	function auth(){
+		$email    = $this->input->post('email',TRUE);
+		$password = $this->input->post('password',TRUE);
+		$validate = $this->UserManager->validate($email,$password);
+		if($validate->num_rows() > 0){
+			$data  = $validate->row_array();
+			$firstName  = $data['firstName'];
+			$email = $data['email'];
+			$sessionData = array(
+				'firstName'  => $firstName,
+				'email'     => $email,
+				'logged_in' => TRUE
+			);
+			$this->session->set_userdata($sessionData);
+			$this->load->view('home_page');
+
+		}else{
+			echo $this->session->set_flashdata('msg','Username or Password is Wrong');
+			redirect('login');
+		}
+	}
+
+	function logout(){
+		$this->session->sess_destroy();
+		redirect('login');
+	}
 
 }

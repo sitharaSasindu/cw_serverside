@@ -18,8 +18,41 @@
 			height: 100%;
 		}
 	</style>
+	<script type="text/javascript">formValidateErrors
+		function hideAlertBoxes(){
+            var x = document.getElementById("genreBox");
+            var y = document.getElementById("formValidateErrors");
+                x.style.display = "none";
+			    y.style.display = "none";
+		}
+
+        function doSelect(el){
+            sel = el.options[el.selectedIndex].value;
+            // var select += sel;
+            if(sel == "-"){
+                alert("Please choose an option");
+            }
+            else{
+                var x = document.getElementById("genreBox");
+                // if (x.style.display === "none") {
+                    x.style.display = "block";
+                // } else {
+                //     x.style.display = "none";
+                // }
+				// var selectedd += sel;
+                // var node = document.createElement("Br");
+                // document.getElementById("selectedGenres").appendChild(node);
+                // var textnode = document.createTextNode("Water");         // Create a text node
+                // node.appendChild(textnode);                              // Append the text to <li>
+
+                // document.getElementById("selectedGenres").appendChild(textnode);
+                document.getElementById("selectedGenres").value += sel;
+                $('#selectedGenres').val($('#selectedGenres').val() + ', ');
+            }
+        }
+        </script>
 </head>
-<body>
+<body onload="hideAlertBoxes()">
 <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
 	<div class="container"><a class="navbar-brand logo"><h1>Musically</h1></a>
 	</div>
@@ -35,12 +68,13 @@
 <!--							src="--><?php //echo base_url('assets/image/logo1.jpg'); ?><!--" width="100" height="150">-->
 <!--					</div>-->
 
-					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/Login"
+					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/Registration"
 						  method="post">
 
 						<div class="form-group">
 							<br> <span class="form-title">Sign Up<br><br></span>
-							<div class="alert alert-warning">
+							<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 								<?php echo validation_errors(); ?>
 							</div>
 							<label class="label">First Name</label>
@@ -87,15 +121,36 @@
 							</div>
 						</div>
 
+<!--						<div class="form-group">-->
+<!--								<div class="dropdown">-->
+<!--									<button class="dropbtn">Dropdown</button>-->
+<!--									<div class="dropdown-content">-->
+<!--										<a href="#">Link 1</a>-->
+<!--										<a href="#">Link 2</a>-->
+<!--										<a href="#">Link 3</a>-->
+<!--									</div>-->
+<!--									<div class="alert alert-warning">-->
+<!--										--><?php //echo validation_errors(); ?>
+<!--									</div>-->
+<!--							</div>-->
+<!--						</div>-->
+
 						<div class="form-group">
-								<div class="dropdown">
-									<button class="dropbtn">Dropdown</button>
-									<div class="dropdown-content">
-										<a href="#">Link 1</a>
-										<a href="#">Link 2</a>
-										<a href="#">Link 3</a>
-									</div>
-							</div> 
+							<select class="dropbtn" name="select" id="mySelect" onchange="doSelect(this)">
+								<div class="dropdown-content">
+								<option value="-">Choose Your Genres</option>
+								<option value="Pop">Pop</option>
+								<option value="Jazz">Jazz</option>
+								<option value="Classic">Classic</option>
+								<option value="Hiphop">Hiphop</option>
+								</div>
+							</select>
+						<div class="alert alert-success alert-dismissible fade in" id="genreBox">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+							<input type="text" class="input" name="selectedGenres" id="selectedGenres" readonly><br>
+<!--							<label type="text" id="selectedGenres" name="selectedGenres"></label><br>-->
+						</div>
+						</div>
 							<br>
 
 							<div class="form-group">
@@ -107,7 +162,6 @@
 
 				</div>
 			</div>
-			<!--		<div class="col-lg-1"></div>-->
 		</div>
 	</div>
 </div>

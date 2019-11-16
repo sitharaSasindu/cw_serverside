@@ -30,17 +30,17 @@
 		<div class="row" style="margin-top: 62px">
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
-				Not a Member<input type="button" onclick="location.replace('Register')" id="signUp" value="Sign Up"
+				Not a Member<input type="button" onclick="location.replace('register')" id="signUp" value="Sign Up"
 					   class="btn btn-xs btn-block">
 				<div class="login-form">
 					<div class="logo-container" align="center"><img
 							src="<?php echo base_url('assets/image/logo1.jpg'); ?>" width="100" height="150">
 					</div>
-					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/Login"
+					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/auth"
 						  method="post">
 						<div class="form-group">
 
-						
+<!--							--><?php //if(! is_null($msg)) echo $msg;?>
 							<br> <span class="form-title">Sign In<br><br></span>
 							<div class="wrap-input">
 								<input id="email" class="input" type="email" name="email"
@@ -60,7 +60,7 @@
 						<?php echo anchor('register', 'Forget Password'); ?>
 
 						<center>
-							<input type="button" id="loginbtn" value="Login"
+							<input type="submit" id="loginbtn" value="Login"
 								   class="btn btn-xs btn-success btn-block">
 						</center>
 					</form>

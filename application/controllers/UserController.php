@@ -17,8 +17,6 @@ Class UserController extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->model('UserManager');
-//		if($this->session->userdata('logged_in') !== TRUE){
-//			redirect('home');
 		}
 
 	
@@ -141,9 +139,15 @@ Class UserController extends CI_Controller
 		if($validate->num_rows() > 0){
 			$data  = $validate->row_array();
 			$firstName  = $data['firstName'];
+			$lastName  = $data['lastName'];
+			$musicGenre  = $data['musicGenre'];
 			$email = $data['email'];
+			$userId = $data['userId'];
 			$sessionData = array(
+				'userId' => $userId,
 				'firstName'  => $firstName,
+				'lastName' => $lastName,
+				'musicGenre'=> $musicGenre,
 				'email'     => $email,
 				'logged_in' => TRUE
 			);

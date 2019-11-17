@@ -12,7 +12,7 @@ class PageController extends CI_Controller
 	public function LoggedIn()
 	{
 		if ($this->session->userdata('logged_in') == TRUE) {
-			return TRUE;
+			redirect('home');
 		} else {
 			return FALSE;
 		}
@@ -23,7 +23,7 @@ class PageController extends CI_Controller
 		if ($this->session->userdata('logged_in') == TRUE) {
 			redirect('home');
 		}else{
-		$this->load->view('login_view');
+			redirect('login');
 	}}
 
 	function HomePage()
@@ -46,11 +46,7 @@ class PageController extends CI_Controller
 
 	function Login()
 	{
-//		if ($this->session->userdata('logged_in') == TRUE) {
-//			redirect('home');
-//		} else {
 			$this->load->view('login_view');
-//		}
 	}
 
 

@@ -12,10 +12,28 @@
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 
 
-	<!--time line style-->
-	<style>
-
-	</style>
+	<script>
+        $(document).ready(function(){
+            $("#personal-info").submit(function(e){
+                e.preventDefault();
+                var title = $("#js_personal_title").val();;
+                var decs= $("#js_personal_desc").val();
+                $.ajax({
+                    type: "POST",
+                    url: '<?php echo base_url() ?>index.php/FriendsController/add_personal',
+                    data: {title:title,decs:decs},
+                    success:function(data)
+                    {
+                        alert('SUCCESS!!');
+                    },
+                    error:function()
+                    {
+                        alert('fail');
+                    }
+                });
+            });
+        });
+	</script>
 
 </head>
 <body>
@@ -48,19 +66,36 @@
 	<!--<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">-->
 	<!--	<div class="container"><a class="navbar-brand logo"><h1>Musically</h1></a>-->
 	<!--	</div>-->
-	<!--</nav>-->
-<?php foreach ($userList as $row) {
+	<!--</nav>--><h1>
+		<?php
 
-	echo $row->userId;
-	echo $row->firstName;
-}?>
+		foreach ($user as $row) {
+//
+//	print_r($row->fname);
+//	echo $row->lname;
+		}
+
+//		print_r($user[2][0]);
+
+		foreach ($user as $key => $item) {
+			 ?>
+			<?php echo ($user[$key][0][1]); ?> <?php	echo($user[$key][0][2]); ?><br>
+	<?php	} ?>
 
 
-
+	</h1>
 
 
 	<!--			</div>-->
 	<!--	</div>-->
+
+
+	<form action="" method="POST" id="personal-info" class="form-group">
+		<input class="form-control" type="text" id="js_personal_title" name="js_personal_title">
+		<input class="form-control" type="text" id="js_personal_desc" name="js_personal_desc">
+		<input id="submit-p" class="form-control" type="submit" value="Add">
+	</form>
+
 
 	<div class="page-footer">
 		© Copyright 2019. All Rights Reserved.

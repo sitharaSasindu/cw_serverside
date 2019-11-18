@@ -14,13 +14,13 @@ class FriendsManager extends CI_Model{
 
 		$query= $this->db->get('users');
 
-		$selected = [];
+		$selected = array();
 		foreach ($query->result() as $row)
 		{
 
 			if (strpos($row->musicGenre, $genre) !== false)
 			{
-				$selected[] = array($row->userId);
+				$selected[][] = array($row->userId, $row->firstName, $row->lastName);
 			}
 		}
 //		print_r($selected);
@@ -31,6 +31,6 @@ class FriendsManager extends CI_Model{
 
 
 
-
-
+//$selected[] = array($row->userId);
+//
 }

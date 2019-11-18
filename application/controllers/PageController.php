@@ -7,6 +7,7 @@ class PageController extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+
 	}
 
 	public function LoggedIn()
@@ -28,8 +29,11 @@ class PageController extends CI_Controller
 
 	function HomePage()
 	{
+
 		if ($this->session->userdata('logged_in') == TRUE) {
-			$this->load->view('home_page');
+			$this->load->model('PostManager', 'posts');
+			$data['post'] = $this->posts->getPosts();
+			$this->load->view('home_page', $data);
 		}else {
 			$this->load->view('login_view');
 		}
@@ -49,5 +53,8 @@ class PageController extends CI_Controller
 			$this->load->view('login_view');
 	}
 
+	function Friends(){
+		$this->load->view('friends');
+	}
 
 }

@@ -57,3 +57,4 @@ $route['register'] = 'PageController/Register';
 $route['loggedIn'] = 'PageController/LoggedIn';
 $route['home'] = 'PageController/HomePage';
 $route['login'] = 'PageController/Login';
+$route['friends'] = 'PageController/Friends';

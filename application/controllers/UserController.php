@@ -66,7 +66,7 @@ Class UserController extends CI_Controller
 				$this->load->model('UserManager', 'newUser');
 				$newUser = $this->newUser->userRegistration($firstName, $lastName, $email, $password, $musicGenres);
 				$this->form_validation->set_message('AA', 'XXX');
-				$this->load->view('home_page');
+				redirect('home');
 			}
 		}
 	}

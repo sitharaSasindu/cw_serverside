@@ -36,9 +36,15 @@
 
 
 	<div class="navbar" style="background-color: #999999">
-		<a class="active" href="#"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a class="active" href="#"><i class="fa fa-fw fa-home"></i> Home
+			<form method="POST" action="/2016372/cw_serverside/index.php/PageController/HomePage">
+				<input type="submit" name="button1" value="Friends">
+			</form></a></a>
 		<a href="#"><i class="fa fa-fw fa-search"></i> Search</a>
-		<a href="#"><i class="fa fa-fw fa-envelope"></i> Friends</a>
+		<a href="#"><i class="fa fa-fw fa-envelope"></i> Friends
+			<form method="POST" action="/2016372/cw_serverside/index.php/FriendsController/FindFriends">
+				<input type="submit" name="button1" value="Friends">
+			</form></a>
 		<a href="#"><i class="fa fa-fw fa-user"></i>
 			<form method="POST" action="/2016372/cw_serverside/index.php/UserController/logout">
 				<input type="submit" name="button1" value="Sign Out">
@@ -49,10 +55,7 @@
 			<button class="btn btn-success" type="submit">Search</button>
 		</form>
 	</div>
-	<!--<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">-->
-	<!--	<div class="container"><a class="navbar-brand logo"><h1>Musically</h1></a>-->
-	<!--	</div>-->
-	<!--</nav>-->
+
 
 	<div class="row">
 		<div class="col-md-9">
@@ -85,18 +88,28 @@
 
 
 	<div class="timeline-centered">
-		<?php foreach ($post as $row) {
-			$date = date('Y-m-d',strtotime($row->timestamp));
-			$time = date('H:i:s',strtotime($row->timestamp));
+		<?php
+
+		if(empty($currentUserPosts)) {
+echo "Start Posting";
+		}else{
+
+		foreach ($currentUserPosts as $row) {
+			$date = date('Y-m-d', strtotime($row->timestamp));
+			$time = date('H:i:s', strtotime($row->timestamp));
+
+
+
 			if ($row->counter % 2 == 0) {
 
-			?>
+				?>
 
-				<?php echo $date?>
+				<?php echo $date ?>
 				<article class="timeline-entry">
 
 					<div class="timeline-entry-inner">
-						<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time?></span> <span>	<?php echo $date?></span>
+						<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time ?></span>
+							<span>	<?php echo $date ?></span>
 						</time>
 
 						<div class="timeline-icon bg-success">
@@ -105,9 +118,12 @@
 
 						<div class="timeline-label">
 							<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
-							<p>Mohtashim is an MCA from AMU (Aligarah) and a Project Management Professional. He has more
-								than 17 years of experience in Telecom and Datacom industries covering complete SDLC. He is
-								managing in-house innovations, business planning, implementation, finance and the overall
+							<p>Mohtashim is an MCA from AMU (Aligarah) and a Project Management Professional. He has
+								more
+								than 17 years of experience in Telecom and Datacom industries covering complete SDLC. He
+								is
+								managing in-house innovations, business planning, implementation, finance and the
+								overall
 								business development of Tutorials Point.</p>
 						</div>
 					</div>
@@ -117,33 +133,37 @@
 			<?php } else { ?>
 
 
-		<article class="timeline-entry left-aligned">
+				<article class="timeline-entry left-aligned">
 
-			<div class="timeline-entry-inner">
-				<time class="timeline-time" datetime="2014-01-10T03:45"><span>03:45 AM</span> <span>Today</span>
-				</time>
+					<div class="timeline-entry-inner">
+						<time class="timeline-time" datetime="2014-01-10T03:45"><span>03:45 AM</span> <span>Today</span>
+						</time>
 
-				<div class="timeline-icon bg-warning">
-					<i class="entypo-camera"></i>
-				</div>
+						<div class="timeline-icon bg-warning">
+							<i class="entypo-camera"></i>
+						</div>
 
-				<div class="timeline-label">
-					<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile Picture</a></h2>
+						<div class="timeline-label">
+							<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile Picture</a>
+							</h2>
 
-					<blockquote>Gopal is an MCA from GJU (Hisar) and a Cisco Certified Network Professional. He has
-						more than 11 years of experience in core data networking and telecommunications. He develops
-						contents for Computer Science related subjects. He is also involved in developing Apps for
-						various Mobile devices.
-					</blockquote>
+							<blockquote>Gopal is an MCA from GJU (Hisar) and a Cisco Certified Network Professional. He
+								has
+								more than 11 years of experience in core data networking and telecommunications. He
+								develops
+								contents for Computer Science related subjects. He is also involved in developing Apps
+								for
+								various Mobile devices.
+							</blockquote>
 
-					<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
-						 class="img-responsive img-rounded full-width">
-				</div>
-			</div>
+							<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
+								 class="img-responsive img-rounded full-width">
+						</div>
+					</div>
 
-		</article>
-		<?php }
-			} ?>
+				</article>
+			<?php }
+		}	} ?>
 
 		<article class="timeline-entry begin">
 

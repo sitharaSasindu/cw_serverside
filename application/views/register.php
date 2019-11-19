@@ -18,41 +18,30 @@
 			height: 100%;
 		}
 	</style>
-	<script type="text/javascript">formValidateErrors
-		function hideAlertBoxes(){
+	<script type="text/javascript">
+        function hideAlertBoxes() {
             var x = document.getElementById("genreBox");
             var y = document.getElementById("formValidateErrors");
-                x.style.display = "none";
-			    y.style.display = "none";
-		}
+            x.style.display = "none";
+            y.style.display = "none";
+        }
 
-        function doSelect(el){
+        function doSelect(el) {
             sel = el.options[el.selectedIndex].value;
             // var select += sel;
-            if(sel == "-"){
+            if (sel == "-") {
                 alert("Please choose an option");
-            }
-            else{
+            } else {
                 var x = document.getElementById("genreBox");
                 // if (x.style.display === "none") {
-                    x.style.display = "block";
-                // } else {
-                //     x.style.display = "none";
-                // }
-				// var selectedd += sel;
-                // var node = document.createElement("Br");
-                // document.getElementById("selectedGenres").appendChild(node);
-                // var textnode = document.createTextNode("Water");         // Create a text node
-                // node.appendChild(textnode);                              // Append the text to <li>
-
-                // document.getElementById("selectedGenres").appendChild(textnode);
+                x.style.display = "block";
                 document.getElementById("selectedGenres").value += sel;
                 $('#selectedGenres').val($('#selectedGenres').val() + ', ');
             }
         }
-        </script>
+	</script>
 </head>
-<body onload="hideAlertBoxes()">
+<body>
 <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
 	<div class="container"><a class="navbar-brand logo"><h1>Musically</h1></a>
 	</div>
@@ -64,11 +53,14 @@
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
 				<div class="login-form">
-<!--					<div class="logo-container" align="center"><img-->
-<!--							src="--><?php //echo base_url('assets/image/logo1.jpg'); ?><!--" width="100" height="150">-->
-<!--					</div>-->
 
-					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/Registration"
+					<label class="label">Already a Member</label><input type="button"
+																		onclick="location.replace('login')"
+																		value="Sign Ip"
+																		class="btn btn-xs btn-success btn-block">
+
+					<form id="login" name="loginForm"
+						  action="/2016372/cw_serverside/index.php/UserController/Registration"
 						  method="post">
 
 						<div class="form-group">
@@ -121,43 +113,32 @@
 							</div>
 						</div>
 
-<!--						<div class="form-group">-->
-<!--								<div class="dropdown">-->
-<!--									<button class="dropbtn">Dropdown</button>-->
-<!--									<div class="dropdown-content">-->
-<!--										<a href="#">Link 1</a>-->
-<!--										<a href="#">Link 2</a>-->
-<!--										<a href="#">Link 3</a>-->
-<!--									</div>-->
-<!--									<div class="alert alert-warning">-->
-<!--										--><?php //echo validation_errors(); ?>
-<!--									</div>-->
-<!--							</div>-->
-<!--						</div>-->
-
 						<div class="form-group">
 							<select class="dropbtn" name="select" id="mySelect" onchange="doSelect(this)">
 								<div class="dropdown-content">
-								<option value="-">Choose Your Genres</option>
-								<option value="Pop">Pop</option>
-								<option value="Jazz">Jazz</option>
-								<option value="Classic">Classic</option>
-								<option value="Hiphop">Hiphop</option>
+									<option value="-">Choose Your Genres</option>
+									<option value="Pop">Pop</option>
+									<option value="Jazz">Jazz</option>
+									<option value="Classic">Classic</option>
+									<option value="Rock">Rock</option>
+									<option value="Electro">Electro</option>
+									<option value="Hiphop">Hiphop</option>
 								</div>
 							</select>
-						<div class="alert alert-success alert-dismissible fade in" id="genreBox">
-							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-							<input type="text" class="input" name="selectedGenres" id="selectedGenres" readonly><br>
-<!--							<label type="text" id="selectedGenres" name="selectedGenres"></label><br>-->
+							<div class="alert alert-success alert-dismissible fade in" id="genreBox">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<input type="text" class="input" name="selectedGenres" id="selectedGenres" readonly><br>
+								<!--							<label type="text" id="selectedGenres" name="selectedGenres"></label><br>-->
+							</div>
 						</div>
-						</div>
-							<br>
+						<br>
 
-							<div class="form-group">
-						<center>
-						<br><input type="submit" id="loginbtn" value="Sign Up"
-								   class="btn btn-xs btn-success btn-block">
-						</center></div>
+						<div class="form-group">
+							<center>
+								<br><input type="submit" id="loginbtn" value="Sign Up"
+										   class="btn btn-xs btn-success btn-block">
+							</center>
+						</div>
 					</form>
 
 				</div>

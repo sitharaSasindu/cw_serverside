@@ -8,7 +8,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Time: 10:10 AM
  */
 
-
 Class UserController extends CI_Controller
 {
 
@@ -19,8 +18,6 @@ Class UserController extends CI_Controller
 		$this->load->model('UserManager');
 		}
 
-	
-	
 	function Registration()
 	{
 		if ($this->input->post()) {
@@ -111,28 +108,7 @@ Class UserController extends CI_Controller
 		}
 	}
 
-
-
-//	public function Process(){
-//		// Load the model
-//		// Validate the user can login
-//		$result = $this->UserManager->validate();
-//		// Now we verify the result
-//
-//		if(! $result){
-////			$this->load->view('register');
-//			// If user did not validate, then show them login page again
-//			$msg = '<font color=red>Invalid username and/or password.</font><br />';
-//			$this->index($msg);
-//		}else{
-//			$this->load->view('home_page');
-//			// If user did validate,
-//			// Send them to members area
-////			redirect('home');
-//		}
-//	}
-
-	function auth(){
+	function CheckLogin(){
 		$email    = $this->input->post('email',TRUE);
 		$password = $this->input->post('password',TRUE);
 		$validate = $this->UserManager->validate($email,$password);

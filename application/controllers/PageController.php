@@ -23,19 +23,8 @@ class PageController extends CI_Controller
 	{
 		if ($this->session->userdata('logged_in') == TRUE) {
 			redirect('home');
-		}else{
+		} else {
 			redirect('login');
-	}}
-
-	function HomePage()
-	{
-
-		if ($this->session->userdata('logged_in') == TRUE) {
-			$this->load->model('PostManager', 'posts');
-			$data['post'] = $this->posts->getPosts();
-			$this->load->view('home_page', $data);
-		}else {
-			$this->load->view('login_view');
 		}
 	}
 
@@ -43,18 +32,18 @@ class PageController extends CI_Controller
 	{
 		if ($this->session->userdata('logged_in') == TRUE) {
 			redirect('home');
-		}else {
+		} else {
 			$this->load->view('register');
 		}
 	}
 
 	function Login()
 	{
+		if ($this->session->userdata('logged_in') == TRUE) {
+			redirect('home');
+		} else {
 			$this->load->view('login_view');
-	}
-
-	function Friends(){
-		$this->load->view('friends');
+		}
 	}
 
 }

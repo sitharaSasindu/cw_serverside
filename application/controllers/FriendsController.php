@@ -14,58 +14,45 @@ class FriendsController extends CI_Controller
 	function ShowUsersByGenre()
 	{
 		$genre = $this->input->post('genreSearch');
-		$data = $this->friendsManager->QueryUsersByGenre($genre);
+		$userListByGenre = $this->friendsManager->QueryUsersByGenre($genre);
+		$userListByGenre2 = $this->friendsManager->QueryUsersByGenre2($genre);
+		$followingsUserIds = $this->friendsManager->GetFollowings();
 
+//		print_r($followingsUserIds);
+//		print_r($userListByGenre2);
 
+		$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2,$followingsUserIds);
+		$sendData['userListByGenre'] = $userListByGenre;
 
-//		$count = count($data[0]);
-//
-//for($i=0; $i<=$count; $i++){
-//
-//}
-		$sendData['user'] = $data;
-//		print_r($sendData['user']);
+		print_r($sendData['alreadyFollowedUsers']);
 
-		$this->load->view('friends', $sendData);
+		$this->load->view('find_friends', $sendData);
 
 	}
 
-	function add_personal()
+	function followAUser()
 	{
-		$id = $this->uri->segment(3);
-		//im confusing this part
-//		$jid = $this->Jsprofile->get_jsid($id);
-		print_r($this->input->post('title'));
-echo "jjjj";
-		$data = array(
-			'js_personal_title' => $this->input->post('title'),
-			'js_personal_desc' => $this->input->post('decs'),
-			'tbl_jobseeker_jobseeker_id' => $id[0]['jobseeker_id'],
-			'tbl_jobseeker_tbl_user_u_id'=>$id
-		);
-		// echo json_encode($data);
+			$followedByUserId = $this->input->post('followedByUserId');
+			$currentLoggedUserId = $this->session->userdata('userId');
 
-		print_r($data);
-//		$this->db->insert('tbl_js_personal',$data);
+			$this->load->model('FriendsManager', 'newConnection');
+			$newConnection = $this->newConnection->AddConnection($currentLoggedUserId, $followedByUserId );
+	}
 
+	function FindFriends(){
+		$this->load->model('FriendsManager', 'friendsManager');
 
+		$data['friends'] = $this->friendsManager->FindFriends();
+		$data['followers'] = $this->friendsManager->GetFollowersNames();
+		$data['followings'] = $this->friendsManager->GetFollowingsNames();
 
+		$this->load->view('friends', $data);
+	}
 
-
-			$title = $this->input->post('userId');
-			$time = date('Y-m-d H:i:s');
-			$userId = $this->session->userdata('userId');
-
-			$this->load->model('PostManager', 'posts');
-			$data['results'] = $this->posts->getPosts();
-//			echo $data['results']->title;
-
-			$this->load->model('PostManager', 'newPost');
-			$newPost = $this->newPost->addNewPost($title, $time, $userId);
+	function CheckFollowing(){
 
 
 
 	}
-
 
 }

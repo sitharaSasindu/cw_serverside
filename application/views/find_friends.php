@@ -12,10 +12,35 @@
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 
 
-	<!--time line style-->
-	<style>
+	<script>
+        $(document).ready(function () {
+			<?php foreach ($userListByGenre as $key => $item) { ?>
+            var i;
+            // for(i=0; i<=1; i++){
+            console.log("<?php echo $key ?>");
+            $("#personal-info<?php echo $key?>").submit(function (e) {
+                console.log("<?php echo $key ?>");
+                e.preventDefault();
+                //var dec= $("#queriedUser<?php //echo $user[$key][0][1] ?>//").val();
+                var userId = "<?php echo $userListByGenre[$key][0] ?>";
+                console.log(userId);
+                $.ajax({
+                    type: "POST",
+                    url: '<?php echo base_url() ?>index.php/FriendsController/followAUser',
+                    data: {followedByUserId: userId},
+                    success: function (data) {
+                        alert('SUCCESS!!');
+                    },
+                    error: function () {
+                        alert('fail');
+                    }
+                });
+            });
 
-	</style>
+            // }
+			<?php } ?>
+        });
+	</script>
 
 </head>
 <body>
@@ -33,7 +58,6 @@
 			<p><?php echo $this->session->userdata('musicGenre'); ?></p>
 		</div>
 	</div>
-
 
 	<div class="navbar" style="background-color: #999999">
 		<a class="active" href="#"><i class="fa fa-fw fa-home"></i> Home
@@ -55,30 +79,34 @@
 			<button class="btn btn-success" type="submit">Search</button>
 		</form>
 	</div>
+	<h1>
+		<?php
 
-	<h1>Friends</h1>
-<?php
-	foreach ($friends as $key => $item) {
-		echo $friends[$key][0]; ?> <?php echo $friends[$key][1];
-	} ?>
+		foreach ($userListByGenre as $key => $item) {
+			if ($userListByGenre[$key][0] !== $this->session->userdata('userId')) {
+				?>
+				<div class="panel panel-default">
+					<div style="text-align: center;" class="panel-body">
+						<?php echo($userListByGenre[$key][1]); ?> <?php echo($userListByGenre[$key][2]); ?>
+						<?php echo "<form action='' method='POST' id='personal-info" . $key . "' class='form-group'>"; ?>
+
+					<?php	foreach ($userListByGenre as $key => $item) {
+//if(alreadyFollowedUsers)
+//						print_r($alreadyFollowedUsers);
+					}?>
+						<input id="submit-p" class="btn btn-outline-success"" type="submit" value="Follow"><br>
+
+						<?php echo "<input type='hidden' id='queriedUser" . $key . "' value='" . $userListByGenre[$key][1] . "'/>"; ?>
+
+					</div>
+				</div>
 
 
-	<br><br><h1>Followers</h1>
-	<?php
-	foreach ($followers as $key => $item) {
-		echo $followers[$key][0]; ?> <?php echo $followers[$key][1];
-	} ?>
+				</form>
+			<?php }
+		} ?>
 
-
-
-<br><br><h1>Followings</h1>
-	<?php
-	foreach ($followings as $key => $item) {
-		echo $followings[$key][0]; ?> <?php echo $followings[$key][1];?><br>
-<?php	} ?>
-
-
-
+	</h1>
 
 
 	<div class="page-footer">

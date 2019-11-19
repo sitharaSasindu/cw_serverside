@@ -18,6 +18,13 @@
 			height: 100%;
 		}
 	</style>
+	<script type="text/javascript">
+        function hideAlertBoxes() {
+            var y = document.getElementById("formValidateErrors");
+            y.style.display = "none";
+        }
+	</script>
+
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
@@ -30,18 +37,25 @@
 		<div class="row" style="margin-top: 62px">
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
-				Not a Member<input type="button" onclick="location.replace('register')" id="signUp" value="Sign Up"
-					   class="btn btn-xs btn-block">
+				<label class="label">Not a Member</label><input type="button" onclick="location.replace('register')"
+																id="signUp" value="Sign Up"
+																class="btn btn-xs btn-block">
 				<div class="login-form">
 					<div class="logo-container" align="center"><img
 							src="<?php echo base_url('assets/image/logo1.jpg'); ?>" width="100" height="150">
 					</div>
-					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/auth"
+					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
 						  method="post">
 						<div class="form-group">
 
-<!--							--><?php //if(! is_null($msg)) echo $msg;?>
+							<!--							--><?php //if(! is_null($msg)) echo $msg;?>
 							<br> <span class="form-title">Sign In<br><br></span>
+
+							<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
+								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<h4><?php echo $this->session->flashdata('msg'); ?></h4>
+							</div>
+
 							<div class="wrap-input">
 								<input id="email" class="input" type="email" name="email"
 									   placeholder="Email">
@@ -67,7 +81,6 @@
 
 				</div>
 			</div>
-			<!--		<div class="col-lg-1"></div>-->
 		</div>
 	</div>
 </div>

@@ -52,8 +52,7 @@ echo "jjjj";
 
 
 
-
-			$title = $this->input->post('title');
+			$title = $this->input->post('userId');
 			$time = date('Y-m-d H:i:s');
 			$userId = $this->session->userdata('userId');
 

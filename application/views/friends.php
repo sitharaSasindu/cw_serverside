@@ -14,24 +14,35 @@
 
 	<script>
         $(document).ready(function(){
-            $("#personal-info").submit(function(e){
-                e.preventDefault();
-                var title = $("#js_personal_title").val();;
-                var decs= $("#js_personal_desc").val();
-                $.ajax({
-                    type: "POST",
-                    url: '<?php echo base_url() ?>index.php/FriendsController/add_personal',
-                    data: {title:title,decs:decs},
-                    success:function(data)
-                    {
-                        alert('SUCCESS!!');
-                    },
-                    error:function()
-                    {
-                        alert('fail');
-                    }
+<?php foreach ($user as $key => $item) { ?>
+            var i;
+            // for(i=0; i<=1; i++){
+                console.log("<?php echo $key ?>");
+                $("#personal-info<?php echo $key?>").submit(function(e){
+                    console.log("<?php echo $key ?>");
+                    e.preventDefault();
+                    var title = $("#js_personal_title").val();;
+                    var decs= $("#js_personal_desc").val();
+                    //var dec= $("#queriedUser<?php //echo $user[$key][0][1] ?>//").val();
+                    var userId = "<?php echo $user[$key][0][1] ?>";
+                    console.log(userId);
+                    $.ajax({
+                        type: "POST",
+                        url: '<?php echo base_url() ?>index.php/FriendsController/add_personal',
+                        data: {userId:userId},
+                        success:function(data)
+                        {
+                            alert('SUCCESS!!');
+                        },
+                        error:function()
+                        {
+                            alert('fail');
+                        }
+                    });
                 });
-            });
+
+			// }
+<?php } ?>
         });
 	</script>
 
@@ -79,22 +90,41 @@
 
 		foreach ($user as $key => $item) {
 			 ?>
-			<?php echo ($user[$key][0][1]); ?> <?php	echo($user[$key][0][2]); ?><br>
+
+
+
+			<?php
+
+			echo ($user[$key][0][1]); ?> <?php	echo($user[$key][0][2]); ?><br>
+			<?php echo"<form action='' method='POST' id='personal-info".$key."' class='form-group'>"; ?>
+			<input class="form-control" type="text" id="js_personal_title" name="js_personal_title">
+			<input class="form-control" type="text" id="js_personal_desc" name="js_personal_desc">
+			<?php echo "<input type='hidden' id='queriedUser".$key."' value='".$user[$key][0][1]."'/>";?>
+			<!--			<input type="hidden" name="id_director" value="--><?//= $id ?><!--" />-->
+			<input id="submit-p" class="form-control" type="submit" value="Add">
+			</form>
+
+			personal-info[<?php echo $key?>]
+
 	<?php	} ?>
 
-
 	</h1>
-
+<!--	<form action="" method="POST" id="personal-info" class="form-group">-->
+<!--		<input class="form-control" type="text" id="js_personal_title" name="js_personal_title">-->
+<!--		<input class="form-control" type="text" id="js_personal_desc" name="js_personal_desc">-->
+<!--		<input id="submit-p" class="form-control" type="submit" value="Add">-->
+<!--	</form>-->
+<!--		<form action="" method="POST" id="personal-info1" class="form-group">-->
+<!--		<input class="form-control" type="text" id="js_personal_title" name="js_personal_title">-->
+<!--		<input class="form-control" type="text" id="js_personal_desc" name="js_personal_desc">-->
+<!--		<input id="submit-p" class="form-control" type="submit" value="Add">-->
+<!--	</form>-->
 
 	<!--			</div>-->
 	<!--	</div>-->
 
 
-	<form action="" method="POST" id="personal-info" class="form-group">
-		<input class="form-control" type="text" id="js_personal_title" name="js_personal_title">
-		<input class="form-control" type="text" id="js_personal_desc" name="js_personal_desc">
-		<input id="submit-p" class="form-control" type="submit" value="Add">
-	</form>
+
 
 
 	<div class="page-footer">

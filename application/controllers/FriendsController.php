@@ -18,12 +18,25 @@ class FriendsController extends CI_Controller
 		$userListByGenre2 = $this->friendsManager->QueryUsersByGenre2($genre);
 		$followingsUserIds = $this->friendsManager->GetFollowings();
 
-//		print_r($followingsUserIds);
-//		print_r($userListByGenre2);
+		print_r($followingsUserIds);
+		echo "KKKKKKK";
+		print_r($userListByGenre2);
 
-		$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2,$followingsUserIds);
+		if(empty(array_diff($followingsUserIds, $userListByGenre2))) {
+			if(!empty(array_diff($userListByGenre2, $followingsUserIds))) {
+				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
+			}
+		}else{
+			if(sizeof($userListByGenre2) >= sizeof($followingsUserIds)){
+				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
+			}else{
+				$sendData['alreadyFollowedUsers'] = array_diff($followingsUserIds, $userListByGenre2);
+			}
+		}
+
+//		$sendData['alreadyFollowedUsers'] = array_diff($followingsUserIds, $userListByGenre2);
 		$sendData['userListByGenre'] = $userListByGenre;
-
+		echo "KKKKKKK";
 		print_r($sendData['alreadyFollowedUsers']);
 
 		$this->load->view('find_friends', $sendData);

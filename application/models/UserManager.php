@@ -49,4 +49,12 @@ class UserManager extends CI_Model
 
 //	}
 
+function GetUserDetails($userId){
+	$this->db->where('userId', $userId);
+	$query = $this->db->get('users');
+	redirect('login');
+
+
+}
+
 }

@@ -36,29 +36,6 @@
 
             // }
 			<?php } ?>
-
-			<?php foreach ($userListByGenre as $key => $item) { ?>
-            $("#queriedUsers<?php echo $key?>").submit(function (e) {
-                console.log("<?php echo $key ?>");
-                e.preventDefault();
-                //var dec= $("#queriedUser<?php //echo $user[$key][0][1] ?>//").val();
-                var userId = "<?php echo $userListByGenre[$key][0] ?>";
-                console.log(userId);
-                $.ajax({
-                    type: "POST",
-                    url: '<?php echo base_url() ?>index.php/FriendsController/followAUser',
-                    data: {followedByUserId: userId},
-                    success: function (data) {
-                        alert('SUCCESS!!');
-                    },
-                    error: function () {
-                        alert('fail');
-                    }
-                });
-            });
-
-            // }
-			<?php } ?>
         });
 	</script>
 
@@ -111,10 +88,13 @@
 				<div class="panel panel-default">
 					<div style="text-align: center;" class="panel-body">
 
-						<?php echo "<form action='' method='POST' id='queriedUsers" . $key . "' class='form-group'>"; ?>
-						<a href="#" onclick="document.forms['queriedUsers'].submit();">
+						<form  action="/2016372/cw_serverside/index.php/PageController/RedirectToUserProfile" method="POST"  class='form-group'>
+<!--<!--						<a href="#" onclick="document.getElementById('queriedUsers').submit();">-->
+				<?php "<input type='hidden' name='userId' value='".$userListByGenre[$key][0]."' >"?>
+							<input id="submit-p" class="btn btn-outline-success"" type="submit" value="Followeee">
 						<?php echo($userListByGenre[$key][1]); ?> <?php echo($userListByGenre[$key][2]); ?>
-						</a></form>
+<!--<!--						</a>-->
+						</form>
 
 
 						<?php echo "<form action='' method='POST' id='personal-info" . $key . "' class='form-group'>"; ?>

@@ -13,14 +13,15 @@ class FriendsController extends CI_Controller
 
 	function ShowUsersByGenre()
 	{
+		$this->load->model('UserManager', 'aaa');
+		$ww = $this->aaa->GetUserDetails1();
+//		print_r($ww);
+		print_r($ww->getFirstName());
+
 		$genre = $this->input->post('genreSearch');
 		$userListByGenre = $this->friendsManager->QueryUsersByGenre($genre);
 		$userListByGenre2 = $this->friendsManager->QueryUsersByGenre2($genre);
 		$followingsUserIds = $this->friendsManager->GetFollowings();
-
-//		print_r($followingsUserIds);
-//		echo "KKKKKKK";
-//		print_r($userListByGenre2);
 
 		if(empty(array_diff($followingsUserIds, $userListByGenre2))) {
 			if(!empty(array_diff($userListByGenre2, $followingsUserIds))) {
@@ -34,11 +35,7 @@ class FriendsController extends CI_Controller
 			}
 		}
 
-//		$sendData['alreadyFollowedUsers'] = array_diff($followingsUserIds, $userListByGenre2);
 		$sendData['userListByGenre'] = $userListByGenre;
-//		echo "KKKKKKK";
-//		print_r($sendData['alreadyFollowedUsers']);
-
 		$this->load->view('find_friends', $sendData);
 
 	}
@@ -46,22 +43,13 @@ class FriendsController extends CI_Controller
 	function followAUser()
 	{
 			$followedByUserId = $this->input->post('followedByUserId');
-			echo $followedByUserId;
 			$currentLoggedUserId = $this->session->userdata('userId');
 
 			$this->load->model('FriendsManager', 'newConnection');
 			$newConnection = $this->newConnection->AddConnection($currentLoggedUserId, $followedByUserId );
 	}
 
-	function FindFriends(){
-		$this->load->model('FriendsManager', 'friendsManager');
 
-		$data['friends'] = $this->friendsManager->FindFriends();
-		$data['followers'] = $this->friendsManager->GetFollowersNames();
-		$data['followings'] = $this->friendsManager->GetFollowingsNames();
-
-		$this->load->view('friends', $data);
-	}
 
 	function CheckFollowing(){
 

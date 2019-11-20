@@ -26,6 +26,7 @@ class FriendsManager extends CI_Model
 
 	function QueryUsersByGenre2($genre)
 	{
+
 		$this->db->select('musicGenre, userId, lastName, firstName');
 		$query = $this->db->get('users');
 

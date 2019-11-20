@@ -8,7 +8,7 @@ class PageController extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Usermanager', 'userManager');
-
+		$this->load->model('FriendsManager', 'friendsManager');
 	}
 
 	public function LoggedIn()
@@ -76,6 +76,27 @@ class PageController extends CI_Controller
 			$this->load->view('login_view');
 		}
 
+	}
+
+	function FindFriends(){
+		$this->load->model('FriendsManager', 'friendsManager');
+
+		$data['friends'] = $this->friendsManager->FindFriends();
+		$data['followers'] = $this->friendsManager->GetFollowersNames();
+		$data['followings'] = $this->friendsManager->GetFollowingsNames();
+
+		$this->load->view('friends', $data);
+	}
+
+
+	function ShowFollowings(){
+		$data['followings'] = $this->friendsManager->GetFollowingsNames();
+		$this->load->view('followings_page', $data);
+	}
+
+	function ShowFollowers(){
+		$data['followers'] = $this->friendsManager->GetFollowersNames();
+		$this->load->view('followers_page', $data);
 	}
 
 

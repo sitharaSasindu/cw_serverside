@@ -31,15 +31,13 @@ class UserManager extends CI_Model
 
 		echo (password_verify($password, $result['password']));
 
-//echo $password;
-//echo $query;
 		echo "aaaa";
+		print_r(GetUserDetails1());
 		if((password_verify($password, $result['password']))){
-			echo "aaaa";
 
 		}
 
-		return $query;
+//		return $query;
 //		if ($result && password_verify($password, $aaa)) {
 //			print_r($result['password']);
 //		}
@@ -56,35 +54,23 @@ class UserManager extends CI_Model
 
 	}
 
-//	}
 
 function GetUserDetails($userId){
 	$this->db->where('userId', $userId);
 	$query = $this->db->get('users');
 
-
-//
-//	$userDetails = array();
-//	foreach ($query->result() as $row) {
-//
-//			$userDetails[] = array($row->userId, $row->firstName, $row->lastName, $row->musicGenre);
-//
-//	}
-//	print_r($userDetails);
 	return $query;
 }
 
-	function GetUserDetails1($userId){
-		$this->db->where('userId', $userId);
+	function GetUserDetails1(){
+		$currentLoggedUserId = $this->session->userdata('userId');
+		$this->db->where('userId', $currentLoggedUserId);
 		$query = $this->db->get('users');
 
-
-//
-//	$userDetails = array();
 	foreach ($query->result() as $row) {
-			$userDetails[] = new user($row->userId, $row->firstName, $row->lastName, $row->email, $row->password, $row->musicGenre);
+			$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->email, $row->password, $row->musicGenre);
 	}
-//	print_r($userDetails);
+
 		return $userDetails;
 	}
 

@@ -41,7 +41,7 @@
 				<input type="submit" name="button1" value="Friends">
 			</form></a></a>
 		<a href="#"><i class="fa fa-fw fa-search"></i> Search</a>
-		<a href="#"><i class="fa fa-fw fa-envelope"></i> Friends
+		<a href="/cw_w1654468/index.php/followings"><i class="fa fa-fw fa-envelope">Friends
 			<form method="POST" action="/2016372/cw_serverside/index.php/FriendsController/FindFriends">
 				<input type="submit" name="button1" value="Friends">
 			</form></a>

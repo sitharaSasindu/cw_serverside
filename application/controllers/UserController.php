@@ -7,7 +7,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Date: 10/26/2019
  * Time: 10:10 AM
  */
-
 Class UserController extends CI_Controller
 {
 
@@ -16,7 +15,7 @@ Class UserController extends CI_Controller
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->model('UserManager');
-		}
+	}
 
 	function Registration()
 	{
@@ -68,7 +67,7 @@ Class UserController extends CI_Controller
 			}
 		}
 	}
-	
+
 	/**
 	 * Validate the password
 	 *
@@ -109,35 +108,37 @@ Class UserController extends CI_Controller
 		}
 	}
 
-	function CheckLogin(){
-		$email    = $this->input->post('email',TRUE);
-		$password = $this->input->post('password',TRUE);
-		$validate = $this->UserManager->validate($email,$password);
-		if($validate->num_rows() > 0){
-			$data  = $validate->row_array();
-			$firstName  = $data['firstName'];
-			$lastName  = $data['lastName'];
-			$musicGenre  = $data['musicGenre'];
+	function CheckLogin()
+	{
+		$email = $this->input->post('email', TRUE);
+		$password = $this->input->post('password', TRUE);
+		$validate = $this->UserManager->validate($email, $password);
+		if ($validate->num_rows() > 0) {
+			$data = $validate->row_array();
+			$firstName = $data['firstName'];
+			$lastName = $data['lastName'];
+			$musicGenre = $data['musicGenre'];
 			$email = $data['email'];
 			$userId = $data['userId'];
 			$sessionData = array(
 				'userId' => $userId,
-				'firstName'  => $firstName,
+				'firstName' => $firstName,
 				'lastName' => $lastName,
-				'musicGenre'=> $musicGenre,
-				'email'     => $email,
+				'musicGenre' => $musicGenre,
+				'email' => $email,
 				'logged_in' => TRUE
 			);
 			$this->session->set_userdata($sessionData);
 //			$this->load->view('home_page');
-redirect('home');
-		}else{
-			echo $this->session->set_flashdata('msg','Username or Password is Wrong');
+			redirect('home');
+		} else {
+			echo $this->session->set_flashdata('msg', 'Username or Password is Wrong');
 			redirect('login');
 		}
 	}
 
-	function logout(){
+	function logout()
+	{
 		$this->session->sess_destroy();
 		redirect('login');
 	}

@@ -21,11 +21,6 @@ Class user extends CI_Model{
 	}
 	public function getUserId(){return $this->userId;}
 
-	public function setUserId($userId){
-		$userId = uniqid(usr, true);
-		$this->userId = $userId;
-	}
-
 	public function setActive($active){$this->active = $active;}
 
 	public function getFirstName(){return $this->firstName;}

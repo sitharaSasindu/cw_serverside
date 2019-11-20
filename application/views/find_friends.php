@@ -84,13 +84,14 @@
 
 		foreach ($userListByGenre as $key => $item) {
 			if ($userListByGenre[$key][0] !== $this->session->userdata('userId')) {
+				echo ($userListByGenre[$key][0]);
 				?>
 				<div class="panel panel-default">
 					<div style="text-align: center;" class="panel-body">
 
 						<form  action="/2016372/cw_serverside/index.php/PageController/RedirectToUserProfile" method="POST"  class='form-group'>
 <!--<!--						<a href="#" onclick="document.getElementById('queriedUsers').submit();">-->
-				<?php "<input type='hidden' name='userId' value='".$userListByGenre[$key][0]."' >"?>
+				<?php echo "<input type='hidden' name='userId' value='".$userListByGenre[$key][0]."' >"?>
 							<input id="submit-p" class="btn btn-outline-success"" type="submit" value="Followeee">
 						<?php echo($userListByGenre[$key][1]); ?> <?php echo($userListByGenre[$key][2]); ?>
 <!--<!--						</a>-->

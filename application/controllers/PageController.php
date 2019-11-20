@@ -48,39 +48,36 @@ class PageController extends CI_Controller
 	}
 
 	function RedirectToUserProfile(){
-//		$redirectToUserId = $this->input->post('redirectToUserId');
+		$redirectToUserId = $this->input->post('userId');
 
-//		$result = $this->userManager->GetUserDetails($redirectToUserId);
+		$result = $this->userManager->GetUserDetails($redirectToUserId);
 
+			$data  = $result->row_array();
+			$firstName  = $data['firstName'];
+			$lastName  = $data['lastName'];
+			$musicGenre  = $data['musicGenre'];
+			$userId = $data['userId'];
+			$redirectedUserSessionData = array(
+				'redirectedUsersUserId' => $userId,
+				'redirectedUsersFirstName'  => $firstName,
+				'redirectedUsersLastName' => $lastName,
+				'redirectedUsersMusicGenre'=> $musicGenre,
+				'redirectedUserSet' => TRUE
+			);
+			$this->session->set_userdata($redirectedUserSessionData);
 
+		$this->load->model('PostManager', 'posts');
 
-		redirect('login');
-//		echo $redirectToUserId;
-//		$email    = $this->input->post('email',TRUE);
-//		$password = $this->input->post('password',TRUE);
-//		$validate = $this->UserManager->validate($email,$password);
-//		if($validate->num_rows() > 0){
-//			$data  = $validate->row_array();
-//			$firstName  = $data['firstName'];
-//			$lastName  = $data['lastName'];
-//			$musicGenre  = $data['musicGenre'];
-//			$email = $data['email'];
-//			$userId = $data['userId'];
-//			$sessionData = array(
-//				'userId' => $userId,
-//				'firstName'  => $firstName,
-//				'lastName' => $lastName,
-//				'musicGenre'=> $musicGenre,
-//				'email'     => $email,
-//				'logged_in' => TRUE
-//			);
-//			$this->session->set_userdata($sessionData);
-//			$this->load->view('home_page');
-//
-//		}else{
-//			echo $this->session->set_flashdata('msg','Username or Password is Wrong');
-//			redirect('login');
-//		}
+		$currentUserId = $this->session->userdata('redirectedUsersUserId');
+		if ($this->session->userdata('redirectedUserSet') == TRUE) {
+			$data['currentUserPosts'] = $this->posts->getPosts($currentUserId);
+			$this->load->view('public_home_page', $data);
+		} else {
+			$this->load->view('login_view');
+		}
+
 	}
+
+
 
 }

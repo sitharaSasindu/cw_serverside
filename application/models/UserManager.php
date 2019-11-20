@@ -9,12 +9,12 @@ class UserManager extends CI_Model
 		parent::__construct();
 	}
 
-	function userRegistration($firstName, $lastName, $email, $password, $musicGenres)
+	function userRegistration($firstName, $lastName, $email, $password, $photoUrl, $musicGenres)
 	{
 		$userId = uniqid('usr', true);
 		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-		$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $password, 'musicGenre' => $musicGenres);
+		$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl, 'musicGenre' => $musicGenres);
 		$this->db->insert('users', $userDetails);
 	}
 
@@ -26,15 +26,24 @@ class UserManager extends CI_Model
 		$query = $this->db->get('users', 1);
 
 		$result = $query->row_array(); // get the row first
-		print_r($result['password']);
+//		print_r($result['password']);
 
-		$aaa = '$2y$10$drwta1FAeiArW';
-		echo(password_verify($password, $aaa));
 
-		if ($result && password_verify($password, $aaa)) {
-			print_r($result['password']);
+		echo (password_verify($password, $result['password']));
+
+//echo $password;
+//echo $query;
+		echo "aaaa";
+		if((password_verify($password, $result['password']))){
+			echo "aaaa";
+
 		}
+
 		return $query;
+//		if ($result && password_verify($password, $aaa)) {
+//			print_r($result['password']);
+//		}
+//		return $query;
 
 //		$userPass = $result->row();
 //		if(password_verify($password, $result->password)){
@@ -52,9 +61,31 @@ class UserManager extends CI_Model
 function GetUserDetails($userId){
 	$this->db->where('userId', $userId);
 	$query = $this->db->get('users');
-	redirect('login');
 
 
+//
+//	$userDetails = array();
+//	foreach ($query->result() as $row) {
+//
+//			$userDetails[] = array($row->userId, $row->firstName, $row->lastName, $row->musicGenre);
+//
+//	}
+//	print_r($userDetails);
+	return $query;
 }
+
+	function GetUserDetails1($userId){
+		$this->db->where('userId', $userId);
+		$query = $this->db->get('users');
+
+
+//
+//	$userDetails = array();
+	foreach ($query->result() as $row) {
+			$userDetails[] = new user($row->userId, $row->firstName, $row->lastName, $row->email, $row->password, $row->musicGenre);
+	}
+//	print_r($userDetails);
+		return $userDetails;
+	}
 
 }

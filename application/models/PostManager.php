@@ -12,6 +12,7 @@ class PostManager extends CI_Model
 
 	function getPosts($userId)
 	{
+
 		$this->db->where('userId', $userId);
 		$result = $this->db->get('posts');
 		if ($result->num_rows() == 0) {
@@ -32,58 +33,45 @@ class PostManager extends CI_Model
 
 
 
-	function getPosts2($userId)
+	function getAllPosts()
 	{
-		$this->db->where('userId', $userId);
+		$currentUserId = $this->session->userdata('userId');
+		$this->db->where('userId', $currentUserId);
 		$result = $this->db->get('posts');
-		if ($result->num_rows() == 0) {
-			return false;
-		}
-
-
-
-		$followers =array();
 		foreach ($result->result() as $row) {
-			$followers[] = $row->timestamp;
+				$currentUserPosts[] = array($row->userId,$row->title, $row->timestamp);
+	}
+
+
+		$this->load->model('PostManager', 'posts');
+		$this->load->model('FriendsManager', 'friendsManager');
+		$followingsUserId = $this->friendsManager->GetFollowings();
+
+
+		foreach ($followingsUserId as $key2 => $item) {
+			$this->db->where('userId', $followingsUserId[$key2]);
+			$result = $this->db->get('posts');
+			foreach ($result->result() as $row) {
+				$followingsUsersPosts[] = array($row->userId, $row->title, $row->timestamp);
+			}
 		}
 
-		print_r($followers);
 
-		usort($followers, 'date_compare');
+		$allPosts = array_merge($currentUserPosts,$followingsUsersPosts);
+		usort($allPosts, array($this, "date_compare"));
 
-//		print_r($result->result());
-		return $result;
+		print_r($allPosts);
 
-//		$fetchedPosts = array();
-//		$postDate = array();
-//		foreach ($result->result() as $row) {
-//			$fetchedPosts[] = $row->title;
-//			$postDate[] = $row->timestamp;
-//		}
+return $allPosts;
 
 
 	}
 
 	function date_compare($element1, $element2) {
-		$datetime1 = strtotime($element1['timestamp']);
-		$datetime2 = strtotime($element2['timestamp']);
+		$datetime1 = strtotime($element1['2']);
+		$datetime2 = strtotime($element2['2']);
 		return $datetime1 - $datetime2;
 	}
 
-	function GetFollowingsPosts(){
-		$this->load->model('PostManager', 'posts');
-		$this->load->model('FriendsManager', 'friendsManager');
-		$followingsUserId[] = $this->friendsManager->GetFollowings();
-//			print_r($data['followings'][1]);
-
-		$data = [];
-		foreach ($followingsUserId[0] as $key => $item) {
-			$data[] = $this->posts->getPosts($followingsUserId[0][$key]);
-
-//echo $key;
-		}
-//		print_r($data);
-		return $data;
-	}
 
 }

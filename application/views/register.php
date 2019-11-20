@@ -114,6 +114,15 @@
 						</div>
 
 						<div class="form-group">
+							<label class="label">Profile Photo Url</label>
+							<div class="wrap-input">
+								<input type="url" class="input" name="photoUrl" id="photoUrl"
+									   placeholder="Enter a Url to Update Your Profile Photo">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
 							<select class="dropbtn" name="select" id="mySelect" onchange="doSelect(this)">
 								<div class="dropdown-content">
 									<option value="-">Choose Your Genres</option>

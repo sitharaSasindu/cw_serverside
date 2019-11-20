@@ -58,10 +58,11 @@ Class UserController extends CI_Controller
 				$email = $this->input->post('email');
 				$password = $this->input->post('password');
 				$musicGenresUnedited = $this->input->post('selectedGenres');
+				$photoUrl = $this->input->post('photoUrl');
 				$musicGenres = rtrim($musicGenresUnedited, ", ");
 
 				$this->load->model('UserManager', 'newUser');
-				$newUser = $this->newUser->userRegistration($firstName, $lastName, $email, $password, $musicGenres);
+				$newUser = $this->newUser->userRegistration($firstName, $lastName, $email, $password, $photoUrl, $musicGenres);
 				$this->form_validation->set_message('AA', 'XXX');
 				redirect('home');
 			}
@@ -128,8 +129,8 @@ Class UserController extends CI_Controller
 				'logged_in' => TRUE
 			);
 			$this->session->set_userdata($sessionData);
-			$this->load->view('home_page');
-
+//			$this->load->view('home_page');
+redirect('home');
 		}else{
 			echo $this->session->set_flashdata('msg','Username or Password is Wrong');
 			redirect('login');

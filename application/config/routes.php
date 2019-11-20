@@ -55,7 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['register'] = 'PageController/Register';
 $route['loggedIn'] = 'PageController/LoggedIn';
-$route['home'] = 'HomePageController/showPublicHomePage';
+$route['publicHome'] = 'HomePageController/showPublicHomePage';
+$route['home'] = 'HomePageController/HomePage';
 $route['login'] = 'PageController/Login';
 $route['findFriends'] = 'HomePageController/FindFriends';
 $route['friends'] = 'HomePageController/Friends';

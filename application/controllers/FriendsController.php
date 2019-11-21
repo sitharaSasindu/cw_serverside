@@ -17,6 +17,7 @@ class FriendsController extends CI_Controller
 		$ww = $this->aaa->GetUserDetails1();
 //		print_r($ww);
 		print_r($ww->getFirstName());
+		$this->aaa->showGenreList()
 
 		$genre = $this->input->post('genreSearch');
 		$userListByGenre = $this->friendsManager->QueryUsersByGenre($genre);

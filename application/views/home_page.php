@@ -36,23 +36,15 @@
 
 
 	<div class="navbar" style="background-color: #999999">
-		<a class="active" href="#"><i class="fa fa-fw fa-home"></i> Home
-			<form method="POST" action="/2016372/cw_serverside/index.php/PageController/HomePage">
-				<input type="submit" name="button1" value="Friends">
-			</form></a></a>
-		<a href="#"><i class="fa fa-fw fa-search"></i> Search</a>
-		<a href="/cw_w1654468/index.php/followings"><i class="fa fa-fw fa-envelope">Friends
-			<form method="POST" action="/2016372/cw_serverside/index.php/FriendsController/FindFriends">
-				<input type="submit" name="button1" value="Friends">
-			</form></a>
-		<a href="#"><i class="fa fa-fw fa-user"></i>
-			<form method="POST" action="/2016372/cw_serverside/index.php/UserController/logout">
-				<input type="submit" name="button1" value="Sign Out">
-			</form>
-		</a>
-		<form class="form-inline" method="post" action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
-			<input class="form-control mr-sm-2" name="genreSearch" type="text"  placeholder="Search">
-			<button class="btn btn-success" type="submit">Search</button>
+		<a class="active" href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a href="/2016372/cw_serverside/index.php/findFriends"><i class="fa fa-fw fa-user"></i> Friends</a>
+		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
+		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
+		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+		<form class="form-inline" method="post"
+			  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
+			<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
+			<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
 		</form>
 	</div>
 

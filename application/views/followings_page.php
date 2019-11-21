@@ -37,28 +37,24 @@
 
 	<div class="navbar" style="background-color: #999999">
 		<a class="active" href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-		<a href="#"><i class="fa fa-fw fa-search"></i> Search</a>
 		<a href="/2016372/cw_serverside/index.php/findFriends"><i class="fa fa-fw fa-user"></i> Friends</a>
 		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
-		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>
-		</a>
-		<form class="form-inline" method="post" action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
-			<input class="form-control mr-sm-2" name="genreSearch" type="text"  placeholder="Search">
-			<button class="btn btn-success" type="submit">Search</button>
+		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+		<form class="form-inline" method="post"
+			  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
+			<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
+			<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
 		</form>
 	</div>
 
 
-
-	<br><br><h1>Followings</h1>
+	<br><br>
+	<h1>Followings</h1>
 	<?php
 	foreach ($followings as $key => $item) {
-		echo $followings[$key][0]; ?> <?php echo $followings[$key][1];?><br>
-	<?php	} ?>
-
-
-
+		echo $followings[$key][0]; ?><?php echo $followings[$key][1]; ?><br>
+	<?php } ?>
 
 
 	<div class="page-footer">

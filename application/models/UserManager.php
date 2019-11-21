@@ -1,5 +1,5 @@
 <?php
-include 'user.php';
+include 'User.php';
 
 class UserManager extends CI_Model
 {
@@ -12,10 +12,24 @@ class UserManager extends CI_Model
 	function userRegistration($firstName, $lastName, $email, $password, $photoUrl, $musicGenres)
 	{
 		$userId = uniqid('usr', true);
+		$genreId = uniqid('genre', true);
 		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-		$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl, 'musicGenre' => $musicGenres);
+		$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl);
 		$this->db->insert('users', $userDetails);
+
+
+	}
+
+	function showGenreList(){
+		$this->db->select('genreId, genreName');
+		$query = $this->db->get('genre');
+
+		foreach ($query->result() as $row) {
+			$genreList = new Genre($row->genreId, $row->genreName);
+		}
+
+		print_r($genreList);
 	}
 
 
@@ -29,19 +43,19 @@ class UserManager extends CI_Model
 //		print_r($result['password']);
 
 
-		echo (password_verify($password, $result['password']));
+//		echo (password_verify($password, $result['password']));
 
 		echo "aaaa";
-		print_r(GetUserDetails1());
-		if((password_verify($password, $result['password']))){
-
-		}
+//		print_r(GetUserDetails1());
+//		if((password_verify($password, $result['password']))){
+//
+//		}
 
 //		return $query;
 //		if ($result && password_verify($password, $aaa)) {
 //			print_r($result['password']);
 //		}
-//		return $query;
+		return $query;
 
 //		$userPass = $result->row();
 //		if(password_verify($password, $result->password)){
@@ -72,6 +86,19 @@ function GetUserDetails($userId){
 	}
 
 		return $userDetails;
+	}
+
+	function verifyPasswordHash($password, $hashedPassword){
+		if(password_verify($password, $hashedPassword)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function Login1($email, $password){
+
+//		$email = $this->
 	}
 
 }

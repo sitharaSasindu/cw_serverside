@@ -19,6 +19,7 @@ Class HomePageController extends CI_Controller
 		$this->load->view('friends');
 	}
 
+	//add new post
 	function NewPost()
 	{
 		if ($this->input->post()) {
@@ -26,14 +27,12 @@ Class HomePageController extends CI_Controller
 			$time = date('Y-m-d H:i:s');
 			$userId = $this->session->userdata('userId');
 
-			$this->load->model('PostManager', 'posts');
-			$data['results'] = $this->posts->getPosts();
-
 			$this->load->model('PostManager', 'newPost');
 			$newPost = $this->newPost->addNewPost($title, $time, $userId);
 			redirect('home');
 		}
 	}
+
 
 	function showPublicHomePage()
 	{
@@ -42,6 +41,7 @@ Class HomePageController extends CI_Controller
 
 			$currentUserId = $this->session->userdata('userId');
 			$data['currentUserPosts'] = $this->posts->getPosts($currentUserId);
+//			print_r($data);
 			$this->load->view('home_page', $data);
 		} else {
 			$this->load->view('login_view');

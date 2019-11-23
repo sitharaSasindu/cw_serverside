@@ -13,33 +13,32 @@
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 
 
-	<!--time line style-->
-	<style>
-
-	</style>
-
 </head>
 <body>
-
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
 		<img align="left" class="fb-image-lg"
-			 src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTfMhgAB_nzwLdNIpmxUz3YaWtkGhqi7QUkljzC_ogmqxT7b7VQ"
+			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"
 			 alt="Profile image example"/>
 		<img align="left" class="fb-image-profile thumbnail"
-			 src="http://www.tutorialspoint.com/about/images/mohtashim.jpg" alt="Profile image example"/>
+			 src="<?php echo $this->session->userdata('redirectedUsersAvatarUrl') ?>" alt="Profile image example"/>
 		<div class="fb-profile-text">
 			<h1><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
 				<?php echo $this->session->userdata('redirectedUsersLastName'); ?></h1>
-			<p><?php echo $this->session->userdata('redirectedUsersMusicGenre'); ?></p>
+			<p><?php
+				$favGenreList = $this->session->userdata('redirectedUsersMusicGenre');
+				foreach ($favGenreList as $key => $item){
+					echo $favGenreList[$key];
+					echo " ";
+				}
+				?></p>
 		</div>
 	</div>
 
-
 	<div class="navbar" style="background-color: #999999">
-		<a class="active" href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-		<a href="/2016372/cw_serverside/index.php/findFriends"><i class="fa fa-fw fa-user"></i> Friends</a>
-		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
+		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
+		<a class="active" href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
 		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
 		<form class="form-inline" method="post"
@@ -52,22 +51,16 @@
 
 	<div class="timeline-centered">
 		<?php
-
-		if(empty($currentUserPosts)) {
+		if(empty($redirectedUserPosts)) {
 echo "No Posts";
 		}else{
 
-		foreach ($currentUserPosts as $row) {
-			$date = date('Y-m-d', strtotime($row->timestamp));
-			$time = date('H:i:s', strtotime($row->timestamp));
+		foreach ($redirectedUserPosts as $key => $post) {
+			$date = date('Y-m-d', strtotime($post->getTimestamp()));
+			$time = date('H:i:s', strtotime($post->getTimestamp()));
 
+			if ($key % 2 == 0) { ?>
 
-
-			if ($row->counter % 2 == 0) {
-
-				?>
-
-				<?php echo $date ?>
 				<article class="timeline-entry">
 
 					<div class="timeline-entry-inner">
@@ -81,13 +74,7 @@ echo "No Posts";
 
 						<div class="timeline-label">
 							<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
-							<p>Mohtashim is an MCA from AMU (Aligarah) and a Project Management Professional. He has
-								more
-								than 17 years of experience in Telecom and Datacom industries covering complete SDLC. He
-								is
-								managing in-house innovations, business planning, implementation, finance and the
-								overall
-								business development of Tutorials Point.</p>
+							<p><?php echo $post->getPostBody()?></p>
 						</div>
 					</div>
 
@@ -109,16 +96,7 @@ echo "No Posts";
 						<div class="timeline-label">
 							<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile Picture</a>
 							</h2>
-
-							<blockquote>Gopal is an MCA from GJU (Hisar) and a Cisco Certified Network Professional. He
-								has
-								more than 11 years of experience in core data networking and telecommunications. He
-								develops
-								contents for Computer Science related subjects. He is also involved in developing Apps
-								for
-								various Mobile devices.
-							</blockquote>
-
+							<p><?php echo $post->getPostBody()?></p>
 							<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
 								 class="img-responsive img-rounded full-width">
 						</div>

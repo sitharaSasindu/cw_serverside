@@ -157,17 +157,17 @@ function AddSelectedGenres(){
 			$data = $validate->row_array();
 			$firstName = $data['firstName'];
 			$lastName = $data['lastName'];
-//			$musicGenre = $data['musicGenre'];
+			$avatarUrl = $data['photoUrl'];
 			$email = $data['email'];
 			$userId = $data['userId'];
-			$userfavGenres = $this->newUser->GetGenreNames($userId);
-			print_r($userfavGenres);
+			$userFavGenres = $this->newUser->GetFavGenreNames($userId);
 			$sessionData = array(
 				'userId' => $userId,
 				'firstName' => $firstName,
 				'lastName' => $lastName,
-//				'musicGenre' => $musicGenre,
+				'musicGenre' => $userFavGenres,
 				'email' => $email,
+				'avatarUrl' =>$avatarUrl,
 				'logged_in' => TRUE
 			);
 			$this->session->set_userdata($sessionData);

@@ -1,8 +1,9 @@
 <?php
-
-
+include 'Post.php';
 class PostManager extends CI_Model
 {
+
+	//add post to db
 	function addNewPost($title, $date, $userId){
 
 		$postId = uniqid('post', true);
@@ -12,24 +13,16 @@ class PostManager extends CI_Model
 
 	function getPosts($userId)
 	{
-
 		$this->db->where('userId', $userId);
-		$result = $this->db->get('posts');
-		if ($result->num_rows() == 0) {
-			return false;
+		$query = $this->db->get('posts');
+
+		$userPosts =array();
+		foreach ($query->result() as $row) {
+			$userPosts[] = new Post($row->userId, $row->postId, $row->title, $row->timestamp);
 		}
-//		print_r($result->result());
-			return $result->result();
-
-//		$fetchedPosts = array();
-//		$postDate = array();
-//		foreach ($result->result() as $row) {
-//			$fetchedPosts[] = $row->title;
-//			$postDate[] = $row->timestamp;
-//		}
-
-
+		return $userPosts;
 	}
+
 
 	function getAllPosts()
 	{

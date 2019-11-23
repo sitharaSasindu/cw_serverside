@@ -10,35 +10,39 @@ class FriendsManager extends CI_Model
 
 	function QueryUsersByGenre($genre)
 	{
-		$this->db->select('musicGenre, userId, lastName, firstName');
-		$query = $this->db->get('users');
+		$this->db->select('genreId, genreName');
+		$this->db->where('genreName', $genre);
+		$query = $this->db->get('genre');
+		$searchedGenreId = $query->row()->genreId;
 
-		$selected = array();
-		foreach ($query->result() as $row) {
+		$usersSelected = array();
+		$this->db->select('genreId, userId');
+$this->db->where('genreId', $searchedGenreId);
+		$query2 = $this->db->get('genre_connection');
 
-			if (strpos($row->musicGenre, $genre) !== false) {
-				$selected[] = array($row->userId, $row->firstName, $row->lastName);
-			}
+		foreach ($query2->result() as $row) {
+
+			$usersSelected[] = $row->userId;
 		}
-		return $selected;
+		return $usersSelected;
 	}
 
-
-	function QueryUsersByGenre2($genre)
-	{
-
-		$this->db->select('musicGenre, userId, lastName, firstName');
-		$query = $this->db->get('users');
-
-		$selected = array();
-		foreach ($query->result() as $row) {
-
-			if (strpos($row->musicGenre, $genre) !== false) {
-				$selected[] = $row->userId;
-			}
-		}
-		return $selected;
-	}
+//
+//	function GetUser($genre)
+//	{
+//
+//		$this->db->select('userId, lastName, firstName');
+//		$query = $this->db->get('users');
+//
+//		$selected = array();
+//		foreach ($query->result() as $row) {
+//
+//			if (strpos($row->musicGenre, $genre) !== false) {
+//				$selected[] = $row->userId;
+//			}
+//		}
+//		return $selected;
+//	}
 
 	function AddConnection($CurrentLoggedUserId, $followedByUserId)
 	{

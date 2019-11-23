@@ -9,34 +9,30 @@ class PublicHomePageController extends CI_Controller
 		parent::__construct();
 		$this->load->model('PostManager');
 		$this->load->model('FriendsManager', 'friendsManager');
+		$this->load->model('UserManager', 'userManager');
 	}
 
 
 	function RedirectToUserProfile()
 	{
 		$redirectToUserId = $this->input->post('userId');
-
+		print_r($redirectToUserId);
+		$this->load->model('UserManager', 'user');
 		$result = $this->userManager->GetUserDetails($redirectToUserId);
 
-		$data = $result->row_array();
-		$firstName = $data['firstName'];
-		$lastName = $data['lastName'];
-		$musicGenre = $data['musicGenre'];
-		$userId = $data['userId'];
 		$redirectedUserSessionData = array(
-			'redirectedUsersUserId' => $userId,
-			'redirectedUsersFirstName' => $firstName,
-			'redirectedUsersLastName' => $lastName,
-			'redirectedUsersMusicGenre' => $musicGenre,
+			'redirectedUsersUserId' => $redirectToUserId,
+			'redirectedUsersFirstName' => $result->getFirstName(),
+			'redirectedUsersLastName' => $result->getLastName(),
+			'redirectedUsersMusicGenre' => $this->user->GetFavGenreNames($redirectToUserId),
+			'redirectedUsersAvatarUrl' => $result->getProfilePhotoUrl(),
 			'redirectedUserSet' => TRUE
 		);
 		$this->session->set_userdata($redirectedUserSessionData);
-
 		$this->load->model('PostManager', 'posts');
 
-		$currentUserId = $this->session->userdata('redirectedUsersUserId');
 		if ($this->session->userdata('redirectedUserSet') == TRUE) {
-			$data['currentUserPosts'] = $this->posts->getPosts($currentUserId);
+			$data['redirectedUserPosts'] = $this->posts->getPosts($redirectToUserId);
 			$this->load->view('public_home_page', $data);
 		} else {
 			$this->load->view('login_view');

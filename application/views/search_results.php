@@ -13,29 +13,27 @@
 
 
 	<script>
-        $(document).ready(function () {
-			<?php foreach ($userListByGenre as $key => $item) { ?>
-            $("#personal-info<?php echo $key?>").submit(function (e) {
-                console.log("<?php echo $key ?>");
-                e.preventDefault();
-                //var dec= $("#queriedUser<?php //echo $user[$key][0][1] ?>//").val();
-                var userId = "<?php echo $userListByGenre[$key][0] ?>";
-                console.log(userId);
-                $.ajax({
-                    type: "POST",
-                    url: '<?php echo base_url() ?>index.php/FriendsController/followAUser',
-                    data: {followedByUserId: userId},
-                    success: function (data) {
-                        alert('SUCCESS!!');
-                    },
-                    error: function () {
-                        alert('fail');
-                    }
-                });
-            });
+         $(document).ready(function () {
+        	<?php foreach ($userListByGenre as $key => $item) { ?>
+             $("#personal-info<?php echo $key?>").submit(function (e) {
+                 console.log("<?php echo $key ?>");
+                 e.preventDefault();
+                 var userId = "<?php echo $item->getUserId() ?>";
+                 console.log(userId);
+                 $.ajax({
+                     type: "POST",
+                     url: '<?php echo base_url() ?>index.php/FriendsController/followAUser',
+                     data: {followedByUserId: userId},
+                     success: function (data) {
+                         alert('SUCCESS!!');
+                     },
+                     error: function () {
+                         alert('fail');
+                     }
+                 });
+             });
 
-            // }
-			<?php } ?>
+        	<?php } ?>
         });
 	</script>
 
@@ -45,20 +43,28 @@
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
 		<img align="left" class="fb-image-lg"
-			 src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTfMhgAB_nzwLdNIpmxUz3YaWtkGhqi7QUkljzC_ogmqxT7b7VQ"
+			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"
 			 alt="Profile image example"/>
 		<img align="left" class="fb-image-profile thumbnail"
-			 src="http://www.tutorialspoint.com/about/images/mohtashim.jpg" alt="Profile image example"/>
+			 src="<?php echo $this->session->userdata('avatarUrl') ?>" alt="Profile image example"/>
 		<div class="fb-profile-text">
 			<h1><?php echo $this->session->userdata('firstName'); ?>
 				<?php echo $this->session->userdata('lastName'); ?></h1>
-			<p><?php echo $this->session->userdata('musicGenre'); ?></p>
+			<p><?php
+				$favGenreList = $this->session->userdata('musicGenre');
+				foreach ($favGenreList as $key => $item) {
+					echo $favGenreList[$key];
+					echo " ";
+				}
+				?></p>
 		</div>
 	</div>
 
+
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-		<a href="/2016372/cw_serverside/index.php/findFriends"><i class="fa fa-fw fa-user"></i> Friends</a>
+		<a class="active" href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i>
+			Friends</a>
 		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
 		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
@@ -72,21 +78,18 @@
 	<h1>
 		<?php
 
-		foreach ($userListByGenre as $key => $item) {
-			if ($userListByGenre[$key][0] !== $this->session->userdata('userId')) {
-				echo ($userListByGenre[$key][0]);
-				?>
+		foreach ($userListByGenre as $key=> $user) {
+			if ($user->getUserId() !== $this->session->userdata('userId')) {
+			?>
 				<div class="panel panel-default">
 					<div style="text-align: center;" class="panel-body">
 
-						<form  action="/2016372/cw_serverside/index.php/PageController/RedirectToUserProfile" method="POST"  class='form-group'>
-<!--<!--						<a href="#" onclick="document.getElementById('queriedUsers').submit();">-->
-				<?php echo "<input type='hidden' name='userId' value='".$userListByGenre[$key][0]."' >"?>
+						<form action="/2016372/cw_serverside/index.php/PublicHomePageController/RedirectToUserProfile"
+							  method="POST" class='form-group'>
+							<?php echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
 							<input id="submit-p" class="btn btn-outline-success"" type="submit" value="Followeee">
-						<?php echo($userListByGenre[$key][1]); ?> <?php echo($userListByGenre[$key][2]); ?>
-<!--<!--						</a>-->
+							<?php echo($user->getFirstName()); ?> <?php echo($user->getLastName()); ?>
 						</form>
-
 
 						<?php echo "<form action='' method='POST' id='personal-info" . $key . "' class='form-group'>"; ?>
 						<?php
@@ -95,7 +98,7 @@
 						<?php } else {
 
 							foreach ($alreadyFollowedUsers as $key2 => $item) {
-								if ($alreadyFollowedUsers[$key2] === $userListByGenre[$key][0]) { ?>
+								if ($alreadyFollowedUsers[$key2] === $user->getUserId()) { ?>
 									<input id="submit-p" class="btn btn-outline-success"" type="submit" value="Follow">
 									<br>
 								<?php }
@@ -103,8 +106,7 @@
 						}
 						?>
 
-
-						<?php echo "<input type='hidden' id='queriedUser" . $key . "' value='" . $userListByGenre[$key][1] . "'/>"; ?>
+						<?php echo "<input type='hidden' id='queriedUser" . $key . "' value='" . $user->getFirstName() . "'/>"; ?>
 
 					</div>
 				</div>

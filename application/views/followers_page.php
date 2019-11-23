@@ -23,21 +23,27 @@
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
 		<img align="left" class="fb-image-lg"
-			 src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTfMhgAB_nzwLdNIpmxUz3YaWtkGhqi7QUkljzC_ogmqxT7b7VQ"
+			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"
 			 alt="Profile image example"/>
 		<img align="left" class="fb-image-profile thumbnail"
-			 src="http://www.tutorialspoint.com/about/images/mohtashim.jpg" alt="Profile image example"/>
+			 src="<?php echo $this->session->userdata('avatarUrl') ?>" alt="Profile image example"/>
 		<div class="fb-profile-text">
 			<h1><?php echo $this->session->userdata('firstName'); ?>
 				<?php echo $this->session->userdata('lastName'); ?></h1>
-			<p><?php echo $this->session->userdata('musicGenre'); ?></p>
+			<p><?php
+				$favGenreList = $this->session->userdata('musicGenre');
+				foreach ($favGenreList as $key => $item){
+					echo $favGenreList[$key];
+					echo " ";
+				}
+				?></p>
 		</div>
 	</div>
 
 
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-		<a href="/2016372/cw_serverside/index.php/findFriends"><i class="fa fa-fw fa-user"></i> Friends</a>
+		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
 		<a class="active" href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
 		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>

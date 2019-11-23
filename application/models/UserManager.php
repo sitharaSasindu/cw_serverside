@@ -29,9 +29,9 @@ class UserManager extends CI_Model
 			$this->db->insert('users', $userDetails);
 
 			foreach ($selectedGenre as $key => $item1) {
-					$userFavGenre = array('userId' =>$userId , 'genreId' => $selectedGenre[$key]);
-					$this->db->insert('genre_connection', $userFavGenre);
-				}
+				$userFavGenre = array('userId' => $userId, 'genreId' => $selectedGenre[$key]);
+				$this->db->insert('genre_connection', $userFavGenre);
+			}
 			return true;
 		}
 	}
@@ -50,40 +50,23 @@ class UserManager extends CI_Model
 		return $genreList;
 	}
 
-
-	function GetGenreNames($userId)
+//get selected users fav genres names
+	function GetFavGenreNames($userId)
 	{
 		$genreList = $this->ShowGenreList();
-		$this->db->select('genreId, userId');
 		$this->db->where('userId', $userId);
 		$query = $this->db->get('genre_connection');
 
-		$favGenreIdList = array();
-		foreach ($query->result() as $row){
-			$favGenreIdList = $row->genreName;
+		$favGenreNameList = array();
+		foreach ($query->result() as $row) {
+			foreach ($genreList as $item) {
+				if ($item->getGenreId() == $row->genreId) {
+					$favGenreNameList[] = $item->getGenreName();
+				}
+			}
 		}
-
-
-//		foreach($genreListSelected as $selected){
-//			foreach($genreListSelected as $key => $item1){
-//			print_r($selected[$key]);
-//			foreach ($genreList as $item) {
-////			print_r($item->getGenreName());
-////				print_r($genreListSelected);
-//
-//				if ($selected[$key] == $item->getGenreName() ) {
-//					$favGenreIdList[] = $item->getGenreId();
-//				}
-//			}
-//			}
-//		}
-
-
-		print_r($favGenreIdList);
-		return $favGenreIdList;
-
+		return $favGenreNameList;
 	}
-
 
 	//login validation
 	function validate($email, $password)
@@ -104,27 +87,34 @@ class UserManager extends CI_Model
 		}
 	}
 
+//get users by genres
+	function GetMultipleUserDetails($userId)
+	{
+		foreach ($userId as $key => $item) {
+			$this->db->where('userId', $userId[$key]);
+			$query = $this->db->get('users');
 
+			foreach ($query->result() as $row) {
+				$userDetails[] = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
+			}
+		}
+		return $userDetails;
+	}
+
+	///get one user detail for page redirect
 	function GetUserDetails($userId)
 	{
 		$this->db->where('userId', $userId);
 		$query = $this->db->get('users');
 
-		return $query;
-	}
-
-	function GetUserDetails1($userId)
-	{
-		$this->db->where('userId', $userId);
-		$query = $this->db->get('users');
-		$user = $query->row();
-
-//	foreach ($query->result() as $row) {
-		$userDetails = new user($user->userId, $user->firstName, $user->lastName, $user->photoUrl);
-//	}
-
+		$userDetails = array();
+		foreach ($query->result() as $row) {
+			$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
+		}
 		return $userDetails;
+
 	}
+
 
 	//verify login password
 	function verifyPasswordHash($password, $hashedPassword)

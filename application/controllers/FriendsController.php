@@ -11,35 +11,63 @@ class FriendsController extends CI_Controller
 		$this->load->model('FriendsManager', 'friendsManager');
 	}
 
-	function ShowUsersByGenre()
-	{
-		$this->load->model('UserManager', 'aaa');
-		$ww = $this->aaa->GetUserDetails1();
-//		print_r($ww);
-		print_r($ww->getFirstName());
-		$this->aaa->showGenreList()
+	function ShowFriends(){
+		$this->load->model('FriendsManager', 'friendsManager');
 
-		$genre = $this->input->post('genreSearch');
-		$userListByGenre = $this->friendsManager->QueryUsersByGenre($genre);
-		$userListByGenre2 = $this->friendsManager->QueryUsersByGenre2($genre);
-		$followingsUserIds = $this->friendsManager->GetFollowings();
-
-		if(empty(array_diff($followingsUserIds, $userListByGenre2))) {
-			if(!empty(array_diff($userListByGenre2, $followingsUserIds))) {
-				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
-			}
-		}else{
-			if(sizeof($userListByGenre2) >= sizeof($followingsUserIds)){
-				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
-			}else{
-				$sendData['alreadyFollowedUsers'] = array_diff($followingsUserIds, $userListByGenre2);
-			}
-		}
-
-		$sendData['userListByGenre'] = $userListByGenre;
-		$this->load->view('find_friends', $sendData);
-
+		$data['friends'] = $this->friendsManager->FindFriends();
+		$data['followers'] = $this->friendsManager->GetFollowersNames();
+		$data['followings'] = $this->friendsManager->GetFollowingsNames();
+		$this->load->view('friends', $data);
 	}
+
+	function ShowGenreListOnRegistration(){
+		$this->load->model('UserManager', 'user');
+		$genreList = $this->user->ShowGenreList();
+		print_r($genreList);
+
+		$this->load->view('register', $genreList);
+	}
+
+	function ShowFollowings(){
+		$this->ShowGenreListOnRegistration();
+		$data['followings'] = $this->friendsManager->GetFollowingsNames();
+		$this->load->view('followings_page', $data);
+	}
+
+	function ShowFollowers(){
+		$data['followers'] = $this->friendsManager->GetFollowersNames();
+		$this->load->view('followers_page', $data);
+	}
+	
+//	function ShowUsersByGenre()
+//	{
+//		$this->load->model('UserManager', 'aaa');
+//		$ww = $this->aaa->GetUserDetails1();
+////		print_r($ww);
+//		print_r($ww->getFirstName());
+//		$this->aaa->showGenreList()
+//
+//		$genre = $this->input->post('genreSearch');
+//		$userListByGenre = $this->friendsManager->QueryUsersByGenre($genre);
+//		$userListByGenre2 = $this->friendsManager->QueryUsersByGenre2($genre);
+//		$followingsUserIds = $this->friendsManager->GetFollowings();
+//
+//		if(empty(array_diff($followingsUserIds, $userListByGenre2))) {
+//			if(!empty(array_diff($userListByGenre2, $followingsUserIds))) {
+//				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
+//			}
+//		}else{
+//			if(sizeof($userListByGenre2) >= sizeof($followingsUserIds)){
+//				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
+//			}else{
+//				$sendData['alreadyFollowedUsers'] = array_diff($followingsUserIds, $userListByGenre2);
+//			}
+//		}
+//
+//		$sendData['userListByGenre'] = $userListByGenre;
+//		$this->load->view('find_friends', $sendData);
+//
+//	}
 
 	function followAUser()
 	{
@@ -52,10 +80,6 @@ class FriendsController extends CI_Controller
 
 
 
-	function CheckFollowing(){
 
-
-
-	}
 
 }

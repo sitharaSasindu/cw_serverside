@@ -14,13 +14,59 @@ Class UserController extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('session');
-		$this->load->model('UserManager');
+		$this->load->model('UserManager', 'newUser');
 	}
 
+	public function Index()
+	{
+		$this->load->view('register');
+	}
+
+//get genre list from table
+	function RegistrationView(){
+		$genreList = $this->newUser->ShowGenreList();
+		$musicGenreList =array(
+			'genre' => $genreList
+		);
+		$this->load->view('register', $musicGenreList);
+	}
+
+function AddSelectedGenres(){
+		$selectedGenreList = $this->input->post('selectedGenres');
+		print_r($selectedGenreList);
+		$userFavGenreIdList = $this->newUser->AddUserFavGenre($selectedGenreList);
+}
+
+
+
+
+//add registration data to database
 	function Registration()
 	{
 		if ($this->input->post()) {
-			$rules = array(
+			if ($this->RegistrationFormValidation()) {
+				$this->load->view('register');
+			} else {
+				$firstName = $this->input->post('firstName');
+				$lastName = $this->input->post('lastName');
+				$email = $this->input->post('email');
+				$password = $this->input->post('password');
+				$photoUrl = $this->input->post('photoUrl');
+				$selectedGenreList = $this->input->post('selectedGenres');
+
+				$this->newUser->UserRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenreList);
+//				$this->AddSelectedGenres();
+				redirect('login');
+			}
+		}
+	}
+
+
+
+	//register form validation rules
+	function RegistrationFormValidation()
+	{
+			$validationRules = array(
 				array(
 					'field' => 'firstName',
 					'label' => 'First Name',
@@ -43,29 +89,21 @@ Class UserController extends CI_Controller
 					'field' => 'password',
 					'label' => 'Password',
 					'rules' => 'callback_passwordValidation',
+				),
+				array(
+					'field' => 'photoUrl',
+					'label' => 'Avatar Url',
+					'rules' => 'required'
 				)
 			);
 
 			$this->form_validation->set_rules('passwordVerify', 'Confirm Password', 'required|matches[password]');
-			$this->form_validation->set_rules($rules);
-
-			if ($this->form_validation->run() == FALSE) {
-				$this->load->view('register');
-			} else {
-				$firstName = $this->input->post('firstName');
-				$lastName = $this->input->post('lastName');
-				$email = $this->input->post('email');
-				$password = $this->input->post('password');
-				$musicGenresUnedited = $this->input->post('selectedGenres');
-				$photoUrl = $this->input->post('photoUrl');
-				$musicGenres = rtrim($musicGenresUnedited, ", ");
-
-				$this->load->model('UserManager', 'newUser');
-				$newUser = $this->newUser->userRegistration($firstName, $lastName, $email, $password, $photoUrl, $musicGenres);
-				$this->form_validation->set_message('AA', 'XXX');
-				redirect('home');
+			$this->form_validation->set_rules($validationRules);
+			if ($this->form_validation->run() == False) {
+				return TRUE;
+			}else{
+				return FALSE;
 			}
-		}
 	}
 
 	/**
@@ -108,35 +146,40 @@ Class UserController extends CI_Controller
 		}
 	}
 
+
+//login function
 	function CheckLogin()
 	{
 		$email = $this->input->post('email', TRUE);
 		$password = $this->input->post('password', TRUE);
-		$validate = $this->UserManager->validate($email, $password);
-		if ($validate->num_rows() > 0) {
+		$validate = $this->newUser->validate($email, $password);
+		if ($validate) {
 			$data = $validate->row_array();
 			$firstName = $data['firstName'];
 			$lastName = $data['lastName'];
-			$musicGenre = $data['musicGenre'];
+//			$musicGenre = $data['musicGenre'];
 			$email = $data['email'];
 			$userId = $data['userId'];
+			$userfavGenres = $this->newUser->GetGenreNames($userId);
+			print_r($userfavGenres);
 			$sessionData = array(
 				'userId' => $userId,
 				'firstName' => $firstName,
 				'lastName' => $lastName,
-				'musicGenre' => $musicGenre,
+//				'musicGenre' => $musicGenre,
 				'email' => $email,
 				'logged_in' => TRUE
 			);
 			$this->session->set_userdata($sessionData);
-//			$this->load->view('home_page');
-			redirect('home');
+			$this->load->view('home_page');
+//			redirect('home');
 		} else {
 			echo $this->session->set_flashdata('msg', 'Username or Password is Wrong');
 			redirect('login');
 		}
 	}
 
+	//session destroy logout
 	function logout()
 	{
 		$this->session->sess_destroy();

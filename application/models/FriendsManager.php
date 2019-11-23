@@ -46,6 +46,7 @@ class FriendsManager extends CI_Model
 		$this->db->insert('connection', $newConnection);
 	}
 
+	//get friends user id list from follower snad followings and return friend list names
 	function FindFriends()
 	{
 		$friendsUserIds = array_intersect($this->GetFollowers(), $this->GetFollowings());
@@ -61,6 +62,7 @@ class FriendsManager extends CI_Model
 		return $friendsNames;
 	}
 
+	//get followers user ids and return array of user ids
 	function GetFollowers()
 	{
 		$currentLoggedUserId = $this->session->userdata('userId');
@@ -77,13 +79,14 @@ class FriendsManager extends CI_Model
 		return $followers;
 	}
 
+	//get followeings user ids from the connection table
 	function GetFollowings()
 	{
 		$currentLoggedUserId = $this->session->userdata('userId');
 		$this->db->select('user_follows, user');
 		$query = $this->db->get('connection');
 
-//		$followings = Array();
+		$followings = Array();
 		foreach ($query->result() as $row) {
 
 			if ($currentLoggedUserId === $row->user) {
@@ -93,6 +96,7 @@ class FriendsManager extends CI_Model
 		return $followings;
 	}
 
+	//get names of the followers from the user table
 	function GetFollowersNames(){
 		$followersUserIds = $this->GetFollowers();
 		$followersNames = array();
@@ -101,14 +105,13 @@ class FriendsManager extends CI_Model
 			$query = $this->db->get('users');
 
 			foreach ($query->result() as $row) {
-				$name = $row->firstName + $row->lastName;
 				$followersNames[] = array($row->firstName, $row->lastName);
 			}
 		}
 		return $followersNames;
 	}
 
-
+//get names of followings from user table
 	function GetFollowingsNames(){
 		$followingsUserIds = $this->GetFollowings();
 		$followingsNames = array();

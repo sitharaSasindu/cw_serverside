@@ -1,5 +1,6 @@
 <?php
 include 'User.php';
+include 'Genre.php';
 
 class UserManager extends CI_Model
 {
@@ -9,96 +10,131 @@ class UserManager extends CI_Model
 		parent::__construct();
 	}
 
-	function userRegistration($firstName, $lastName, $email, $password, $photoUrl, $musicGenres)
+	/*user registration insert data into user table
+	 * */
+	function UserRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenre)
 	{
-		$userId = uniqid('usr', true);
-		$genreId = uniqid('genre', true);
-		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+		$this->db->select('*');
+		$this->db->from('users');
+		$this->db->where('email', $email);
+		$query = $this->db->get();
 
-		$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl);
-		$this->db->insert('users', $userDetails);
+		if ($query->num_rows() > 0) {
+			return false;
+		} else {
+			$userId = uniqid('usr', true);
+			$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+			$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl);
+			$this->db->insert('users', $userDetails);
 
+			foreach ($selectedGenre as $key => $item1) {
+					$userFavGenre = array('userId' =>$userId , 'genreId' => $selectedGenre[$key]);
+					$this->db->insert('genre_connection', $userFavGenre);
+				}
+			return true;
+		}
 	}
 
-	function showGenreList(){
+
+//get genrelist from the genre table on register page
+	function ShowGenreList()
+	{
 		$this->db->select('genreId, genreName');
 		$query = $this->db->get('genre');
 
+		$genreList = array();
 		foreach ($query->result() as $row) {
-			$genreList = new Genre($row->genreId, $row->genreName);
+			$genreList[] = new Genre($row->genreId, $row->genreName);
 		}
-
-		print_r($genreList);
+		return $genreList;
 	}
 
 
+	function GetGenreNames($userId)
+	{
+		$genreList = $this->ShowGenreList();
+		$this->db->select('genreId, userId');
+		$this->db->where('userId', $userId);
+		$query = $this->db->get('genre_connection');
+
+		$favGenreIdList = array();
+		foreach ($query->result() as $row){
+			$favGenreIdList = $row->genreName;
+		}
+
+
+//		foreach($genreListSelected as $selected){
+//			foreach($genreListSelected as $key => $item1){
+//			print_r($selected[$key]);
+//			foreach ($genreList as $item) {
+////			print_r($item->getGenreName());
+////				print_r($genreListSelected);
+//
+//				if ($selected[$key] == $item->getGenreName() ) {
+//					$favGenreIdList[] = $item->getGenreId();
+//				}
+//			}
+//			}
+//		}
+
+
+		print_r($favGenreIdList);
+		return $favGenreIdList;
+
+	}
+
+
+	//login validation
 	function validate($email, $password)
 	{
 		$this->db->where('email', $email);
-		$this->db->where('password', $password);
-		$query = $this->db->get('users', 1);
-
-		$result = $query->row_array(); // get the row first
-//		print_r($result['password']);
-
-
-//		echo (password_verify($password, $result['password']));
-
-		echo "aaaa";
-//		print_r(GetUserDetails1());
-//		if((password_verify($password, $result['password']))){
-//
-//		}
-
-//		return $query;
-//		if ($result && password_verify($password, $aaa)) {
-//			print_r($result['password']);
-//		}
-		return $query;
-
-//		$userPass = $result->row();
-//		if(password_verify($password, $result->password)){
-//
-//			return $result;
-//		}else{
-//			return false;
-//		}
-//		if($pass == "S2e23ed3qfsssccccccs"){
-
-	}
-
-
-function GetUserDetails($userId){
-	$this->db->where('userId', $userId);
-	$query = $this->db->get('users');
-
-	return $query;
-}
-
-	function GetUserDetails1(){
-		$currentLoggedUserId = $this->session->userdata('userId');
-		$this->db->where('userId', $currentLoggedUserId);
 		$query = $this->db->get('users');
 
-	foreach ($query->result() as $row) {
-			$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->email, $row->password, $row->musicGenre);
-	}
-
-		return $userDetails;
-	}
-
-	function verifyPasswordHash($password, $hashedPassword){
-		if(password_verify($password, $hashedPassword)){
-			return true;
-		}else{
+		if ($query->num_rows() > 0) {
+			$user = $query->row();
+			$accountHashedPassword = $user->password;
+			if ($this->verifyPasswordHash($password, $accountHashedPassword)) {
+				return $query;
+			} else {
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}
 
-	function Login1($email, $password){
 
-//		$email = $this->
+	function GetUserDetails($userId)
+	{
+		$this->db->where('userId', $userId);
+		$query = $this->db->get('users');
+
+		return $query;
 	}
+
+	function GetUserDetails1($userId)
+	{
+		$this->db->where('userId', $userId);
+		$query = $this->db->get('users');
+		$user = $query->row();
+
+//	foreach ($query->result() as $row) {
+		$userDetails = new user($user->userId, $user->firstName, $user->lastName, $user->photoUrl);
+//	}
+
+		return $userDetails;
+	}
+
+	//verify login password
+	function verifyPasswordHash($password, $hashedPassword)
+	{
+		if (password_verify($password, $hashedPassword)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 }

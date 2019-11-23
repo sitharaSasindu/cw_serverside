@@ -53,13 +53,21 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['register'] = 'PageController/Register';
-$route['loggedIn'] = 'PageController/LoggedIn';
-$route['publicHome'] = 'HomePageController/showPublicHomePage';
-$route['home'] = 'HomePageController/HomePage';
+$route['register'] = 'UserController/RegistrationView';
 $route['login'] = 'PageController/Login';
-$route['followings'] = 'PageController/ShowFollowings';
-$route['followers'] = 'PageController/ShowFollowers';
-$route['findFriends'] = 'PageController/FindFriends';
-$route['friends'] = 'HomePageController/Friends';
+$route['friends'] = 'PageController/Friends';
+$route['followers'] = 'PageController/Followers';
+$route['followings'] = 'PageController/Followings';
+$route['home'] = 'HomePageController/HomePage';
 $route['logout'] = 'UserController/logout';
+$route['publicHome'] = 'PageController/showPublicHomePage';
+
+$route['showFriends'] = 'FriendsController/ShowFriends';
+$route['showHome'] = 'HomePageController/HomePage';
+$route['showFollowings'] = 'FriendsController/ShowFollowings';
+$route['showFollowers'] = 'FriendsController/ShowFollowers';
+$route['showPublicHome'] = 'HomePageController/showPublicHomePage';
+
+$route['findFriends'] = 'PageController/FindFriends';
+
+

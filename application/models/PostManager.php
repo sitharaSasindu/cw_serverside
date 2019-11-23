@@ -31,8 +31,6 @@ class PostManager extends CI_Model
 
 	}
 
-
-
 	function getAllPosts()
 	{
 		$currentUserId = $this->session->userdata('userId');

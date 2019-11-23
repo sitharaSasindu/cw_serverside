@@ -10,15 +10,20 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
+	<script type="text/javascript">
+        $(window).on('load', function () { // makes sure the whole site is loaded
+            $('#status').fadeOut(); // will first fade out the loading animation
+            $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('body').delay(550).css({'overflow': 'visible'});
+        })
 
-
-	<!--time line style-->
-	<style>
-
-	</style>
-
+	</script>
 </head>
-<body>
+<body onload="onload()">
+<div id="preloader">
+	<div id="status">&nbsp;</div>
+</div>
 
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
@@ -32,14 +37,13 @@
 				<?php echo $this->session->userdata('lastName'); ?></h1>
 			<p><?php
 				$favGenreList = $this->session->userdata('musicGenre');
-				foreach ($favGenreList as $key => $item){
+				foreach ($favGenreList as $key => $item) {
 					echo $favGenreList[$key];
 					echo " ";
 				}
 				?></p>
 		</div>
 	</div>
-
 
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
@@ -54,7 +58,6 @@
 		</form>
 	</div>
 
-
 	<br><br>
 	<h1>Followings</h1>
 	<?php
@@ -62,12 +65,10 @@
 		echo $followings[$key][0]; ?><?php echo $followings[$key][1]; ?><br>
 	<?php } ?>
 
-
 	<div class="page-footer">
-		© Copyright 2019. All Rights Reserved.
+		<div class="footer-copyright" style="color: #938c8c;">
+			© Copyright 2019. All Rights Reserved.
+		</div>
 	</div>
-</div>
-
-
 </body>
 </html>

@@ -17,6 +17,13 @@
 			background-attachment: fixed;
 			height: 100%;
 		}
+
+		@media (min-width: 1400px) {
+			.container {
+				width: 1800px;
+			}
+		}
+
 	</style>
 	<script type="text/javascript">
         function hideAlertBoxes() {
@@ -37,9 +44,7 @@
 		<div class="row" style="margin-top: 62px">
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
-				<label class="label">Not a Member</label><input type="button" onclick="location.replace('register')"
-																id="signUp" value="Sign Up"
-																class="btn btn-xs btn-block">
+				<label class="label">Not a Member</label><input type="button" onclick="location.replace('register')" id="signUp" value="Sign Up" class="btn btn-xs btn-block">
 				<div class="login-form">
 					<div class="logo-container" align="center"><img
 							src="<?php echo base_url('assets/image/logo1.jpg'); ?>" width="100" height="150">
@@ -86,12 +91,11 @@
 </div>
 
 
-<footer class="page-footer">
-	<div class="footer-copyright">
-		<p>© 2019 Copyright</p>
+<div class="page-footer">
+	<div class="footer-copyright" style="color: #938c8c;">
+		© Copyright 2019. All Rights Reserved.
 	</div>
-</footer>
-
+</div>
 
 </body>
 </html>

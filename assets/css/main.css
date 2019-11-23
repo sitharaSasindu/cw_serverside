@@ -1,3 +1,27 @@
+/*footer*/
+
+
+
+.page-footer .footer-copyright{
+	background-color: black !important;
+	margin-top: 0px !important;
+}
+
+.page-footer{
+	padding-top:  0 !important;
+}
+
+/*login*/
+.btn-success.disabled, .btn-success:enabled {
+	background-color:
+		#DDAA12;
+	border-color:
+		#f00;
+}
+
+
+
+
 /*nav bar button color*/
 .btn-success {
 	color:
@@ -86,11 +110,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 	}
 }
 
-@media (min-width: 1400px) {
-	.container {
-		width: 1800px;
-	}
-}
+
 
 @media only screen and (min-width: 600px) {
 	.left{
@@ -436,15 +456,7 @@ textarea.input {
 	background: #ff0000;
 }
 
-.btn-success.disabled, .btn-success:disabled {
-	background-color: #a5a737;
-	border-color: #ff7b1f;
-}
 
-.btn-success.disabled, .btn-success:enabled {
-	background-color: #a5a737;
-	border-color: #ff9039;
-}
 /*------------------------------------------------------------------
 [ Responsive ]*/
 

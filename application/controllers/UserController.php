@@ -9,38 +9,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 Class UserController extends CI_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('session');
 		$this->load->model('UserManager', 'newUser');
 	}
 
-	public function Index()
+	/**
+	 *Pass available genre list on the database
+	 *to register view
+	 *
+	 * @return void
+	 */
+	function RegistrationView()
 	{
-		$this->load->view('register');
-	}
-
-//get genre list from table
-	function RegistrationView(){
 		$genreList = $this->newUser->ShowGenreList();
-		$musicGenreList =array(
+		$musicGenreList = array(
 			'genre' => $genreList
 		);
 		$this->load->view('register', $musicGenreList);
 	}
 
-function AddSelectedGenres(){
-		$selectedGenreList = $this->input->post('selectedGenres');
-		print_r($selectedGenreList);
-		$userFavGenreIdList = $this->newUser->AddUserFavGenre($selectedGenreList);
-}
-
-
-
-
-//add registration data to database
+	/**
+	 * Send user registration details
+	 * to UserManager model to insert into DB
+	 *
+	 * @return void
+	 */
 	function Registration()
 	{
 		if ($this->input->post()) {
@@ -55,63 +50,64 @@ function AddSelectedGenres(){
 				$selectedGenreList = $this->input->post('selectedGenres');
 
 				$this->newUser->UserRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenreList);
-//				$this->AddSelectedGenres();
 				redirect('login');
 			}
 		}
 	}
 
-
-
-	//register form validation rules
+	/**
+	 * Validate the registration form against given rule set
+	 *
+	 * @return bool if true
+	 */
 	function RegistrationFormValidation()
 	{
-			$validationRules = array(
-				array(
-					'field' => 'firstName',
-					'label' => 'First Name',
-					'rules' => 'required'
+		$validationRules = array(
+			array(
+				'field' => 'firstName',
+				'label' => 'First Name',
+				'rules' => 'required'
+			),
+			array(
+				'field' => 'lastName',
+				'label' => 'Last Number',
+				'rules' => 'required'
+			),
+			array(
+				'field' => 'email',
+				'label' => 'Email Address',
+				'rules' => 'required',
+				'errors' => array(
+					'required' => 'Please Enter a Email Address.',
 				),
-				array(
-					'field' => 'lastName',
-					'label' => 'Last Number',
-					'rules' => 'required'
-				),
-				array(
-					'field' => 'email',
-					'label' => 'Email Address',
-					'rules' => 'required',
-					'errors' => array(
-						'required' => 'Please Enter a Email Address.',
-					),
-				),
-				array(
-					'field' => 'password',
-					'label' => 'Password',
-					'rules' => 'callback_passwordValidation',
-				),
-				array(
-					'field' => 'photoUrl',
-					'label' => 'Avatar Url',
-					'rules' => 'required'
-				)
-			);
+			),
+			array(
+				'field' => 'password',
+				'label' => 'Password',
+				'rules' => 'callback_passwordValidation',
+			),
+			array(
+				'field' => 'photoUrl',
+				'label' => 'Avatar Url',
+				'rules' => 'required'
+			)
+		);
 
-			$this->form_validation->set_rules('passwordVerify', 'Confirm Password', 'required|matches[password]');
-			$this->form_validation->set_rules($validationRules);
-			if ($this->form_validation->run() == False) {
-				return TRUE;
-			}else{
-				return FALSE;
-			}
+		$this->form_validation->set_rules('passwordVerify', 'Confirm Password', 'required|matches[password]');//confirm password rule
+		$this->form_validation->set_rules($validationRules);
+		if ($this->form_validation->run() == False) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 
 	/**
 	 * Validate the password
 	 *
-	 * @param string $password
+	 * @param string $password user entered
 	 *
-	 * @return bool
+	 * @return bool if strong enough password
 	 */
 	public function passwordValidation($password = '')
 	{
@@ -136,10 +132,10 @@ function AddSelectedGenres(){
 			$this->form_validation->set_message('passwordValidation', 'The {field} field must have at least one number.');
 			return FALSE;
 		}
-//		if (preg_match_all($regex_special, $password) < 1) {
-//			$this->form_validation->set_message('passwordValidation', 'The {field} field must have at least one special character.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>§~'));
-//			return FALSE;
-//		}
+		if (preg_match_all($regex_special, $password) < 1) {
+			$this->form_validation->set_message('passwordValidation', 'The {field} field must have at least one special character.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>§~'));
+			return FALSE;
+		}
 		if (strlen($password) < 8) {
 			$this->form_validation->set_message('passwordValidation', 'The {field} field must be at least 8 characters in length.');
 			return FALSE;
@@ -147,39 +143,66 @@ function AddSelectedGenres(){
 	}
 
 
-//login function
+	/**
+	 * Validate login details with the user credentials
+	 * on the database
+	 *
+	 */
 	function CheckLogin()
 	{
-		$email = $this->input->post('email', TRUE);
-		$password = $this->input->post('password', TRUE);
-		$validate = $this->newUser->validate($email, $password);
-		if ($validate) {
-			$data = $validate->row_array();
-			$firstName = $data['firstName'];
-			$lastName = $data['lastName'];
-			$avatarUrl = $data['photoUrl'];
-			$email = $data['email'];
-			$userId = $data['userId'];
-			$userFavGenres = $this->newUser->GetFavGenreNames($userId);
-			$sessionData = array(
-				'userId' => $userId,
-				'firstName' => $firstName,
-				'lastName' => $lastName,
-				'musicGenre' => $userFavGenres,
-				'email' => $email,
-				'avatarUrl' =>$avatarUrl,
-				'logged_in' => TRUE
-			);
-			$this->session->set_userdata($sessionData);
-			$this->load->view('home_page');
-//			redirect('home');
-		} else {
-			echo $this->session->set_flashdata('msg', 'Username or Password is Wrong');
-			redirect('login');
+		if ($this->LoginFormValidation()) {
+			$email = $this->input->post('email', TRUE);
+			$password = $this->input->post('password', TRUE);
+			$validate = $this->newUser->validate($email, $password);
+			if ($validate) {
+				$data = $validate->row_array();//get first row of the array
+				$firstName = $data['firstName'];
+				$lastName = $data['lastName'];
+				$avatarUrl = $data['photoUrl'];
+				$email = $data['email'];
+				$userId = $data['userId'];
+				$userFavGenres = $this->newUser->GetFavGenreNames($userId);
+				$sessionData = array(
+					'userId' => $userId,
+					'firstName' => $firstName,
+					'lastName' => $lastName,
+					'musicGenre' => $userFavGenres,
+					'email' => $email,
+					'avatarUrl' => $avatarUrl,
+					'logged_in' => TRUE
+				);
+				$this->session->set_userdata($sessionData);
+				redirect('home');
+			} else {
+				echo $this->session->set_flashdata('msg', 'Username or Password is Wrong');
+				$this->load->view('login_view');
+			}
 		}
 	}
 
-	//session destroy logout
+	/**
+	 * Validate the login form against given rule set
+	 *
+	 * @return bool if true
+	 */
+	function LoginFormValidation()
+	{
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
+
+		if ($this->form_validation->run() == FALSE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Logout function
+	 * simply destroy the current session on the browser
+	 * redirect the current page to login page
+	 * @return void
+	 */
 	function logout()
 	{
 		$this->session->sess_destroy();

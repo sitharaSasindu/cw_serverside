@@ -10,15 +10,20 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
+	<script type="text/javascript">
+        $(window).on('load', function () { // makes sure the whole site is loaded
+            $('#status').fadeOut(); // will first fade out the loading animation
+            $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('body').delay(550).css({'overflow': 'visible'});
+        })
 
-
-	<!--time line style-->
-	<style>
-
-	</style>
-
+	</script>
 </head>
-<body>
+<body onload="onload()">
+<div id="preloader">
+	<div id="status">&nbsp;</div>
+</div>
 
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
@@ -32,7 +37,7 @@
 				<?php echo $this->session->userdata('lastName'); ?></h1>
 			<p><?php
 				$favGenreList = $this->session->userdata('musicGenre');
-				foreach ($favGenreList as $key => $item){
+				foreach ($favGenreList as $key => $item) {
 					echo $favGenreList[$key];
 					echo " ";
 				}
@@ -40,11 +45,10 @@
 		</div>
 	</div>
 
-
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
 		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
-		<a class="active" href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
+		<a class="active" href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i>Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
 		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
 		<form class="form-inline" method="post"
@@ -54,19 +58,18 @@
 		</form>
 	</div>
 
-	<br><br><h1>Followers</h1>
+	<br><br>
+	<h1>Followers</h1>
 	<?php
 	foreach ($followers as $key => $item) {
-		echo $followers[$key][0]; ?> <?php echo $followers[$key][1];
+		echo $followers[$key][0]; ?><?php echo $followers[$key][1];
 	} ?>
 
-
 	<div class="page-footer">
-		© Copyright 2019. All Rights Reserved.
+		<div class="footer-copyright" style="color: #938c8c;">
+			© Copyright 2019. All Rights Reserved.
+		</div>
 	</div>
-</div>
-
-
 </body>
 </html>
-<?php
+

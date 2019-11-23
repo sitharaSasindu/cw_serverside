@@ -9,10 +9,15 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+	<script type="text/javascript">
+        $(window).on('load', function () { // makes sure the whole site is loaded
+            $('#status').fadeOut(); // will first fade out the loading animation
+            $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('body').delay(550).css({'overflow': 'visible'});
+        })
 
-
-	<script>
          $(document).ready(function () {
         	<?php foreach ($userListByGenre as $key => $item) { ?>
              $("#personal-info<?php echo $key?>").submit(function (e) {
@@ -38,7 +43,10 @@
 	</script>
 
 </head>
-<body>
+<body onload="onload()">
+<div id="preloader">
+	<div id="status">&nbsp;</div>
+</div>
 
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
@@ -120,10 +128,10 @@
 
 
 	<div class="page-footer">
-		© Copyright 2019. All Rights Reserved.
+		<div class="footer-copyright" style="color: #938c8c;">
+			© Copyright 2019. All Rights Reserved.
+		</div>
 	</div>
-</div>
-
 
 </body>
 </html>

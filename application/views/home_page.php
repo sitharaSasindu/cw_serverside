@@ -9,17 +9,22 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
-<!--	<link rel="stylesheet" type="text/css" href="--><?php //echo base_url('assets/css/main.css'); ?><!--">-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+	<script type="text/javascript">
+        $(window).on('load', function () { // makes sure the whole site is loaded
+            $('#status').fadeOut(); // will first fade out the loading animation
+            $('#preloader').delay(650).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('body').delay(550).css({'overflow': 'visible'});
+        })
 
-
-	<!--time line style-->
-	<style>
-
-	</style>
-
+	</script>
 </head>
-<body>
+<body onload="onload()">
+<div id="preloader">
+	<div id="status">&nbsp;</div>
+</div>
 
 <div class='container' style="background-color: #e2e0e0">
 	<div class="fb-profile">
@@ -33,14 +38,13 @@
 				<?php echo $this->session->userdata('lastName'); ?></h1>
 			<p><?php
 				$favGenreList = $this->session->userdata('musicGenre');
-				foreach ($favGenreList as $key => $item){
+				foreach ($favGenreList as $key => $item) {
 					echo $favGenreList[$key];
 					echo " ";
 				}
 				?></p>
 		</div>
 	</div>
-
 
 	<div class="navbar" style="background-color: #999999">
 		<a class="active" href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
@@ -54,7 +58,6 @@
 			<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
 		</form>
 	</div>
-
 
 	<div class="row">
 		<div class="col-md-9">
@@ -76,93 +79,81 @@
 						<button type="submit" class="btn btn-success green"><i class="fa fa-share"></i> Share</button>
 					</form>
 				</div>
-				<!-- Status Upload  -->
 			</div>
-			<!-- Widget Area -->
 		</div>
-
 	</div>
-
-
-
 
 	<div class="timeline-centered">
 		<?php
+		if (empty($allPosts)) {
+			echo "No Posts";
+		} else {
+			foreach ($allPosts as $key => $post) {
+				$date = date('Y-m-d', strtotime($post[3]));
+				$time = date('H:i:s', strtotime($post[3]));
 
-		if(empty($currentUserPosts)) {
-echo "Start Posting";
-		}else{
+				if ($key % 2 == 0) { ?>
 
-		foreach ($currentUserPosts as $row) {
-			$date = date('Y-m-d', strtotime($row->timestamp));
-			$time = date('H:i:s', strtotime($row->timestamp));
+					<article class="timeline-entry">
 
+						<div class="timeline-entry-inner">
+							<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time ?></span>
+								<span>	<?php echo $date ?></span>
+							</time>
 
+							<div class="timeline-icon bg-success">
+								<i class="entypo-feather"></i>
+							</div>
 
-			if ($row->counter % 2 == 0) {
+							<div class="timeline-label">
+								<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
 
-				?>
-
-				<?php echo $date ?>
-				<article class="timeline-entry">
-
-					<div class="timeline-entry-inner">
-						<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time ?></span>
-							<span>	<?php echo $date ?></span>
-						</time>
-
-						<div class="timeline-icon bg-success">
-							<i class="entypo-feather"></i>
+								<p><?php
+									//									$file = $post[2];
+									//									$file_headers = @get_headers($file);
+									//									if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
+									//										$exists = false;
+									//									}
+									//									else {
+									//										echo "<img src='".$post[2]."'
+									//									 class='img-responsive img-rounded full-width'>";
+									//										$exists = true;
+									//									}
+									echo $post[2] ?></p>
+							</div>
 						</div>
 
-						<div class="timeline-label">
-							<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
-							<p>Mohtashim is an MCA from AMU (Aligarah) and a Project Management Professional. He has
-								more
-								than 17 years of experience in Telecom and Datacom industries covering complete SDLC. He
-								is
-								managing in-house innovations, business planning, implementation, finance and the
-								overall
-								business development of Tutorials Point.</p>
+					</article>
+
+				<?php } else { ?>
+
+
+					<article class="timeline-entry left-aligned">
+
+						<div class="timeline-entry-inner">
+							<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time ?></span>
+								<span><?php echo $date ?></span>
+							</time>
+
+							<div class="timeline-icon bg-warning">
+								<i class="entypo-camera"></i>
+							</div>
+
+							<div class="timeline-label">
+								<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile
+										Picture</a>
+								</h2>
+								<p><?php echo $post[2]
+									?></p>
+								<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
+									 class="img-responsive img-rounded full-width">
+							</div>
 						</div>
-					</div>
 
-				</article>
-
-			<?php } else { ?>
-
-
-				<article class="timeline-entry left-aligned">
-
-					<div class="timeline-entry-inner">
-						<time class="timeline-time" datetime="2014-01-10T03:45"><span>03:45 AM</span> <span>Today</span>
-						</time>
-
-						<div class="timeline-icon bg-warning">
-							<i class="entypo-camera"></i>
-						</div>
-
-						<div class="timeline-label">
-							<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile Picture</a>
-							</h2>
-
-							<blockquote>Gopal is an MCA from GJU (Hisar) and a Cisco Certified Network Professional. He
-								has
-								more than 11 years of experience in core data networking and telecommunications. He
-								develops
-								contents for Computer Science related subjects. He is also involved in developing Apps
-								for
-								various Mobile devices.
-							</blockquote>
-
-							<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
-								 class="img-responsive img-rounded full-width">
-						</div>
-					</div>
-
-				</article>
-			<?php }
-		}	} ?>
+					</article>
+				<?php }
+			}
+		} ?>
 
 		<article class="timeline-entry begin">
 
@@ -177,13 +168,12 @@ echo "Start Posting";
 
 		</article>
 	</div>
-	<!--			</div>-->
-	<!--	</div>-->
 
 	<div class="page-footer">
-		© Copyright 2019. All Rights Reserved.
+		<div class="footer-copyright" style="color: #938c8c;">
+			© Copyright 2019. All Rights Reserved.
+		</div>
 	</div>
-</div>
 
 
 </body>

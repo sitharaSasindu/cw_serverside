@@ -23,7 +23,7 @@ Class UserController extends CI_Controller
 	 */
 	function RegistrationView()
 	{
-		$genreList = $this->newUser->ShowGenreList();
+		$genreList = $this->newUser->getAvailableGenres();
 		$musicGenreList = array(
 			'genre' => $genreList
 		);
@@ -49,7 +49,7 @@ Class UserController extends CI_Controller
 				$photoUrl = $this->input->post('photoUrl');
 				$selectedGenreList = $this->input->post('selectedGenres');
 
-				$this->newUser->UserRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenreList);
+				$this->newUser->userRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenreList);
 				redirect('login');
 			}
 		}
@@ -161,7 +161,7 @@ Class UserController extends CI_Controller
 				$avatarUrl = $data['photoUrl'];
 				$email = $data['email'];
 				$userId = $data['userId'];
-				$userFavGenres = $this->newUser->GetFavGenreNames($userId);
+				$userFavGenres = $this->newUser->findUsersFavGenres($userId);
 				$sessionData = array(
 					'userId' => $userId,
 					'firstName' => $firstName,

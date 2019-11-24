@@ -27,18 +27,17 @@
 </div>
 
 <div class='container' style="background-color: #e2e0e0">
-	<div class="fb-profile">
-		<img align="left" class="fb-image-lg"
-			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"
-			 alt="Profile image example"/>
-		<img align="left" class="fb-image-profile thumbnail"
-			 src="<?php echo $this->session->userdata('redirectedUsersAvatarUrl') ?>" alt="Profile image example"/>
-		<div class="fb-profile-text">
-			<h1><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
-				<?php echo $this->session->userdata('redirectedUsersLastName'); ?></h1>
+	<div class="wall-profile">
+		<img align="left" class="wall-image-lg"
+			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
+		<img align="left" class="wall-image-profile thumbnail"
+			 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
+		<div class="wall-profile-text">
+			<h1><?php echo $this->session->userdata('firstName'); ?>
+				<?php echo $this->session->userdata('lastName'); ?></h1>
 			<p><?php
-				$favGenreList = $this->session->userdata('redirectedUsersMusicGenre');
-				foreach ($favGenreList as $key => $item){
+				$favGenreList = $this->session->userdata('musicGenre');
+				foreach ($favGenreList as $key => $item) {
 					echo $favGenreList[$key];
 					echo " ";
 				}

@@ -41,7 +41,6 @@
         	<?php } ?>
         });
 	</script>
-
 </head>
 <body onload="onload()">
 <div id="preloader">
@@ -49,13 +48,12 @@
 </div>
 
 <div class='container' style="background-color: #e2e0e0">
-	<div class="fb-profile">
-		<img align="left" class="fb-image-lg"
-			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"
-			 alt="Profile image example"/>
-		<img align="left" class="fb-image-profile thumbnail"
-			 src="<?php echo $this->session->userdata('avatarUrl') ?>" alt="Profile image example"/>
-		<div class="fb-profile-text">
+	<div class="wall-profile">
+		<img align="left" class="wall-image-lg"
+			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
+		<img align="left" class="wall-image-profile thumbnail"
+			 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
+		<div class="wall-profile-text">
 			<h1><?php echo $this->session->userdata('firstName'); ?>
 				<?php echo $this->session->userdata('lastName'); ?></h1>
 			<p><?php

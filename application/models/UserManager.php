@@ -10,9 +10,20 @@ class UserManager extends CI_Model
 		parent::__construct();
 	}
 
-	/*user registration insert data into user table
-	 * */
-	function UserRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenre)
+	/**
+	 * Insert user registration details into Database
+	 *
+	 * @param $firstName
+	 * @param $lastName
+	 * @param $email
+	 * @param string $password user entered
+	 * @param $photoUrl users avatar URL
+	 * @param $selectedGenre an array of selected music genres
+	 *
+	 * @return bool if the user doesn't exist under that email and
+	 *  successfully inserted registration details into database
+	 */
+	function userRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenre)
 	{
 		$this->db->select('*');
 		$this->db->from('users');
@@ -28,7 +39,7 @@ class UserManager extends CI_Model
 			$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl);
 			$this->db->insert('users', $userDetails);
 
-			foreach ($selectedGenre as $key => $item1) {
+			foreach ($selectedGenre as $key => $item1) {//insert user fav genres into genre connection table
 				$userFavGenre = array('userId' => $userId, 'genreId' => $selectedGenre[$key]);
 				$this->db->insert('genre_connection', $userFavGenre);
 			}
@@ -36,9 +47,13 @@ class UserManager extends CI_Model
 		}
 	}
 
-
-//get genrelist from the genre table on register page
-	function ShowGenreList()
+	/**
+	 * Get available music genres on the genre table
+	 * to show it in the registration form
+	 *
+	 * @return array music genre list array
+	 */
+	function getAvailableGenres()
 	{
 		$this->db->select('genreId, genreName');
 		$query = $this->db->get('genre');
@@ -50,10 +65,17 @@ class UserManager extends CI_Model
 		return $genreList;
 	}
 
-//get selected users fav genres names
-	function GetFavGenreNames($userId)
+	/**
+	 * Returns the favourite genre list of one user or
+	 * multiple users
+	 *
+	 * @param $userId array of user ids
+	 *
+	 * @return array favourite genre names list of users
+	 */
+	function findUsersFavGenres($userId)
 	{
-		$genreList = $this->ShowGenreList();
+		$genreList = $this->getAvailableGenres();
 		$this->db->where('userId', $userId);
 		$query = $this->db->get('genre_connection');
 
@@ -68,7 +90,16 @@ class UserManager extends CI_Model
 		return $favGenreNameList;
 	}
 
-	//login validation
+	/**
+	 * Validate the login form details with the
+	 * user credentials on the database
+	 *
+	 * @param string $email user enterd
+	 * @param string $password user entered
+	 *
+	 * @return bool|obj if user doesn't exits return false
+	 * if exist return object of user details
+	 */
 	function validate($email, $password)
 	{
 		$this->db->where('email', $email);
@@ -87,8 +118,14 @@ class UserManager extends CI_Model
 		}
 	}
 
-//get users by genres
-	function GetMultipleUserDetails($userId)
+	/**
+	 * Returns array of user details of particular users 
+	 *
+	 * @param $userId array of userIds 
+	 * 
+	 * @return array user details
+	 */
+	function findUsersDetails($userId)
 	{
 		foreach ($userId as $key => $item) {
 			$this->db->where('userId', $userId[$key]);
@@ -101,22 +138,14 @@ class UserManager extends CI_Model
 		return $userDetails;
 	}
 
-	///get one user detail for page redirect
-	function GetUserDetails($userId)
-	{
-		$this->db->where('userId', $userId);
-		$query = $this->db->get('users');
-
-		$userDetails = array();
-		foreach ($query->result() as $row) {
-			$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
-		}
-		return $userDetails;
-
-	}
-
-
-	//verify login password
+	/**
+	 * Verify the user password with the hashed password on the database
+	 *
+	 * @param string $password user entered
+	 * @param string $hashedPassword from the database
+	 *
+	 * @return bool if password matches with the hash
+	 */
 	function verifyPasswordHash($password, $hashedPassword)
 	{
 		if (password_verify($password, $hashedPassword)) {
@@ -125,6 +154,32 @@ class UserManager extends CI_Model
 			return false;
 		}
 	}
+
+
+
+
+
+	///get one user detail for page redirect
+	/**
+	 * Validate the password
+	 *
+	 * @param string $password user entered
+	 *
+	 * @return bool if strong enough password
+	 */
+//	function GetUserDetails($userId)
+//	{
+//		$this->db->where('userId', $userId);
+//		$query = $this->db->get('users');
+//
+//		$userDetails = array();
+//		foreach ($query->result() as $row) {
+//			$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
+//		}
+//		return $userDetails;
+//
+//	}
+
 
 
 }

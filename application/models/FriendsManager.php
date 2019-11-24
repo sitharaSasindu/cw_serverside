@@ -27,8 +27,8 @@ $this->db->where('genreId', $searchedGenreId);
 		return $usersSelected;
 	}
 
-//
-//	function GetUser($genre)
+
+//	function QueryUsersByGenre2($genre)
 //	{
 //
 //		$this->db->select('userId, lastName, firstName');

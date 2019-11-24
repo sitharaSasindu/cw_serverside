@@ -8,10 +8,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
-
-<!--	//dropdown js-->
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/select2.css'); ?>">
+	<script type='text/javascript' src="<?php echo base_url('assets/js/select2.js'); ?>"></script>
 	<style>
 		.background {
 			background-image: url("<?php echo base_url('assets/image/login_back.jpg'); ?>");
@@ -29,18 +27,18 @@
 		}
 	</style>
 	<script type="text/javascript">
-        $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
-        });
-
         function hideAlertBoxes() {
             var x = document.getElementById("genreBox");
             var y = document.getElementById("formValidateErrors");
             x.style.display = "none";
             y.style.display = "none";
         }
-        }
+
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2();
+        });
 	</script>
+
 </head>
 <body>
 
@@ -58,7 +56,7 @@
 
 					<label class="label">Already a Member</label><input type="button"
 																		onclick="location.replace('login')"
-																		value="Sign Ip"
+																		value="Sign In"
 																		class="btn btn-xs btn-success btn-block">
 
 					<form id="login" name="loginForm"
@@ -125,28 +123,19 @@
 						</div>
 
 						<div class="form-group">
-
-
-
 							<label class="label">Select Your Favorite Genres</label>
-						<select class='js-example-basic-multiple' name='selectedGenres[]' multiple='multiple' style="width: 100%">
-
+							<select class='js-example-basic-multiple' name='selectedGenres[]' multiple='multiple'
+									style="width: 100%">
 								<?php
-							foreach($genre as $row){
-									echo "<option value='".$row->getGenreId()."'>".$row->getGenreName()."</span>";
-							}
+								foreach ($genre as $row) {
+									echo "<option value='" . $row->getGenreId() . "'>" . $row->getGenreName() . "</span>";
+								}
 								?>
 							</select>
-
-						</div>
-
-						<br>
-
-
+						</div><br>
 
 						<div class="form-group">
-							<center>
-								<br><input type="submit" id="loginbtn" value="Sign Up"
+							<center><br><input type="submit" id="loginbtn" value="Sign Up"
 										   class="btn btn-xs btn-success btn-block">
 							</center>
 						</div>
@@ -167,3 +156,4 @@
 
 </body>
 </html>
+

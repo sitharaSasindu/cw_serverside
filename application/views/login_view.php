@@ -23,18 +23,16 @@
 				width: 1800px;
 			}
 		}
-
 	</style>
-	<script type="text/javascript">
+	<script>
         function hideAlertBoxes() {
             var y = document.getElementById("formValidateErrors");
             y.style.display = "none";
         }
 	</script>
-
 </head>
 <body>
-<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar" style="top: 0;">
 	<div class="container"><a class="navbar-brand logo"><h1>Musically</h1></a>
 	</div>
 </nav>
@@ -44,16 +42,18 @@
 		<div class="row" style="margin-top: 62px">
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
-				<label class="label">Not a Member</label><input type="button" onclick="location.replace('register')" id="signUp" value="Sign Up" class="btn btn-xs btn-block">
+				<label class="label">Not a Member</label><input type="button" onclick="location.replace('register')"
+																id="signUp" value="Sign Up"
+																class="btn btn-xs btn-block">
 				<div class="login-form">
 					<div class="logo-container" align="center"><img
 							src="<?php echo base_url('assets/image/logo1.jpg'); ?>" width="100" height="150">
 					</div>
-					<form id="login" name="loginForm" action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
+					<form id="login" name="loginForm"
+						  action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
 						  method="post">
 						<div class="form-group">
 
-							<!--							--><?php //if(! is_null($msg)) echo $msg;?>
 							<br> <span class="form-title">Sign In<br><br></span>
 
 							<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
@@ -89,7 +89,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="page-footer">
 	<div class="footer-copyright" style="color: #938c8c;">

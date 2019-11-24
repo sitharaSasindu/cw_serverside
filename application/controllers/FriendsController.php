@@ -60,7 +60,8 @@ class FriendsController extends CI_Controller
 		}
 
 		$this->load->model('UserManager', 'user');
-		$userListByGenre = $this->user->GetMultipleUserDetails($userListByGenre2);
+		$userListByGenre = $this->user->findUsersDetails($userListByGenre2);
+		print_r($userListByGenre);
 
 		$sendData['userListByGenre'] = $userListByGenre;
 		$this->load->view('search_results', $sendData);

@@ -8,6 +8,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
@@ -17,8 +18,15 @@
             $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
             $('body').delay(550).css({'overflow': 'visible'});
         })
-
 	</script>
+	<style>
+		.avatar{
+			margin-right: 25px; margin-left: 20px;
+			/*position: relative;*/
+			margin-top: 10px;
+			border-radius: 50%;
+		}
+	</style>
 </head>
 <body onload="onload()">
 <div id="preloader">
@@ -57,11 +65,21 @@
 		</form>
 	</div>
 
-	<br><br>
-	<h1>Followings</h1>
 	<?php
-	foreach ($followings as $key => $item) {
-		echo $followings[$key][0]; ?><?php echo $followings[$key][1]; ?><br>
+	if(!empty($followings)){ ?>
+		<div class='page-small-title'>You are Following,</div>
+	<?php }else{ ?>
+		<div class='page-small-title'>You are not Following Anyone.</div>
+	<?php } ?>
+
+	<?php
+	foreach ($followings as $row) { ?>
+		<div class='profile' style="">
+			<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
+			<label class="label">
+				<?php echo $row->getFirstName(); ?>
+				<?php echo $row->getLastName(); ?>
+			</label></div>
 	<?php } ?>
 
 	<div class="page-footer">

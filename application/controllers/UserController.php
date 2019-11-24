@@ -21,7 +21,7 @@ Class UserController extends CI_Controller
 	 *
 	 * @return void
 	 */
-	function RegistrationView()
+	function registrationView()
 	{
 		$genreList = $this->newUser->getAvailableGenres();
 		$musicGenreList = array(
@@ -36,20 +36,21 @@ Class UserController extends CI_Controller
 	 *
 	 * @return void
 	 */
-	function Registration()
+	function registration()
 	{
 		if ($this->input->post()) {
-			if ($this->RegistrationFormValidation()) {
+			if ($this->registrationFormValidation()) {
 				$this->load->view('register');
 			} else {
 				$firstName = $this->input->post('firstName');
 				$lastName = $this->input->post('lastName');
+				$userName = $this->input->post('userName');
 				$email = $this->input->post('email');
 				$password = $this->input->post('password');
 				$photoUrl = $this->input->post('photoUrl');
 				$selectedGenreList = $this->input->post('selectedGenres');
 
-				$this->newUser->userRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenreList);
+				$this->newUser->userRegistration($firstName, $lastName, $userName, $email, $password, $photoUrl, $selectedGenreList);
 				redirect('login');
 			}
 		}
@@ -60,7 +61,7 @@ Class UserController extends CI_Controller
 	 *
 	 * @return bool if true
 	 */
-	function RegistrationFormValidation()
+	function registrationFormValidation()
 	{
 		$validationRules = array(
 			array(
@@ -70,7 +71,12 @@ Class UserController extends CI_Controller
 			),
 			array(
 				'field' => 'lastName',
-				'label' => 'Last Number',
+				'label' => 'Last Name',
+				'rules' => 'required'
+			),
+			array(
+				'field' => 'userName',
+				'label' => 'User Name',
 				'rules' => 'required'
 			),
 			array(
@@ -148,16 +154,17 @@ Class UserController extends CI_Controller
 	 * on the database
 	 *
 	 */
-	function CheckLogin()
+	function checkLogin()
 	{
-		if ($this->LoginFormValidation()) {
-			$email = $this->input->post('email', TRUE);
+		if ($this->loginFormValidation()) {
+			$userName = $this->input->post('userName', TRUE);
 			$password = $this->input->post('password', TRUE);
-			$validate = $this->newUser->validate($email, $password);
+			$validate = $this->newUser->validate($userName, $password);
 			if ($validate) {
 				$data = $validate->row_array();//get first row of the array
 				$firstName = $data['firstName'];
 				$lastName = $data['lastName'];
+				$userName = $data['userName'];
 				$avatarUrl = $data['photoUrl'];
 				$email = $data['email'];
 				$userId = $data['userId'];
@@ -166,6 +173,7 @@ Class UserController extends CI_Controller
 					'userId' => $userId,
 					'firstName' => $firstName,
 					'lastName' => $lastName,
+					'userName' => $userName,
 					'musicGenre' => $userFavGenres,
 					'email' => $email,
 					'avatarUrl' => $avatarUrl,
@@ -185,9 +193,9 @@ Class UserController extends CI_Controller
 	 *
 	 * @return bool if true
 	 */
-	function LoginFormValidation()
+	function loginFormValidation()
 	{
-		$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('userName', 'UserName', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 
 		if ($this->form_validation->run() == FALSE) {
@@ -203,7 +211,7 @@ Class UserController extends CI_Controller
 	 * redirect the current page to login page
 	 * @return void
 	 */
-	function logout()
+	function logOut()
 	{
 		$this->session->sess_destroy();
 		redirect('login');

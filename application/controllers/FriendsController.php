@@ -1,85 +1,100 @@
 <?php
 
-
 class FriendsController extends CI_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('PostManager');
 		$this->load->model('FriendsManager', 'friendsManager');
+		$this->load->model('UserManager', 'user');
 	}
 
-	function ShowFriends(){
-		$this->load->model('FriendsManager', 'friendsManager');
-
-		$data['friends'] = $this->friendsManager->FindFriends();
-		$data['followers'] = $this->friendsManager->GetFollowersNames();
-		$data['followings'] = $this->friendsManager->GetFollowingsNames();
-		$this->load->view('friends', $data);
+	/**
+	 * Send particular users friend list to friends view
+	 *
+	 * @return void
+	 */
+	function showFriends(){
+		$currentLoggedUserId = $this->session->userdata('userId');
+		$bagOfValues['friends'] = $this->friendsManager->FindFriends($currentLoggedUserId);
+		$this->load->view('friends', $bagOfValues);
 	}
 
-
-//	function ShowGenreListOnRegistration(){
-//		$this->load->model('UserManager', 'user');
-//		$genreList = $this->user->ShowGenreList();
-//		print_r($genreList);
-//
-//		$this->load->view('register', $genreList);
-//	}
-
+	/**
+	 * Send particular users following list to following view
+	 *
+	 * @return void
+	 */
 	function ShowFollowings(){
-		$data['followings'] = $this->friendsManager->GetFollowingsNames();
-		$this->load->view('followings_page', $data);
+		$currentLoggedUserId = $this->session->userdata('userId');
+		$bagOfValues['followings'] = $this->friendsManager->getFollowingsDetails($currentLoggedUserId);
+		$this->load->view('followings_page', $bagOfValues);
 	}
 
-	function ShowFollowers(){
-		$data['followers'] = $this->friendsManager->GetFollowersNames();
-		$this->load->view('followers_page', $data);
+	/**
+	 * Send particular users followers list to followers view
+	 *
+	 * @return void
+	 */
+	function showFollowers(){
+		$currentLoggedUserId = $this->session->userdata('userId');
+		$bagOfValues['followers'] = $this->friendsManager->getFollowersDetails($currentLoggedUserId);
+		$this->load->view('followers_page', $bagOfValues);
 	}
 
-	//search function
-	function ShowUsersByGenre()
+	/**
+	 * Get user's search box input genre and find all the users
+	 * registered under that genre
+	 *
+	 * @return void
+	 */
+	function showUsersByGenre()
 	{
-		$genre = $this->input->post('genreSearch');
-		$userListByGenre2 = $this->friendsManager->QueryUsersByGenre($genre);
+		$currentLoggedUserId = $this->session->userdata('userId');
+		$genre = $this->input->post('genreSearch');//get search box input
+		$searchResultsUserList = $this->friendsManager->queryUsersByGenre($genre);
+		$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
 
-		$followingsUserIds = $this->friendsManager->GetFollowings();
-
-		if(empty(array_diff($followingsUserIds, $userListByGenre2))) {
-			if(!empty(array_diff($userListByGenre2, $followingsUserIds))) {
-				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
+		$followingsNotInSearchList = array_diff($followingsUserIdList, $searchResultsUserList);
+		$searchListUsersNotInFollowings = array_diff($searchResultsUserList, $followingsUserIdList);
+		if(empty($followingsNotInSearchList)) {
+			if(!empty($searchListUsersNotInFollowings)) {
+				$bagOfValues['alreadyFollowedUsers'] = $followingsUserIdList;
 			}
 		}else{
-			if(sizeof($userListByGenre2) >= sizeof($followingsUserIds)){
-				$sendData['alreadyFollowedUsers'] = array_diff($userListByGenre2, $followingsUserIds);
+			if(sizeof($searchResultsUserList) >= sizeof($followingsUserIdList)){
+				$bagOfValues['alreadyFollowedUsers'] = $searchListUsersNotInFollowings;
 			}else{
-				$sendData['alreadyFollowedUsers'] = array_diff($followingsUserIds, $userListByGenre2);
+				$bagOfValues['alreadyFollowedUsers'] = $followingsNotInSearchList;
 			}
 		}
 
-		$this->load->model('UserManager', 'user');
-		$userListByGenre = $this->user->findUsersDetails($userListByGenre2);
-		print_r($userListByGenre);
-
-		$sendData['userListByGenre'] = $userListByGenre;
-		$this->load->view('search_results', $sendData);
-
+		$userListByGenre = $this->user->findUsersDetails($searchResultsUserList);
+		$bagOfValues['userListByGenre'] = $userListByGenre;
+		$this->load->view('search_results', $bagOfValues);
 	}
 
-	//add record to connection table to follow user
+	/**
+	 * Add user follow record to connection table | remove user record
+	 *
+	 * @return void
+	 */
 	function followAUser()
 	{
-			$followedByUserId = $this->input->post('followedByUserId');
-			$currentLoggedUserId = $this->session->userdata('userId');
+		$followedByUserId = $this->input->post('userId');
+		$currentLoggedUserId = $this->session->userdata('userId');
+		$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
+		$checkIfAlreadyFollowed = in_array($followedByUserId, $followingsUserIdList);
 
-			$this->load->model('FriendsManager', 'newConnection');
-			$newConnection = $this->newConnection->AddConnection($currentLoggedUserId, $followedByUserId );
+			if(empty($checkIfAlreadyFollowed)){
+				$newConnection = $this->friendsManager->addConnection($currentLoggedUserId, $followedByUserId );
+			} else{
+
+			}
+
+
+			redirect('followings');
 	}
-
-
-
-
 
 }

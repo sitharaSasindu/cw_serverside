@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
@@ -24,7 +25,6 @@
 <div id="preloader">
 	<div id="status">&nbsp;</div>
 </div>
-
 
 <div class='container' style="background-color: #e2e0e0">
 	<div class="wall-profile">
@@ -58,11 +58,22 @@
 		</form>
 	</div>
 
-	<h1>Friends</h1>
 	<?php
-	foreach ($friends as $key => $item) {
-		echo $friends[$key][0]; ?><?php echo $friends[$key][1];
-	} ?>
+	if(!empty($friends)){ ?>
+		<div class='page-small-title'>Your Friends,</div>
+	<?php }else{ ?>
+		<div class='page-small-title'>You have no Friends.</div>
+	<?php } ?>
+
+	<?php
+	foreach ($friends as $row) { ?>
+		<div class='profile' style="">
+			<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
+			<label class="label">
+				<?php echo $row->getFirstName(); ?>
+				<?php echo $row->getLastName(); ?>
+			</label></div>
+	<?php } ?>
 
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">

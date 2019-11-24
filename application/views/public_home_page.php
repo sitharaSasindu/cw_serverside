@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
 	<script type="text/javascript">
@@ -31,12 +32,12 @@
 		<img align="left" class="wall-image-lg"
 			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
 		<img align="left" class="wall-image-profile thumbnail"
-			 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
+			 src="<?php echo $this->session->userdata('redirectedUsersAvatarUrl') ?>" "/>
 		<div class="wall-profile-text">
-			<h1><?php echo $this->session->userdata('firstName'); ?>
-				<?php echo $this->session->userdata('lastName'); ?></h1>
+			<h1><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
+				<?php echo $this->session->userdata('redirectedUsersLastName'); ?></h1>
 			<p><?php
-				$favGenreList = $this->session->userdata('musicGenre');
+				$favGenreList = $this->session->userdata('redirectedUsersMusicGenre');
 				foreach ($favGenreList as $key => $item) {
 					echo $favGenreList[$key];
 					echo " ";
@@ -48,7 +49,7 @@
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
 		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
-		<a class="active" href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
+		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
 		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
 		<form class="form-inline" method="post"
@@ -107,8 +108,6 @@ echo "No Posts";
 							<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile Picture</a>
 							</h2>
 							<p><?php echo $post->getPostBody()?></p>
-							<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
-								 class="img-responsive img-rounded full-width">
 						</div>
 					</div>
 

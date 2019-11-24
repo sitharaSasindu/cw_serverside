@@ -16,6 +16,7 @@ class UserManager extends CI_Model
 	 * @param $firstName
 	 * @param $lastName
 	 * @param $email
+	 * @param $userName
 	 * @param string $password user entered
 	 * @param $photoUrl users avatar URL
 	 * @param $selectedGenre an array of selected music genres
@@ -23,11 +24,11 @@ class UserManager extends CI_Model
 	 * @return bool if the user doesn't exist under that email and
 	 *  successfully inserted registration details into database
 	 */
-	function userRegistration($firstName, $lastName, $email, $password, $photoUrl, $selectedGenre)
+	function userRegistration($firstName, $lastName, $userName, $email, $password, $photoUrl, $selectedGenre)
 	{
 		$this->db->select('*');
 		$this->db->from('users');
-		$this->db->where('email', $email);
+		$this->db->where('username', $userName);
 		$query = $this->db->get();
 
 		if ($query->num_rows() > 0) {
@@ -36,7 +37,7 @@ class UserManager extends CI_Model
 			$userId = uniqid('usr', true);
 			$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-			$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl);
+			$userDetails = array('userId' => $userId, 'firstName' => $firstName, 'lastName' => $lastName, 'userName' => $userName, 'email' => $email, 'password' => $hashedPassword, 'photoUrl' => $photoUrl);
 			$this->db->insert('users', $userDetails);
 
 			foreach ($selectedGenre as $key => $item1) {//insert user fav genres into genre connection table
@@ -94,15 +95,15 @@ class UserManager extends CI_Model
 	 * Validate the login form details with the
 	 * user credentials on the database
 	 *
-	 * @param string $email user enterd
+	 * @param $userName
 	 * @param string $password user entered
 	 *
 	 * @return bool|obj if user doesn't exits return false
 	 * if exist return object of user details
 	 */
-	function validate($email, $password)
+	function validate($userName, $password)
 	{
-		$this->db->where('email', $email);
+		$this->db->where('userName', $userName);
 		$query = $this->db->get('users');
 
 		if ($query->num_rows() > 0) {
@@ -127,15 +128,28 @@ class UserManager extends CI_Model
 	 */
 	function findUsersDetails($userId)
 	{
-		foreach ($userId as $key => $item) {
-			$this->db->where('userId', $userId[$key]);
+		if(is_array($userId)){
+			foreach ($userId as $key => $item) {
+				$this->db->where('userId', $userId[$key]);
+				$query = $this->db->get('users');
+
+				foreach ($query->result() as $row) {
+					$userDetails[] = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
+				}
+			}
+			return $userDetails;
+		} else {
+			$this->db->where('userId', $userId);
 			$query = $this->db->get('users');
 
+			$userDetails = array();
 			foreach ($query->result() as $row) {
-				$userDetails[] = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
+				$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
 			}
-		}
 		return $userDetails;
+		}
+
+
 	}
 
 	/**

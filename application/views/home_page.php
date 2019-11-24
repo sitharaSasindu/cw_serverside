@@ -18,7 +18,6 @@
             $('#preloader').delay(650).fadeOut('slow'); // will fade out the white DIV that covers the website.
             $('body').delay(550).css({'overflow': 'visible'});
         })
-
 	</script>
 </head>
 <body onload="onload()">
@@ -84,12 +83,12 @@
 
 	<div class="timeline-centered">
 		<?php
-		if (empty($allPosts)) {
-			echo "No Posts";
-		} else {
-			foreach ($allPosts as $key => $post) {
-				$date = date('Y-m-d', strtotime($post[3]));
-				$time = date('H:i:s', strtotime($post[3]));
+		if (empty($allPosts)) { ?>
+			<div class='page-small-title'>You have No Posts. Start Posting Today,</div>
+	<?php	} else {
+			foreach ($allPosts as $key => $row) {
+				$date = date('Y-m-d', strtotime($row->getTimestamp()));
+				$time = date('H:i:s', strtotime($row->getTimestamp()));
 
 				if ($key % 2 == 0) { ?>
 
@@ -108,17 +107,7 @@
 								<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
 
 								<p><?php
-									//									$file = $post[2];
-									//									$file_headers = @get_headers($file);
-									//									if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
-									//										$exists = false;
-									//									}
-									//									else {
-									//										echo "<img src='".$post[2]."'
-									//									 class='img-responsive img-rounded full-width'>";
-									//										$exists = true;
-									//									}
-									echo $post[2] ?></p>
+									echo $row->getPostBody() ?></p>
 							</div>
 						</div>
 
@@ -142,10 +131,8 @@
 								<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile
 										Picture</a>
 								</h2>
-								<p><?php echo $post[2]
+								<p><?php echo $row->getPostBody()
 									?></p>
-								<img src="http://www.tutorialspoint.com/about/images/gopal_verma.jpg"
-									 class="img-responsive img-rounded full-width">
 							</div>
 						</div>
 

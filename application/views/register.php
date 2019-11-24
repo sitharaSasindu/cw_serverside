@@ -17,7 +17,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: 100%;
+			/*height: 100%;*/
 		}
 
 		@media (min-width: 1400px) {
@@ -57,7 +57,7 @@
 					<label class="label">Already a Member</label><input type="button"
 																		onclick="location.replace('login')"
 																		value="Sign In"
-																		class="btn btn-xs btn-success btn-block">
+																		class="btn btn-xs btn-block">
 
 					<form id="login" name="loginForm"
 						  action="/2016372/cw_serverside/index.php/UserController/Registration"
@@ -82,6 +82,15 @@
 							<div class="wrap-input">
 								<input type="text" class="input" name="lastName" id="lastName"
 									   placeholder="Last Name">
+								<span class="focus-input"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="label">UserName</label>
+							<div class="wrap-input">
+								<input type="text" class="input" name="userName" id="userName"
+									   placeholder="Choose a Username">
 								<span class="focus-input"></span>
 							</div>
 						</div>
@@ -146,7 +155,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="page-footer">
 	<div class="footer-copyright" style="color: #938c8c;">

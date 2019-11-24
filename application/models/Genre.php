@@ -1,6 +1,5 @@
 <?php
 
-
 class Genre extends CI_Model
 {
 

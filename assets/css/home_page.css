@@ -8,6 +8,7 @@ body {
 	/*border: 15px solid green;*/
 	padding: 50px;
 	margin: 20px;
+	padding-bottom: 50px;
 	/*align-content: center;*/
 }
 
@@ -264,7 +265,7 @@ img {
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-success {
-	background-color: #00a651;
+	background-color: #a7a69c;
 	color: #fff;
 }
 
@@ -274,7 +275,7 @@ img {
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-icon.bg-warning {
-	background-color: #fad839;
+	background-color: #d8c01b;
 	color: #fff;
 }
 

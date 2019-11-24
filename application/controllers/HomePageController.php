@@ -10,72 +10,57 @@ Class HomePageController extends CI_Controller
 		$this->load->model('FriendsManager', 'friendsManager');
 	}
 
-
-	function FindFriends()
-	{
-		$this->load->view('find_friends');
-	}
-
-	function Friends()
-	{
-		$this->load->view('friends');
-	}
-
-	//add new post
-	function NewPost()
+	/**
+	 * Add new post to database
+	 *
+	 * @return void
+	 */
+	function newPost()
 	{
 		if ($this->input->post()) {
 			$title = $this->input->post('newpost');
 			$time = date('Y-m-d H:i:s');
 			$userId = $this->session->userdata('userId');
 
-			$this->load->model('PostManager', 'newPost');
-			$newPost = $this->newPost->addNewPost($title, $time, $userId);
+			$this->post->addNewPost($title, $time, $userId);
 			redirect('home');
 		}
 	}
 
-//show current logged users public home page
+	/**
+	 * Show public home page of the current user
+	 *
+	 * @return void
+	 */
 	function showPublicHomePage()
 	{
 		if ($this->session->userdata('logged_in') == TRUE) {
-			$this->load->model('PostManager', 'posts');
 
 			$currentUserId = $this->session->userdata('userId');
-			$data['redirectedUserPosts'] = $this->posts->getPosts($currentUserId);
-			$this->load->view('home_page', $data);
+			$bagOfValues['redirectedUserPosts'] = $this->post->getPosts($currentUserId);
+			$this->load->view('home_page', $bagOfValues);
 		} else {
 			$this->load->view('login_view');
 		}
 	}
 
-
-	function HomePage()
+	/**
+	 * show general home page of the currently logged user
+	 *
+	 * @return void
+	 */
+	function homePage()
 	{
 		if ($this->session->userdata('logged_in') == TRUE) {
-			$this->load->model('PostManager', 'posts');
 
 			$currentUserId = $this->session->userdata('userId');
-			$result['allPosts'] = $this->posts->getAllPosts($currentUserId);
+			$bagOfValues['allPosts'] = $this->post->getAllPosts($currentUserId);
 
-
-			$this->load->view('home_page', $result);
+			$this->load->view('home_page', $bagOfValues);
 		} else {
 			$this->load->view('login_view');
 		}
-
-
 	}
-
-	function date_compare($element1, $element2)
-	{
-		$datetime1 = strtotime($element1['timestamp']);
-		$datetime2 = strtotime($element2['timestamp']);
-		return $datetime1 - $datetime2;
-	}
-
-
-
 }
 
 

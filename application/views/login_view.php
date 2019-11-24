@@ -62,8 +62,8 @@
 							</div>
 
 							<div class="wrap-input">
-								<input id="email" class="input" type="email" name="email"
-									   placeholder="Email">
+								<input id="userName" class="input" type="userName" name="userName"
+									   placeholder="UserName">
 								<span class="focus-input"></span>
 							</div>
 						</div>

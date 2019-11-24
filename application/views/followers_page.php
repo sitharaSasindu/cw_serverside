@@ -9,8 +9,11 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/select2.css'); ?>">
+	<script type='text/javascript' src="<?php echo base_url('assets/js/select2.js'); ?>"></script>
 	<script type="text/javascript">
         $(window).on('load', function () { // makes sure the whole site is loaded
             $('#status').fadeOut(); // will first fade out the loading animation
@@ -57,12 +60,22 @@
 		</form>
 	</div>
 
-	<br><br>
-	<h1>Followers</h1>
 	<?php
-	foreach ($followers as $key => $item) {
-		echo $followers[$key][0]; ?><?php echo $followers[$key][1];
-	} ?>
+	if(!empty($followers)){ ?>
+		<div class='page-small-title'>Your Followers,</div>
+	<?php }else{ ?>
+		<div class='page-small-title'>You have no Followers.</div>
+	<?php } ?>
+
+	<?php
+	foreach ($followers as $row) { ?>
+		<div class='profile' style="">
+			<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
+			<label class="label">
+				<?php echo $row->getFirstName(); ?>
+				<?php echo $row->getLastName(); ?>
+			</label></div>
+	<?php } ?>
 
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">

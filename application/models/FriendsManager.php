@@ -2,13 +2,19 @@
 
 class FriendsManager extends CI_Model
 {
-
 	function __construct()
 	{
 		parent::__construct();
 	}
 
-	function QueryUsersByGenre($genre)
+	/**
+	 * Returns list of users registered under a particular genre
+	 *
+	 * @param $genre search box value
+	 *
+	 * @return array favourite genre names list of users
+	 */
+	function queryUsersByGenre($genre)
 	{
 		$this->db->select('genreId, genreName');
 		$this->db->where('genreName', $genre);
@@ -17,121 +23,139 @@ class FriendsManager extends CI_Model
 
 		$usersSelected = array();
 		$this->db->select('genreId, userId');
-$this->db->where('genreId', $searchedGenreId);
+		$this->db->where('genreId', $searchedGenreId);
 		$query2 = $this->db->get('genre_connection');
 
 		foreach ($query2->result() as $row) {
-
 			$usersSelected[] = $row->userId;
 		}
 		return $usersSelected;
 	}
 
-
-//	function QueryUsersByGenre2($genre)
-//	{
-//
-//		$this->db->select('userId, lastName, firstName');
-//		$query = $this->db->get('users');
-//
-//		$selected = array();
-//		foreach ($query->result() as $row) {
-//
-//			if (strpos($row->musicGenre, $genre) !== false) {
-//				$selected[] = $row->userId;
-//			}
-//		}
-//		return $selected;
-//	}
-
-	function AddConnection($CurrentLoggedUserId, $followedByUserId)
+	/**
+	 * Insert new connection between two users into
+	 * connection table
+	 *
+	 * @param $CurrentLoggedUserId
+	 * @param $followedByUserId
+	 *
+	 * @return void
+	 */
+	function addConnection($CurrentLoggedUserId, $followedByUserId)
 	{
 		$newConnection = array('user_follows' => $followedByUserId, 'user' => $CurrentLoggedUserId);
 		$this->db->insert('connection', $newConnection);
 	}
 
-	//get friends user id list from follower snad followings and return friend list names
-	function FindFriends()
+	/**
+	 * Returns the particular user's friend list
+	 * by intersecting followers and followings in his account
+	 *
+	 * @param $userId
+	 *
+	 * @return array of friends' user details
+	 */
+	function findFriends($userId)
 	{
-		$friendsUserIds = array_intersect($this->GetFollowers(), $this->GetFollowings());
+		$friendsUserIds = array_intersect($this->getFollowers($userId), $this->getFollowings($userId));
 		$friendsNames = array();
 		foreach ($friendsUserIds as $key => $item) {
 			$this->db->where('userId', $friendsUserIds[$key]);
 			$query = $this->db->get('users');
 
 			foreach ($query->result() as $row) {
-				$friendsNames[] = array($row->firstName, $row->lastName);
+				$friendsNames[] = new User($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
 			}
 		}
 		return $friendsNames;
 	}
 
-	//get followers user ids and return array of user ids
-	function GetFollowers()
+	/**
+	 * Returns currently logged users followers list
+	 *
+	 * @param $userId
+	 *
+	 * @return array of user ids of followers
+	 */
+	function getFollowers($userId)
 	{
-		$currentLoggedUserId = $this->session->userdata('userId');
 		$this->db->select('user_follows, user');
 		$query = $this->db->get('connection');
 
 		$followers = Array();
 		foreach ($query->result() as $row) {
 
-			if ($currentLoggedUserId === $row->user_follows) {
+			if ($userId === $row->user_follows) {
 				$followers[] = $row->user;
 			}
 		}
 		return $followers;
 	}
 
-	//get followeings user ids from the connection table
-	function GetFollowings()
+	/**
+	 * Returns currently logged user's followings list
+	 *
+	 * @param $userId
+	 *
+	 * @return array of user ids followings
+	 */
+	function getFollowings($userId)
 	{
-		$currentLoggedUserId = $this->session->userdata('userId');
 		$this->db->select('user_follows, user');
 		$query = $this->db->get('connection');
 
 		$followings = Array();
 		foreach ($query->result() as $row) {
 
-			if ($currentLoggedUserId === $row->user) {
+			if ($userId === $row->user) {
 				$followings[] = $row->user_follows;
 			}
 		}
 		return $followings;
 	}
 
-	//get names of the followers from the user table
-	function GetFollowersNames(){
-		$followersUserIds = $this->GetFollowers();
-		$followersNames = array();
+	/**
+	 * Returns all the details of current user's followers
+	 *
+	 * @param $userId
+	 *
+	 * @return array followers details
+	 */
+	function getFollowersDetails($userId)
+	{
+		$followersUserIds = $this->getFollowers($userId);
+		$followersUserDetails = array();
 		foreach ($followersUserIds as $key => $item) {
 			$this->db->where('userId', $followersUserIds[$key]);
 			$query = $this->db->get('users');
 
 			foreach ($query->result() as $row) {
-				$followersNames[] = array($row->firstName, $row->lastName);
+				$followersUserDetails[] = new User($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
 			}
 		}
-		return $followersNames;
+		return $followersUserDetails;
 	}
 
-//get names of followings from user table
-	function GetFollowingsNames(){
-		$followingsUserIds = $this->GetFollowings();
-		$followingsNames = array();
+	/**
+	 * Returns all the following users' details of current user
+	 *
+	 * @param $userId
+	 *
+	 * @return array user details
+	 */
+	function getFollowingsDetails($userId)
+	{
+		$followingsUserIds = $this->getFollowings($userId);
+		$followingsUsersDetails = array();
 		foreach ($followingsUserIds as $key => $item) {
 			$this->db->where('userId', $followingsUserIds[$key]);
 			$query = $this->db->get('users');
 
 			foreach ($query->result() as $row) {
-				$name = $row->firstName + $row->lastName;
-				$followingsNames[] = array($row->firstName, $row->lastName);
+				$followingsUsersDetails[] = new User($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
 			}
 		}
-		return $followingsNames;
+		return $followingsUsersDetails;
 	}
-
-
-
 
 }

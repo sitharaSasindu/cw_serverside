@@ -15,7 +15,8 @@ class FriendsController extends CI_Controller
 	 *
 	 * @return void
 	 */
-	function showFriends(){
+	function showFriends()
+	{
 		$currentLoggedUserId = $this->session->userdata('userId');
 		$bagOfValues['friends'] = $this->friendsManager->FindFriends($currentLoggedUserId);
 		$this->load->view('friends', $bagOfValues);
@@ -26,7 +27,8 @@ class FriendsController extends CI_Controller
 	 *
 	 * @return void
 	 */
-	function ShowFollowings(){
+	function ShowFollowings()
+	{
 		$currentLoggedUserId = $this->session->userdata('userId');
 		$bagOfValues['followings'] = $this->friendsManager->getFollowingsDetails($currentLoggedUserId);
 		$this->load->view('followings_page', $bagOfValues);
@@ -37,7 +39,8 @@ class FriendsController extends CI_Controller
 	 *
 	 * @return void
 	 */
-	function showFollowers(){
+	function showFollowers()
+	{
 		$currentLoggedUserId = $this->session->userdata('userId');
 		$bagOfValues['followers'] = $this->friendsManager->getFollowersDetails($currentLoggedUserId);
 		$this->load->view('followers_page', $bagOfValues);
@@ -54,25 +57,17 @@ class FriendsController extends CI_Controller
 		$currentLoggedUserId = $this->session->userdata('userId');
 		$genre = $this->input->post('genreSearch');//get search box input
 		$searchResultsUserList = $this->friendsManager->queryUsersByGenre($genre);
-		$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
+		if(empty($searchResultsUserList)){
+			$bagOfValues['userListByGenre'] = null;
+			$this->load->view('search_results', $bagOfValues);
+		}else {
+			$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
 
-		$followingsNotInSearchList = array_diff($followingsUserIdList, $searchResultsUserList);
-		$searchListUsersNotInFollowings = array_diff($searchResultsUserList, $followingsUserIdList);
-		if(empty($followingsNotInSearchList)) {
-			if(!empty($searchListUsersNotInFollowings)) {
-				$bagOfValues['alreadyFollowedUsers'] = $followingsUserIdList;
-			}
-		}else{
-			if(sizeof($searchResultsUserList) >= sizeof($followingsUserIdList)){
-				$bagOfValues['alreadyFollowedUsers'] = $searchListUsersNotInFollowings;
-			}else{
-				$bagOfValues['alreadyFollowedUsers'] = $followingsNotInSearchList;
-			}
+			$bagOfValues['alreadyFollowedUsers'] = $followingsUserIdList;
+			$userListByGenre = $this->user->findUsersDetails($searchResultsUserList);
+			$bagOfValues['userListByGenre'] = $userListByGenre;
+			$this->load->view('search_results', $bagOfValues);
 		}
-
-		$userListByGenre = $this->user->findUsersDetails($searchResultsUserList);
-		$bagOfValues['userListByGenre'] = $userListByGenre;
-		$this->load->view('search_results', $bagOfValues);
 	}
 
 	/**
@@ -87,14 +82,11 @@ class FriendsController extends CI_Controller
 		$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
 		$checkIfAlreadyFollowed = in_array($followedByUserId, $followingsUserIdList);
 
-			if(empty($checkIfAlreadyFollowed)){
-				$newConnection = $this->friendsManager->addConnection($currentLoggedUserId, $followedByUserId );
-			} else{
-
-			}
-
-
-			redirect('followings');
+		if (empty($checkIfAlreadyFollowed)) {
+			$this->friendsManager->addConnection($currentLoggedUserId, $followedByUserId);
+		} else {
+			$this->friendsManager->unFollowAUser($followedByUserId, $currentLoggedUserId);
+		}
+		redirect('followings');
 	}
-
 }

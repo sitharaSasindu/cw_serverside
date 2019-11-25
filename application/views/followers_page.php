@@ -20,14 +20,27 @@
             $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
             $('body').delay(550).css({'overflow': 'visible'});
         })
-
 	</script>
+	<style>
+		.container{
+			padding-bottom: 100px;
+			height: 100%;
+		}
+		.background {
+			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+	</style>
 </head>
 <body onload="onload()">
 <div id="preloader">
 	<div id="status">&nbsp;</div>
 </div>
 
+<div class="background">
 <div class='container' style="background-color: #e2e0e0">
 	<div class="wall-profile">
 		<img align="left" class="wall-image-lg"
@@ -76,7 +89,7 @@
 				<?php echo $row->getLastName(); ?>
 			</label></div>
 	<?php } ?>
-
+</div>
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">
 			© Copyright 2019. All Rights Reserved.

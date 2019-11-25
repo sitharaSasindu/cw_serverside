@@ -8,6 +8,7 @@ Class HomePageController extends CI_Controller
 		parent::__construct();
 		$this->load->model('PostManager', 'post');
 		$this->load->model('FriendsManager', 'friendsManager');
+		$this->load->model('UserManager', 'user');
 	}
 
 	/**
@@ -54,7 +55,15 @@ Class HomePageController extends CI_Controller
 		if ($this->session->userdata('logged_in') == TRUE) {
 
 			$currentUserId = $this->session->userdata('userId');
-			$bagOfValues['allPosts'] = $this->post->getAllPosts($currentUserId);
+			$allPosts = $this->post->getAllPosts($currentUserId);
+//			print_r($allPosts);
+			foreach ($allPosts as $row){
+				$userIdList[] = $row->getUserId();
+			}
+//			$currentlyPostedUsersDetails = $this->user->findUsersDetails($userIdList);
+//			print_r($currentlyPostedUsersDetails);
+			$bagOfValues['currentlyPostedUsersDetails'] = $this->user->findUsersDetails($userIdList);
+			$bagOfValues['allPosts'] = $allPosts;
 
 			$this->load->view('home_page', $bagOfValues);
 		} else {

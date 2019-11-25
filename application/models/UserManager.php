@@ -148,8 +148,6 @@ class UserManager extends CI_Model
 			}
 		return $userDetails;
 		}
-
-
 	}
 
 	/**
@@ -168,32 +166,5 @@ class UserManager extends CI_Model
 			return false;
 		}
 	}
-
-
-
-
-
-	///get one user detail for page redirect
-	/**
-	 * Validate the password
-	 *
-	 * @param string $password user entered
-	 *
-	 * @return bool if strong enough password
-	 */
-//	function GetUserDetails($userId)
-//	{
-//		$this->db->where('userId', $userId);
-//		$query = $this->db->get('users');
-//
-//		$userDetails = array();
-//		foreach ($query->result() as $row) {
-//			$userDetails = new user($row->userId, $row->firstName, $row->lastName, $row->photoUrl);
-//		}
-//		return $userDetails;
-//
-//	}
-
-
 
 }

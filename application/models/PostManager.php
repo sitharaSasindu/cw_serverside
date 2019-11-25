@@ -40,6 +40,7 @@ class PostManager extends CI_Model
 
 		$userPosts = array();
 		foreach ($query->result() as $row) {
+			$checkPostBody = $this->createHyperlinks($row->title);
 			$userPosts[] = new Post($row->userId, $row->postId, $row->title, $row->timestamp);
 		}
 		return $userPosts;
@@ -57,25 +58,79 @@ class PostManager extends CI_Model
 		$currentUserPosts = $this->getPosts($currentUserId);
 		$followingsUsersId = $this->friendsManager->getFollowings($currentUserId);//get array of following users
 
-		$followingsUsersPosts = array();
-		foreach ($followingsUsersId as $row) {//get all the posts of following user by user
-			$followingsUsersPosts = $this->getPosts($row);
-		}
-
-		$followingsPostListArray = array();
-		foreach ($followingsUsersPosts as $row) {//get all the posts of the following users and assign them to array
-			$checkPostBody = $this->createHyperlinks($row->getPostBody());
-			$followingsPostListArray[] = new Post($row->getUserId(), $row->getPostId(), $checkPostBody, $row->getTimestamp());
-		}
-
 		$currentUserPostList = array();
 		foreach ($currentUserPosts as $row) { //get all the posts of the current user
 			$checkPostBody = $this->createHyperlinks($row->getPostBody());
 			$currentUserPostList[] = new Post($row->getUserId(), $row->getPostId(), $checkPostBody, $row->getTimestamp());
 		}
+//		print_r($currentUserPostList);
 
-		$allPosts = array_merge($currentUserPostList, $followingsPostListArray);
-		usort($allPosts, function($timestamp1, $timestamp2) {
+		$followingsUsersPosts = array();
+		foreach ($followingsUsersId as $row) {//get all the posts of following user by user
+			$followingsUsersPosts[] = $this->getPosts($row);
+		}
+		print_r($followingsUsersPosts);
+
+
+
+
+
+
+
+
+
+
+
+
+
+//		print_r( ($this->getPosts($row))->$row->getUserId());
+
+//		$followingsPostListArray = array();
+//		foreach ($followingsUsersId as $row) {//get all the posts of the following users and assign them to array
+//			$A = $this->getPosts($row);
+//			$checkPostBody = $this->createHyperlinks($A->getPostBody());
+//			$followingsPostListArray[] = new Post($A->getUserId(), $A->getPostId(), $checkPostBody, $A->getTimestamp());
+//		}
+//		print_r($followingsPostListArray);
+
+
+
+		$allPosts = array_merge($currentUserPostList, $followingsUsersPosts); //merge users pots and followings posts
+		$sortedAllPosts = $this->sortByDate($allPosts); //sort all posts by date
+		return $sortedAllPosts;
+	}
+
+	/**
+	 * Returns all the posts of a particular user
+	 *
+	 * @param $userId
+	 *
+	 * @return array of posts
+	 */
+	function getPublicHomePosts($userId)
+	{
+		$this->db->where('userId', $userId);
+		$query = $this->db->get('posts');
+
+		$userPosts = array();
+		foreach ($query->result() as $row) {
+			$checkPostBody = $this->createHyperlinks($row->title);
+			$userPosts[] = new Post($row->userId, $row->postId, $checkPostBody, $row->timestamp);
+		}
+		$sortedPosts = $this->sortByDate($userPosts);
+		return $sortedPosts;
+	}
+
+	/**
+	 * Returns the input array sorted by date
+	 *
+	 * @param $postArray
+	 *
+	 * @return array of posts
+	 */
+	function sortByDate($postArray)
+	{
+		usort($postArray, function ($timestamp1, $timestamp2) { //sort all posts by date
 			$time1 = new DateTime($timestamp2->getTimeStamp());
 			$time2 = new DateTime($timestamp1->getTimeStamp());
 
@@ -84,7 +139,7 @@ class PostManager extends CI_Model
 			}
 			return $time1 < $time2 ? -1 : 1;
 		});
-		return $allPosts;
+		return $postArray;
 	}
 
 	/**
@@ -128,5 +183,4 @@ class PostManager extends CI_Model
 		/** @var TYPE_NAME $identifiedStringText */
 		return $stringText;
 	}
-
 }

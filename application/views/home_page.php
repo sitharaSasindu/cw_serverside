@@ -19,12 +19,25 @@
             $('body').delay(550).css({'overflow': 'visible'});
         })
 	</script>
+	<style>
+		.container{
+			padding-bottom: 100px;
+			height: 100%;
+		}
+		.background {
+			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+	</style>
 </head>
 <body onload="onload()">
 <div id="preloader">
 	<div id="status">&nbsp;</div>
 </div>
-
+<div class="background">
 <div class='container' style="background-color: #e2e0e0">
 	<div class="wall-profile">
 		<img align="left" class="wall-image-lg"
@@ -104,7 +117,16 @@
 							</div>
 
 							<div class="timeline-label">
-								<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
+								<h2>
+										<?php foreach ($currentlyPostedUsersDetails as $user){
+											if($row->getUserId() === $user->getUserId()){ ?>
+												<img src=" <?php echo $user->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
+											<?php	echo $user->getFirstName();
+												echo $user->getLastName();
+												break;
+											}
+										} ?>
+									</span></h2>
 
 								<p><?php
 									echo $row->getPostBody() ?></p>
@@ -128,8 +150,14 @@
 							</div>
 
 							<div class="timeline-label">
-								<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile
-										Picture</a>
+								<h2><?php foreach ($currentlyPostedUsersDetails as $user){
+											if($row->getUserId() === $user->getUserId()){ ?>
+												<img src=" <?php echo $user->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
+												<?php	echo $user->getFirstName();
+												echo $user->getLastName();
+												break;
+											}
+										} ?></span>
 								</h2>
 								<p><?php echo $row->getPostBody()
 									?></p>
@@ -154,7 +182,7 @@
 
 		</article>
 	</div>
-
+</div>
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">
 			© Copyright 2019. All Rights Reserved.

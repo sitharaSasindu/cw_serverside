@@ -21,7 +21,6 @@ class PublicHomePageController extends CI_Controller
 		$redirectToUserId = $this->input->post('userId');//get user id of the redirect user
 		$result = $this->userManager->findUsersDetails($redirectToUserId);
 
-		print_r($result);
 		$redirectedUserSessionData = array(
 			'redirectedUsersUserId' => $redirectToUserId,
 			'redirectedUsersFirstName' => $result->getFirstName(),
@@ -33,7 +32,7 @@ class PublicHomePageController extends CI_Controller
 		$this->session->set_userdata($redirectedUserSessionData);
 
 		if ($this->session->userdata('redirectedUserSet') == TRUE) {
-			$bagOfValues['redirectedUserPosts'] = $this->posts->getPosts($redirectToUserId);
+			$bagOfValues['redirectedUserPosts'] = $this->posts->getPublicHomePosts($redirectToUserId);
 			$this->load->view('public_home_page', $bagOfValues);
 		} else {
 			$this->load->view('login_view');

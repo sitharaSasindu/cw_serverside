@@ -21,12 +21,25 @@
         })
 
 	</script>
+	<style>
+		.container{
+			padding-bottom: 100px;
+			height: 100%;
+		}
+		.background {
+			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+	</style>
 </head>
 <body onload="onload()">
 <div id="preloader">
 	<div id="status">&nbsp;</div>
 </div>
-
+<div class="background">
 <div class='container' style="background-color: #e2e0e0">
 	<div class="wall-profile">
 		<img align="left" class="wall-image-lg"
@@ -59,11 +72,10 @@
 		</form>
 	</div>
 
-
 	<div class="timeline-centered">
 		<?php
 		if(empty($redirectedUserPosts)) {
-echo "No Posts";
+		echo	"<div class='page-small-title'>This User hasn't posted anything yet.</div>";
 		}else{
 
 		foreach ($redirectedUserPosts as $key => $post) {
@@ -84,7 +96,8 @@ echo "No Posts";
 						</div>
 
 						<div class="timeline-label">
-							<h2><a href="#">Mohtashim M.</a> <span>Founder & Managing Director</span></h2>
+							<h2><span><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
+									<?php echo $this->session->userdata('redirectedUsersLastName'); ?></span></h2>
 							<p><?php echo $post->getPostBody()?></p>
 						</div>
 					</div>
@@ -105,7 +118,8 @@ echo "No Posts";
 						</div>
 
 						<div class="timeline-label">
-							<h2><a href="#">Gopal K Verma </a> <span>changed his</span> <a href="#">Profile Picture</a>
+							<h2> <span><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
+									<?php echo $this->session->userdata('redirectedUsersLastName'); ?></span>
 							</h2>
 							<p><?php echo $post->getPostBody()?></p>
 						</div>
@@ -128,8 +142,7 @@ echo "No Posts";
 
 		</article>
 	</div>
-	<!--			</div>-->
-	<!--	</div>-->
+				</div>
 
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">

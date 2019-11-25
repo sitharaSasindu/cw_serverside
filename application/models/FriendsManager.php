@@ -19,17 +19,22 @@ class FriendsManager extends CI_Model
 		$this->db->select('genreId, genreName');
 		$this->db->where('genreName', $genre);
 		$query = $this->db->get('genre');
-		$searchedGenreId = $query->row()->genreId;
 
-		$usersSelected = array();
-		$this->db->select('genreId, userId');
-		$this->db->where('genreId', $searchedGenreId);
-		$query2 = $this->db->get('genre_connection');
+		if ($query->num_rows() > 0) {
+			$searchedGenreId = $query->row()->genreId;
+			$usersSelected = array();
+			$this->db->select('genreId, userId');
+			$this->db->where('genreId', $searchedGenreId);
+			$query2 = $this->db->get('genre_connection');
 
-		foreach ($query2->result() as $row) {
-			$usersSelected[] = $row->userId;
+			foreach ($query2->result() as $row) {
+				$usersSelected[] = $row->userId;
+			}
+			return $usersSelected;
+		} else{
+			return false;
 		}
-		return $usersSelected;
+
 	}
 
 	/**
@@ -102,14 +107,13 @@ class FriendsManager extends CI_Model
 	function getFollowings($userId)
 	{
 		$this->db->select('user_follows, user');
+		$this->db->where('user', $userId);
 		$query = $this->db->get('connection');
 
 		$followings = Array();
 		foreach ($query->result() as $row) {
 
-			if ($userId === $row->user) {
 				$followings[] = $row->user_follows;
-			}
 		}
 		return $followings;
 	}
@@ -157,5 +161,13 @@ class FriendsManager extends CI_Model
 		}
 		return $followingsUsersDetails;
 	}
+
+	function unFollowAUser($toUnFollowUserId, $currentLoggedUserId)
+	{
+		$this->db->where('user_follows', $toUnFollowUserId);
+		$this->db->where('user', $currentLoggedUserId);
+		$this->db->delete('connection');
+	}
+
 
 }

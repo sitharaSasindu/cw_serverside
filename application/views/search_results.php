@@ -20,13 +20,16 @@
         })
 	</script>
 	<style>
+		.container{
+			padding-bottom: 100px;
+			height: 100%;
+		}
 		.background {
-			background-image: url("<?php echo base_url('assets/image/login_back.jpg'); ?>");
+			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			/*height: 100%;*/
 		}
 	</style>
 </head>
@@ -36,148 +39,100 @@
 </div>
 
 <div class="background">
-<div class='container' style="background-color: #e2e0e0">
-	<div class="wall-profile">
-		<img align="left" class="wall-image-lg"
-			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
-		<img align="left" class="wall-image-profile thumbnail"
-			 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
-		<div class="wall-profile-text">
-			<h1><?php echo $this->session->userdata('firstName'); ?>
-				<?php echo $this->session->userdata('lastName'); ?></h1>
-			<p><?php
-				$favGenreList = $this->session->userdata('musicGenre');
-				foreach ($favGenreList as $key => $item) {
-					echo $favGenreList[$key];
-					echo " ";
-				}
-				?></p>
+	<div class='container' style="background-color: #e2e0e0">
+		<div class="wall-profile">
+			<img align="left" class="wall-image-lg"
+				 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
+			<img align="left" class="wall-image-profile thumbnail"
+				 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
+			<div class="wall-profile-text">
+				<h1><?php echo $this->session->userdata('firstName'); ?>
+					<?php echo $this->session->userdata('lastName'); ?></h1>
+				<p><?php
+					$favGenreList = $this->session->userdata('musicGenre');
+					foreach ($favGenreList as $key => $item) {
+						echo $favGenreList[$key];
+						echo " ";
+					}
+					?></p>
+			</div>
 		</div>
-	</div>
 
-	<div class="navbar" style="background-color: #999999">
-		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i>
-			Friends</a>
-		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
-		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
-		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
-		<form class="form-inline" method="post"
-			  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
-			<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
-			<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
-		</form>
-	</div>
+		<div class="navbar" style="background-color: #999999">
+			<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+			<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i>
+				Friends</a>
+			<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
+			<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
+			<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+			<form class="form-inline" method="post"
+				  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
+				<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
+				<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
+			</form>
+		</div>
 
-	<h1>
-		<div style="text-align: -webkit-center; display: flex;">
-		<?php
-		if(empty($userListByGenre)){ ?>
-			<div class='page-small-title'>No Users Follow this Genre</div>
+		<h1>
+			<div style="text-align: -webkit-center; display: flex;">
+				<!--check if search result is empty-->
+				<?php if (empty($userListByGenre)) { ?>
+					<div class='page-small-title'>No Users Follow this Genre</div>
+					<?php
+				} else {
+					foreach ($userListByGenre as $key => $user) { //if it's not empty check one by one
+						if ($user->getUserId() !== $this->session->userdata('userId')) {//check whether current user exists in the search result?>
+							<!--select results where current user is not existing-->
+							<div class="panel panel-default" style="width: 75%">
+								<div class="panel-body">
 
-	<?php	}else{ ?>
-
-	<?php	foreach ($userListByGenre as $key=> $user) {
-			if ($user->getUserId() !== $this->session->userdata('userId')) {
-			?>
-				<div class="panel panel-default" style="width: 75%">
-					<div class="panel-body">
-
-						<form action="/2016372/cw_serverside/index.php/PublicHomePageController/RedirectToUserProfile"
-							  method="POST" class='form-group'>
-							<?php echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
-							<input id="submit-p" class="btn btn-outline-success" type="submit" value="Followeee">
-									<img src="<?php echo $user->getProfilePhotoUrl() ?>" class='avatar-search' >
-									<label class="label-profile"><h2>
-										<?php echo $user->getFirstName(); ?>
-										<?php echo $user->getLastName(); ?></h2>
-									</label>
-						</form>
-
-						<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser' method='POST' class='form-group'>
-						<?php
-						if (empty($alreadyFollowedUsers)) { ?>
-							<?php echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
-							<input id="submit-p" class="btn btn-outline-success" type="submit" value="Follow">
-						<?php }
-						else { ?>
-
-<div style="disply:inline:Block">
-				<?php			foreach ($alreadyFollowedUsers as $key2 => $item) {
-								if ($alreadyFollowedUsers[$key2] !==$user->getUserId()) {
-									?>
-									<?php echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
-									<input id="submit-p" class="btn btn-outline-success" type="submit" value="Follow">
-									<br>
-
-								<?php	} else
-									if ($user->getUserId() === $alreadyFollowedUsers[$key2]) {
-										?>
+									<!--View search result's User profiles with the names-->
+									<form
+										action="/2016372/cw_serverside/index.php/PublicHomePageController/RedirectToUserProfile"
+										method="POST" class='form-group'>
 										<?php echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
+										<img src="<?php echo $user->getProfilePhotoUrl() ?>" class='avatar-search'>
+										<label class="label-profile"><h2>
+												<?php echo $user->getFirstName(); ?>
+												<?php echo $user->getLastName(); ?></h2>
+										</label>
 										<input id="submit-p" class="btn btn-outline-success" type="submit"
-														   value="Unfollow">
+											   value="View Profile">
+									</form>
 
+									<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser'
+										  method='POST' class='form-group'>
+										<div style="disply:inline:Block">
+											<!--check whether user particular user is already followed or not-->
+											<?php
+											if (in_array($user->getUserId(), $alreadyFollowedUsers)) {
+												echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
+												<input id="submit-p" class="btn btn-outline-success" type="submit"
+													   value="UnFollow">
+											<?php } else {
+												echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
+												<input id="submit-p" class="btn btn-outline-success" type="submit"
+													   value="Follow">
 
-										<?php
-									}
-
-
-								}
-							?>
+											<?php } ?>
+										</div>
+									</form>
+								</div>
 							</div>
-
-						<?php	}
-						} ?>
-
-
-						</form>
+						<?php }
+					}
+				} ?>
 
 
-
-					</div>
-				</div>
-			<?php }
-		}
-////		foreach ($alreadyFollowedUsers as $key2 => $item) {
-//		if ($user->getUserId() !== $alreadyFollowedUsers[$key2]) {
-//		?>
-<!--			<br><br>    <input id="submit-p" class="btn btn-outline-success" type="submit"-->
-<!--							   value="unFollow">-->
-<!---->
-<!---->
-<!--		--><?php //}
-			//
-			//}?>
-
-
-		</div>
-	</h1>
+			</div>
+		</h1>
 
 
 
-
-<!--	--><?php
-//	if(!empty($followings)){ ?>
-<!--		<div class='page-small-title'>You are Following,</div>-->
-<!--	--><?php //}else{ ?>
-<!--		<div class='page-small-title'>You are not Following Anyone.</div>-->
-<!--	--><?php //} ?>
-<!---->
-<!--	--><?php
-//	foreach ($followings as $row) { ?>
-<!--		<div class='profile' style="">-->
-<!--			<img src="--><?php //echo $row->getProfilePhotoUrl() ?><!--" class='avatar' >-->
-<!--			<label class="label">-->
-<!--				--><?php //echo $row->getFirstName(); ?>
-<!--				--><?php //echo $row->getLastName(); ?>
-<!--			</label></div>-->
-<!--	--><?php //} ?>
-
-	<div class="page-footer">
-		<div class="footer-copyright" style="color: #938c8c;">
-			© Copyright 2019. All Rights Reserved.
+		<div class="page-footer">
+			<div class="footer-copyright" style="color: #938c8c;">
+				© Copyright 2019. All Rights Reserved.
+			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>

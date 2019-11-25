@@ -53,7 +53,8 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['register'] = 'UserController/registrationView';
+$route['register'] = 'PageController/register';
+$route['registerView'] = 'UserController/registrationView';
 $route['login'] = 'PageController/login';
 $route['friends'] = 'PageController/friends';
 $route['followers'] = 'PageController/followers';

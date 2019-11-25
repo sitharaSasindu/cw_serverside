@@ -53,24 +53,12 @@ Class HomePageController extends CI_Controller
 	function homePage()
 	{
 		if ($this->session->userdata('logged_in') == TRUE) {
-
 			$currentUserId = $this->session->userdata('userId');
-
-//			$userList = array_push($followingsUserIdList, $currentUserId);
-
-//			print_r($followingsUserIdList);
+			$userList = $this->friendsManager->getFollowings($currentUserId);//get array of following users
+			array_push($userList, $currentUserId);
 
 			$allPosts = $this->post->getAllPosts($currentUserId);
-
-
-
-//			print_r($allPosts);
-			foreach ($allPosts as $row){
-				$userIdList[] = $row->getUserId();
-			}
-//			$currentlyPostedUsersDetails = $this->user->findUsersDetails($userIdList);
-//			print_r($currentlyPostedUsersDetails);
-			$bagOfValues['currentlyPostedUsersDetails'] = $this->user->findUsersDetails($userIdList);
+			$bagOfValues['currentlyPostedUsersDetails'] = $this->user->findUsersDetails($userList);
 			$bagOfValues['allPosts'] = $allPosts;
 
 			$this->load->view('home_page', $bagOfValues);

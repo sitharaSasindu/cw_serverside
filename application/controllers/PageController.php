@@ -33,11 +33,11 @@ class PageController extends CI_Controller
 
 	function register()
 	{
-//		if ($this->session->userdata('logged_in') !== false) {
-//			redirect('home');
-//		} else {
-			$this->load->view('register');
-//		}
+		if (checkLoggedIn) {
+			redirect('home');
+		} else {
+			redirect('registerView');
+		}
 	}
 
 	function login()
@@ -69,11 +69,6 @@ class PageController extends CI_Controller
 
 	function followings()
 	{
-//		if (CheckLoggedIn) {
-//			redirect('showFollowings');
-//		} else {
-//			redirect('login');
-//		}
 		if (checkLoggedIn) {
 			redirect('showFollowings');
 		} else {

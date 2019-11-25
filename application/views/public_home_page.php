@@ -96,7 +96,7 @@
 						</div>
 
 						<div class="timeline-label">
-							<h2><span><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
+							<h2><img src=" <?php echo $this->session->userdata('redirectedUsersAvatarUrl'); ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span> <?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
 									<?php echo $this->session->userdata('redirectedUsersLastName'); ?></span></h2>
 							<p><?php echo $post->getPostBody()?></p>
 						</div>
@@ -118,7 +118,7 @@
 						</div>
 
 						<div class="timeline-label">
-							<h2> <span><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
+							<h2><img src=" <?php echo $this->session->userdata('redirectedUsersAvatarUrl'); ?>" style='width: 40px; height: 40px; border-radius: 50%;'> <span><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
 									<?php echo $this->session->userdata('redirectedUsersLastName'); ?></span>
 							</h2>
 							<p><?php echo $post->getPostBody()?></p>

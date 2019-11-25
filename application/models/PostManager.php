@@ -56,36 +56,18 @@ class PostManager extends CI_Model
 	function getAllPosts($currentUserId)
 	{
 		$userList = $this->friendsManager->getFollowings($currentUserId);//get array of following users
-		$userList = array_push($userList, $currentUserId);
-		print_r($userList);
-
-//		$currentUserPostList = array();
-//		foreach ($userList as $row) { //get all the posts of the current user
-//			$checkPostBody = $this->createHyperlinks($row->getPostBody());
-//			$currentUserPostList[] = new Post($row->getUserId(), $row->getPostId(), $checkPostBody, $row->getTimestamp());
-//		}
-//		print_r($currentUserPostList);
-
+		array_push($userList, $currentUserId);
 		$followingsUsersPosts = array();
-		foreach ($userList as $row) {//get all the posts of following user by user
-			$followingsUsersPosts[] = $this->getPosts($row);
-		}
-//		print_r($followingsUsersPosts);
-
-//		print_r( ($this->getPosts($row))->$row->getUserId());
-
 		$followingsPostListArray = array();
-		foreach ($followingsUsersId as $row) {//get all the posts of the following users and assign them to array
-			$A = $this->getPosts($row);
-			$checkPostBody = $this->createHyperlinks($A->getPostBody());
-			$followingsPostListArray[] = new Post($A->getUserId(), $A->getPostId(), $checkPostBody, $A->getTimestamp());
+		foreach ($userList as $row) {//get all the posts of following user by user
+			$followingsUsersPosts = $this->getPosts($row);
+			foreach($followingsUsersPosts as $item){
+				$checkPostBody = $this->createHyperlinks($item->getPostBody());
+				$followingsPostListArray[] = new Post($item->getUserId(), $item->getPostId(), $checkPostBody, $item->getTimestamp());
+			}
 		}
-//		print_r($followingsPostListArray);
+		$sortedAllPosts = $this->sortByDate($followingsPostListArray); //sort all posts by date
 
-
-
-		$allPosts = array_merge($currentUserPostList, $followingsUsersPosts); //merge users pots and followings posts
-		$sortedAllPosts = $this->sortByDate($allPosts); //sort all posts by date
 		return $sortedAllPosts;
 	}
 

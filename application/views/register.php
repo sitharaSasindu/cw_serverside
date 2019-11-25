@@ -67,6 +67,7 @@
 							<br> <span class="form-title">Sign Up<br><br></span>
 							<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
 								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<h4><?php echo $this->session->flashdata('registerValidation'); ?></h4>
 								<?php echo validation_errors(); ?>
 							</div>
 							<label class="label">First Name</label>
@@ -134,7 +135,7 @@
 						<div class="form-group">
 							<label class="label">Select Your Favorite Genres</label>
 							<select class='js-example-basic-multiple' name='selectedGenres[]' multiple='multiple'
-									style="width: 100%">
+									style="width: 100%" required>
 								<?php
 								foreach ($genre as $row) {
 									echo "<option value='" . $row->getGenreId() . "'>" . $row->getGenreName() . "</span>";

@@ -120,6 +120,24 @@ class UserManager extends CI_Model
 	}
 
 	/**
+	 * Check user exits
+	 *
+	 * @param $userName
+	 *
+	 * @return bool if user available
+	 */
+	function userExists($userName)
+	{
+		$this->db->where('userName', $userName);
+		$query = $this->db->get('users');
+
+		if ($query->num_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
 	 * Returns array of user details of particular users 
 	 *
 	 * @param $userId array of userIds 

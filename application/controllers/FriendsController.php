@@ -17,9 +17,14 @@ class FriendsController extends CI_Controller
 	 */
 	function showFriends()
 	{
-		$currentLoggedUserId = $this->session->userdata('userId');
-		$bagOfValues['friends'] = $this->friendsManager->FindFriends($currentLoggedUserId);
-		$this->load->view('friends', $bagOfValues);
+		if ($this->session->userdata('logged_in')){
+			$currentLoggedUserId = $this->session->userdata('userId');
+			$bagOfValues['friends'] = $this->friendsManager->FindFriends($currentLoggedUserId);
+			$this->load->view('friends', $bagOfValues);
+		}
+		else {
+			redirect('home');
+		}
 	}
 
 	/**
@@ -29,9 +34,14 @@ class FriendsController extends CI_Controller
 	 */
 	function ShowFollowings()
 	{
-		$currentLoggedUserId = $this->session->userdata('userId');
-		$bagOfValues['followings'] = $this->friendsManager->getFollowingsDetails($currentLoggedUserId);
-		$this->load->view('followings_page', $bagOfValues);
+		if ($this->session->userdata('logged_in')){
+			$currentLoggedUserId = $this->session->userdata('userId');
+			$bagOfValues['followings'] = $this->friendsManager->getFollowingsDetails($currentLoggedUserId);
+			$this->load->view('followings_page', $bagOfValues);
+		}
+		else {
+			redirect('home');
+		}
 	}
 
 	/**
@@ -41,11 +51,15 @@ class FriendsController extends CI_Controller
 	 */
 	function showFollowers()
 	{
-		$currentLoggedUserId = $this->session->userdata('userId');
-		$bagOfValues['followers'] = $this->friendsManager->getFollowersDetails($currentLoggedUserId);
-		$this->load->view('followers_page', $bagOfValues);
+		if ($this->session->userdata('logged_in')){
+			$currentLoggedUserId = $this->session->userdata('userId');
+			$bagOfValues['followers'] = $this->friendsManager->getFollowersDetails($currentLoggedUserId);
+			$this->load->view('followers_page', $bagOfValues);
+		}
+		else {
+			redirect('home');
+		}
 	}
-
 	/**
 	 * Get user's search box input genre and find all the users
 	 * registered under that genre

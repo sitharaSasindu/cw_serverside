@@ -30,6 +30,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
+			height: inherit;
 		}
 	</style>
 </head>

@@ -23,11 +23,16 @@ Class UserController extends CI_Controller
 	 */
 	function registrationView()
 	{
-		$genreList = $this->newUser->getAvailableGenres();
-		$musicGenreList = array(
-			'genre' => $genreList
-		);
-		$this->load->view('register', $musicGenreList);
+		if ($this->session->userdata('logged_in')){
+			redirect('home');
+		}
+		else{
+			$genreList = $this->newUser->getAvailableGenres();
+			$musicGenreList = array(
+				'genre' => $genreList
+			);
+			$this->load->view('register', $musicGenreList);
+		}
 	}
 
 	/**
@@ -40,18 +45,26 @@ Class UserController extends CI_Controller
 	{
 		if ($this->input->post()) {
 			if ($this->registrationFormValidation()) {
-				$this->load->view('register');
+				redirect('register');
 			} else {
-				$firstName = $this->input->post('firstName');
-				$lastName = $this->input->post('lastName');
 				$userName = $this->input->post('userName');
-				$email = $this->input->post('email');
-				$password = $this->input->post('password');
-				$photoUrl = $this->input->post('photoUrl');
-				$selectedGenreList = $this->input->post('selectedGenres');
+				if (!$this->newUser->userExists($userName)) {
+					$firstName = $this->input->post('firstName');
+					$lastName = $this->input->post('lastName');
+					$email = $this->input->post('email');
+					$password = $this->input->post('password');
+					$photoUrl = $this->input->post('photoUrl');
+					$selectedGenreList = $this->input->post('selectedGenres');
 
-				$this->newUser->userRegistration($firstName, $lastName, $userName, $email, $password, $photoUrl, $selectedGenreList);
-				redirect('login');
+					$this->newUser->userRegistration($firstName, $lastName, $userName, $email, $password, $photoUrl, $selectedGenreList);
+					$message = "You have registered Succesfully!";
+					echo $this->session->set_flashdata('registerValidation', 'You have registered Succesfully');
+					$this->load->view('register');
+				}else{
+					$message = "A user with that username already exists!";
+					echo $this->session->set_flashdata('registerValidation', 'A user with that username already exists!');
+					redirect('register');
+				}
 			}
 		}
 	}

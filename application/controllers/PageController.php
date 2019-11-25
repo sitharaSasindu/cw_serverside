@@ -1,16 +1,10 @@
 <?php
-
-
 class PageController extends CI_Controller
 {
 
 	function __construct()
 	{
 		parent::__construct();
-//		if ($this->session->userdata('logged_in') !== TRUE) {
-//			redirect('home');
-//		}
-//		$this->CheckLoggedIn();
 	}
 
 	function checkLoggedIn()
@@ -24,7 +18,7 @@ class PageController extends CI_Controller
 
 	public function Index()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('home');
 		} else {
 			$this->load->view('login_view');
@@ -33,7 +27,7 @@ class PageController extends CI_Controller
 
 	function register()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('home');
 		} else {
 			redirect('registerView');
@@ -42,7 +36,7 @@ class PageController extends CI_Controller
 
 	function login()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('home');
 		} else {
 			$this->load->view('login_view');
@@ -51,7 +45,7 @@ class PageController extends CI_Controller
 
 	function friends()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('showFriends');
 		} else {
 			$this->load->view('login_view');
@@ -60,7 +54,7 @@ class PageController extends CI_Controller
 
 	function followers()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('showFollowers');
 		} else {
 			redirect('login');
@@ -69,7 +63,7 @@ class PageController extends CI_Controller
 
 	function followings()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('showFollowings');
 		} else {
 			redirect('login');
@@ -79,7 +73,7 @@ class PageController extends CI_Controller
 
 	function home()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('home');
 		} else {
 			redirect('login');
@@ -88,7 +82,7 @@ class PageController extends CI_Controller
 
 	function showPublicHomePage()
 	{
-		if (checkLoggedIn) {
+		if ($this->checkLoggedIn()) {
 			redirect('showPublicHome');
 		} else {
 			redirect('login');

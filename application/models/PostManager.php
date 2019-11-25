@@ -55,42 +55,31 @@ class PostManager extends CI_Model
 	 */
 	function getAllPosts($currentUserId)
 	{
-		$currentUserPosts = $this->getPosts($currentUserId);
-		$followingsUsersId = $this->friendsManager->getFollowings($currentUserId);//get array of following users
+		$userList = $this->friendsManager->getFollowings($currentUserId);//get array of following users
+		$userList = array_push($userList, $currentUserId);
+		print_r($userList);
 
-		$currentUserPostList = array();
-		foreach ($currentUserPosts as $row) { //get all the posts of the current user
-			$checkPostBody = $this->createHyperlinks($row->getPostBody());
-			$currentUserPostList[] = new Post($row->getUserId(), $row->getPostId(), $checkPostBody, $row->getTimestamp());
-		}
+//		$currentUserPostList = array();
+//		foreach ($userList as $row) { //get all the posts of the current user
+//			$checkPostBody = $this->createHyperlinks($row->getPostBody());
+//			$currentUserPostList[] = new Post($row->getUserId(), $row->getPostId(), $checkPostBody, $row->getTimestamp());
+//		}
 //		print_r($currentUserPostList);
 
 		$followingsUsersPosts = array();
-		foreach ($followingsUsersId as $row) {//get all the posts of following user by user
+		foreach ($userList as $row) {//get all the posts of following user by user
 			$followingsUsersPosts[] = $this->getPosts($row);
 		}
-		print_r($followingsUsersPosts);
-
-
-
-
-
-
-
-
-
-
-
-
+//		print_r($followingsUsersPosts);
 
 //		print_r( ($this->getPosts($row))->$row->getUserId());
 
-//		$followingsPostListArray = array();
-//		foreach ($followingsUsersId as $row) {//get all the posts of the following users and assign them to array
-//			$A = $this->getPosts($row);
-//			$checkPostBody = $this->createHyperlinks($A->getPostBody());
-//			$followingsPostListArray[] = new Post($A->getUserId(), $A->getPostId(), $checkPostBody, $A->getTimestamp());
-//		}
+		$followingsPostListArray = array();
+		foreach ($followingsUsersId as $row) {//get all the posts of the following users and assign them to array
+			$A = $this->getPosts($row);
+			$checkPostBody = $this->createHyperlinks($A->getPostBody());
+			$followingsPostListArray[] = new Post($A->getUserId(), $A->getPostId(), $checkPostBody, $A->getTimestamp());
+		}
 //		print_r($followingsPostListArray);
 
 

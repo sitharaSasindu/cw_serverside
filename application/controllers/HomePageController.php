@@ -55,7 +55,15 @@ Class HomePageController extends CI_Controller
 		if ($this->session->userdata('logged_in') == TRUE) {
 
 			$currentUserId = $this->session->userdata('userId');
+
+//			$userList = array_push($followingsUserIdList, $currentUserId);
+
+//			print_r($followingsUserIdList);
+
 			$allPosts = $this->post->getAllPosts($currentUserId);
+
+
+
 //			print_r($allPosts);
 			foreach ($allPosts as $row){
 				$userIdList[] = $row->getUserId();

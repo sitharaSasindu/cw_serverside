@@ -24,12 +24,6 @@
 			}
 		}
 	</style>
-	<script>
-        function hideAlertBoxes() {
-            var y = document.getElementById("formValidateErrors");
-            y.style.display = "none";
-        }
-	</script>
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar" style="top: 0;">
@@ -42,9 +36,9 @@
 		<div class="row" style="margin-top: 62px">
 			<div class="col-lg-9"></div>
 			<div class="col-lg-3" style="background-color: white">
-				<label class="label">Not a Member</label><input type="button" onclick="location.replace('register')"
+				<label class="label">Not a Member</label><a href="/2016372/cw_serverside/index.php/UserController/registrationView"><input type="button"
 																id="signUp" value="Sign Up"
-																class="btn btn-xs btn-block">
+																class="btn btn-xs btn-block"></a>
 				<div class="login-form">
 					<div class="logo-container" align="center"><img
 							src="<?php echo base_url('assets/image/logo1.jpg'); ?>" width="100" height="150">
@@ -56,10 +50,13 @@
 
 							<br> <span class="form-title">Sign In<br><br></span>
 
-							<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
-								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-								<h4><?php echo $this->session->flashdata('msg'); ?></h4>
-							</div>
+							<?php if ($this->session->flashdata('msg')){ ?>
+								<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
+									<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+									<h4><?php echo $this->session->flashdata('msg'); ?></h4>
+								</div>
+							<?php }?>
+
 
 							<div class="wrap-input">
 								<input id="userName" class="input" type="userName" name="userName"

@@ -22,13 +22,12 @@
 	<style>
 		.avatar{
 			margin-right: 25px; margin-left: 20px;
-			/*position: relative;*/
 			margin-top: 10px;
 			border-radius: 50%;
 		}
 		.container{
 			padding-bottom: 100px;
-			height: 100%;
+			/*height: 100%;*/
 		}
 		.background {
 			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
@@ -36,7 +35,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: inherit;
+			height: 100%;
 		}
 	</style>
 </head>
@@ -92,8 +91,21 @@
 			<label class="label">
 				<?php echo $row->getFirstName(); ?>
 				<?php echo $row->getLastName(); ?>
-			</label></div>
+			</label>
+			<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser'
+				  method='POST' class='form-group'>
+				<div style="disply:inline:Block">
+					<!--check whether user particular user is already followed or not-->
+					<?php
+					echo "<input type='hidden' name='userId' value='" . $row->getUserId() . "' >" ?>
+					<input id="submit-p" class="btn btn-outline-success" type="submit"
+						   value="UnFollow">
+					<?php ?>
+				</div>
+			</form>
+		</div>
 	<?php } ?>
+
 </div>
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">

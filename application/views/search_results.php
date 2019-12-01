@@ -22,7 +22,7 @@
 	<style>
 		.container{
 			padding-bottom: 100px;
-			height: 100%;
+			/*height: 100%;*/
 		}
 		.background {
 			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
@@ -30,7 +30,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: inherit;
+			height: 100%;
 		}
 	</style>
 </head>

@@ -22,7 +22,6 @@
 	<style>
 		.container{
 			padding-bottom: 100px;
-			height: 100%;
 		}
 		.background {
 			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
@@ -30,7 +29,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: inherit;
+			height: 100%;
 		}
 	</style>
 </head>
@@ -122,8 +121,7 @@
 										<?php foreach ($currentlyPostedUsersDetails as $user){
 											if($row->getUserId() === $user->getUserId()){ ?>
 												<img src=" <?php echo $user->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
-											<?php	echo $user->getFirstName();
-												echo $user->getLastName();
+											<?php	echo $user->getFirstName(); echo $user->getLastName();
 												break;
 											}
 										} ?>

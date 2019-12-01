@@ -27,16 +27,10 @@
 		}
 	</style>
 	<script type="text/javascript">
-        function hideAlertBoxes() {
-            var x = document.getElementById("genreBox");
-            var y = document.getElementById("formValidateErrors");
-            x.style.display = "none";
-            y.style.display = "none";
-        }
-
         $(document).ready(function () {
             $('.js-example-basic-multiple').select2();
         });
+
 	</script>
 
 </head>
@@ -54,10 +48,9 @@
 			<div class="col-lg-3" style="background-color: white">
 				<div class="login-form">
 
-					<label class="label">Already a Member</label><input type="button"
-																		onclick="location.replace('login')"
+					<label class="label">Already a Member</label><a href="/2016372/cw_serverside/index.php/PageController/login"><input type="button"
 																		value="Sign In"
-																		class="btn btn-xs btn-block">
+																		class="btn btn-xs btn-block"></a>
 
 					<form id="login" name="loginForm"
 						  action="/2016372/cw_serverside/index.php/UserController/Registration"
@@ -65,15 +58,19 @@
 
 						<div class="form-group">
 							<br> <span class="form-title">Sign Up<br><br></span>
-							<div class="alert alert-success alert-dismissible fade in" id="formValidateErrors">
+							<h4 style="color: #97310e"><?php echo $this->session->flashdata('registerValidation'); ?></h4>
+							<?php IF(validation_errors()){ ?>
+								<div class="alert alert-success alert-dismissible fade in" >
 								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-								<h4><?php echo $this->session->flashdata('registerValidation'); ?></h4>
-								<?php echo validation_errors(); ?>
+							<?php echo validation_errors(); ?>
+						</div>
+						<?php } ?>
+							<div id="formValidateErrors">
 							</div>
 							<label class="label">First Name</label>
 							<div class="wrap-input">
 								<input id="firstName" class="input" type="text" name="firstName"
-									   placeholder="First Name">
+									   placeholder="First Name" >
 								<span class="focus-input"></span>
 							</div>
 						</div>
@@ -127,7 +124,7 @@
 							<label class="label">Avatar Url</label>
 							<div class="wrap-input">
 								<input type="url" class="input" name="photoUrl" id="photoUrl"
-									   placeholder="Enter a Url to Update Your Profile Photo">
+									   placeholder="Enter a Url to Update Your Profile Photo" required>
 								<span class="focus-input"></span>
 							</div>
 						</div>
@@ -143,7 +140,7 @@
 								?>
 							</select>
 						</div><br>
-
+						<input type="checkbox" name="t&c" value="terms" required> I agree to All the Terms & Conditions.<br>
 						<div class="form-group">
 							<center><br><input type="submit" id="loginbtn" value="Sign Up"
 										   class="btn btn-xs btn-success btn-block">

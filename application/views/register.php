@@ -58,7 +58,10 @@
 
 						<div class="form-group">
 							<br> <span class="form-title">Sign Up<br><br></span>
-							<h4 style="color: #97310e"><?php echo $this->session->flashdata('registerValidation'); ?></h4>
+							<h4 style="color: #10970e"><?php
+								if(!empty($validation)){
+									echo $validation;
+} ?></h4>
 							<?php IF(validation_errors()){ ?>
 								<div class="alert alert-success alert-dismissible fade in" >
 								<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

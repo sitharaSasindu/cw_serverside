@@ -29,7 +29,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: 100%;
+			/*height: 100%;*/
 		}
 	</style>
 </head>
@@ -59,6 +59,8 @@
 
 	<div class="navbar" style="background-color: #999999">
 		<a class="active" href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
+		<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
 		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
 		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
@@ -77,16 +79,6 @@
 					<form action="/2016372/cw_serverside/index.php/HomePageController/NewPost"
 						  method="post">
 						<textarea name='newpost' placeholder="What are you doing right now?"></textarea>
-						<ul>
-							<li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Audio"><i
-										class="fa fa-music"></i></a></li>
-							<li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Video"><i
-										class="fa fa-video-camera"></i></a></li>
-							<li><a title="" data-toggle="tooltip" data-placement="bottom"
-								   data-original-title="Sound Record"><i class="fa fa-microphone"></i></a></li>
-							<li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Picture"><i
-										class="fa fa-picture-o"></i></a></li>
-						</ul>
 						<button type="submit" class="btn btn-success green"><i class="fa fa-share"></i> Share</button>
 					</form>
 				</div>
@@ -121,7 +113,7 @@
 										<?php foreach ($currentlyPostedUsersDetails as $user){
 											if($row->getUserId() === $user->getUserId()){ ?>
 												<img src=" <?php echo $user->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
-											<?php	echo $user->getFirstName(); echo $user->getLastName();
+											<?php	echo $user->getFirstName()." ".$user->getLastName();
 												break;
 											}
 										} ?>
@@ -135,7 +127,6 @@
 					</article>
 
 				<?php } else { ?>
-
 
 					<article class="timeline-entry left-aligned">
 
@@ -152,8 +143,7 @@
 								<h2><?php foreach ($currentlyPostedUsersDetails as $user){
 											if($row->getUserId() === $user->getUserId()){ ?>
 												<img src=" <?php echo $user->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
-												<?php	echo $user->getFirstName();
-												echo $user->getLastName();
+												<?php	echo $user->getFirstName()." ".$user->getLastName();
 												break;
 											}
 										} ?></span>

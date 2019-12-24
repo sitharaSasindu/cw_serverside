@@ -35,7 +35,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: 100%;
+			/*height: 100%;*/
 		}
 	</style>
 </head>
@@ -66,9 +66,11 @@
 
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
+		<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
 		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
 		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
-		<a class="active" href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
+		<a class="active" href="/2016372/cw_serverside/index.php/contact"><i class="fa fa-fw fa-user"></i> Followings</a>
 		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
 		<form class="form-inline" method="post"
 			  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
@@ -79,32 +81,41 @@
 
 	<?php
 	if(!empty($followings)){ ?>
-		<div class='page-small-title'>You are Following,</div>
+		<?php
+		foreach ($followings as $row) {
+			foreach ($friends as $row2){
+				if($row != $row2){
+			?>
+					<div class='page-small-title'>You are Following,</div>
+			<div class='profile' style="">
+				<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
+				<label class="label-profile">
+					<?php echo $row->getFirstName(); ?>
+					<?php echo $row->getLastName(); ?>
+				</label>
+				<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser'
+					  method='POST' class='form-group'>
+					<div style="disply:inline:Block">
+						<?php
+						echo "<input type='hidden' name='userId' value='" . $row->getUserId() . "' >" ?>
+						<input id="submit-p" class="btn btn-warning" type="submit"
+							   value="UnFollow">
+						<?php ?>
+					</div>
+				</form>
+			</div>
+		<?php
+			}else if(count($followings) == count($friends)){ ?>
+					<div class='page-small-title'>You are not Following Anyone.</div>
+				<?php	}
+			}
+		} ?>
+
 	<?php }else{ ?>
 		<div class='page-small-title'>You are not Following Anyone.</div>
 	<?php } ?>
 
-	<?php
-	foreach ($followings as $row) { ?>
-		<div class='profile' style="">
-			<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
-			<label class="label">
-				<?php echo $row->getFirstName(); ?>
-				<?php echo $row->getLastName(); ?>
-			</label>
-			<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser'
-				  method='POST' class='form-group'>
-				<div style="disply:inline:Block">
-					<!--check whether user particular user is already followed or not-->
-					<?php
-					echo "<input type='hidden' name='userId' value='" . $row->getUserId() . "' >" ?>
-					<input id="submit-p" class="btn btn-outline-success" type="submit"
-						   value="UnFollow">
-					<?php ?>
-				</div>
-			</form>
-		</div>
-	<?php } ?>
+
 
 </div>
 	<div class="page-footer">

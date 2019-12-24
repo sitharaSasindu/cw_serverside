@@ -66,6 +66,21 @@ Class HomePageController extends CI_Controller
 			$this->load->view('login_view');
 		}
 	}
+
+	function userProfile()
+	{
+		if ($this->session->userdata('logged_in') == TRUE) {
+			$currentUserId = $this->session->userdata('userId');
+
+			$allPosts = $this->post->getPublicHomePosts($currentUserId);
+			$bagOfValues['currentlyPostedUsersDetails'] = $this->user->findUsersDetails($currentUserId);
+
+			$bagOfValues['allPosts'] = $allPosts;
+			$this->load->view('user_profile', $bagOfValues);
+		} else {
+			$this->load->view('login_view');
+		}
+	}
 }
 
 

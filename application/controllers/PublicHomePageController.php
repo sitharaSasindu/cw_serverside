@@ -16,7 +16,7 @@ class PublicHomePageController extends CI_Controller
 	 *
 	 * @return void
 	 */
-	function redirectToUserProfile()
+	function redirectToUserProfile($redirectToUserId)
 	{
 		$redirectToUserId = $this->input->post('userId');//get user id of the redirect user
 		$result = $this->userManager->findUsersDetails($redirectToUserId);

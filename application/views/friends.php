@@ -31,7 +31,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: 100%;
+			/*height: 100%;*/
 		}
 	</style>
 </head>
@@ -61,6 +61,8 @@
 
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
+		<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
 		<a class="active" href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
 		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
@@ -75,19 +77,22 @@
 	<?php
 	if(!empty($friends)){ ?>
 		<div class='page-small-title'>Your Friends,</div>
+		<?php
+		foreach ($friends as $row) { ?>
+			<div class='profile' style="">
+				<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
+				<label class="label-profile">
+					<?php echo $row->getFirstName(); ?>
+					<?php echo $row->getLastName(); ?>
+				</label>
+			</div>
+		<?php } ?>
+
 	<?php }else{ ?>
 		<div class='page-small-title'>You have no Friends.</div>
 	<?php } ?>
 
-	<?php
-	foreach ($friends as $row) { ?>
-		<div class='profile' style="">
-			<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
-			<label class="label">
-				<?php echo $row->getFirstName(); ?>
-				<?php echo $row->getLastName(); ?>
-			</label></div>
-	<?php } ?>
+
 </div>
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">

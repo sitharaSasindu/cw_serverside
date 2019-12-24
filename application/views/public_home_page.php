@@ -32,7 +32,7 @@
 			background-repeat: no-repeat;
 			background-size: cover;
 			background-attachment: fixed;
-			height: 100%;
+			/*height: 100%;*/
 		}
 	</style>
 </head>
@@ -62,6 +62,8 @@
 
 	<div class="navbar" style="background-color: #999999">
 		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+		<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
+		<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
 		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
 		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 		<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
@@ -97,8 +99,7 @@
 						</div>
 
 						<div class="timeline-label">
-							<h2><img src=" <?php echo $this->session->userdata('redirectedUsersAvatarUrl'); ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span> <?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
-									<?php echo $this->session->userdata('redirectedUsersLastName'); ?></span></h2>
+							<h2><img src=" <?php echo $this->session->userdata('redirectedUsersAvatarUrl'); ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span> <?php echo $this->session->userdata('redirectedUsersFirstName')." ".$this->session->userdata('redirectedUsersLastName'); ?></span></h2>
 							<p><?php echo $post->getPostBody()?></p>
 						</div>
 					</div>
@@ -106,7 +107,6 @@
 				</article>
 
 			<?php } else { ?>
-
 
 				<article class="timeline-entry left-aligned">
 
@@ -119,8 +119,7 @@
 						</div>
 
 						<div class="timeline-label">
-							<h2><img src=" <?php echo $this->session->userdata('redirectedUsersAvatarUrl'); ?>" style='width: 40px; height: 40px; border-radius: 50%;'> <span><?php echo $this->session->userdata('redirectedUsersFirstName'); ?>
-									<?php echo $this->session->userdata('redirectedUsersLastName'); ?></span>
+							<h2><img src=" <?php echo $this->session->userdata('redirectedUsersAvatarUrl'); ?>" style='width: 40px; height: 40px; border-radius: 50%;'> <span><?php echo $this->session->userdata('redirectedUsersFirstName')." ".$this->session->userdata('redirectedUsersLastName'); ?></span>
 							</h2>
 							<p><?php echo $post->getPostBody()?></p>
 						</div>

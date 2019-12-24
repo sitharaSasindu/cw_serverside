@@ -61,6 +61,8 @@ $route['followings'] = 'PageController/followings';
 $route['home'] = 'HomePageController/homePage';
 $route['logout'] = 'UserController/logOut';
 $route['publicHome'] = 'PageController/showPublicHomePage';
+$route['userProfile'] = 'HomePageController/userProfile';
+$route['contacts'] = 'ContactController';
 
 $route['showFriends'] = 'FriendsController/showFriends';
 $route['showHome'] = 'HomePageController/homePage';

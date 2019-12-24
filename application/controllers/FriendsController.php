@@ -36,6 +36,7 @@ class FriendsController extends CI_Controller
 	{
 		if ($this->session->userdata('logged_in')){
 			$currentLoggedUserId = $this->session->userdata('userId');
+			$bagOfValues['friends'] = $this->friendsManager->FindFriends($currentLoggedUserId);
 			$bagOfValues['followings'] = $this->friendsManager->getFollowingsDetails($currentLoggedUserId);
 			$this->load->view('followings_page', $bagOfValues);
 		}
@@ -53,6 +54,7 @@ class FriendsController extends CI_Controller
 	{
 		if ($this->session->userdata('logged_in')){
 			$currentLoggedUserId = $this->session->userdata('userId');
+			$bagOfValues['friends'] = $this->friendsManager->FindFriends($currentLoggedUserId);
 			$bagOfValues['followers'] = $this->friendsManager->getFollowersDetails($currentLoggedUserId);
 			$this->load->view('followers_page', $bagOfValues);
 		}
@@ -68,19 +70,23 @@ class FriendsController extends CI_Controller
 	 */
 	function showUsersByGenre()
 	{
-		$currentLoggedUserId = $this->session->userdata('userId');
-		$genre = $this->input->post('genreSearch');//get search box input
-		$searchResultsUserList = $this->friendsManager->queryUsersByGenre($genre);
-		if(empty($searchResultsUserList)){
-			$bagOfValues['userListByGenre'] = null;
-			$this->load->view('search_results', $bagOfValues);
-		}else {
-			$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
+		if ($this->session->userdata('logged_in')) {
+			$currentLoggedUserId = $this->session->userdata('userId');
+			$genre = $this->input->post('genreSearch');//get search box input
+			$searchResultsUserList = $this->friendsManager->queryUsersByGenre($genre);
+			if (empty($searchResultsUserList)) {
+				$bagOfValues['userListByGenre'] = null;
+				$this->load->view('search_results', $bagOfValues);
+			} else {
+				$followingsUserIdList = $this->friendsManager->getFollowings($currentLoggedUserId);
 
-			$bagOfValues['alreadyFollowedUsers'] = $followingsUserIdList;
-			$userListByGenre = $this->user->findUsersDetails($searchResultsUserList);
-			$bagOfValues['userListByGenre'] = $userListByGenre;
-			$this->load->view('search_results', $bagOfValues);
+				$bagOfValues['alreadyFollowedUsers'] = $followingsUserIdList;
+				$userListByGenre = $this->user->findUsersDetails($searchResultsUserList);
+				$bagOfValues['userListByGenre'] = $userListByGenre;
+				$this->load->view('search_results', $bagOfValues);
+			}
+		}else{
+			redirect('home');
 		}
 	}
 

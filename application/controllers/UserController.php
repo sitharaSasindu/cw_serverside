@@ -27,11 +27,18 @@ Class UserController extends CI_Controller
 			redirect('home');
 		}
 		else{
+			if( $this->session->flashdata('registerValidation')){
+				$validation = $this->session->flashdata('registerValidation');
+			}else{
+				$validation = null;
+			}
+
 			$genreList = $this->newUser->getAvailableGenres();
-			$musicGenreList = array(
+			$bagOfValues = array(
+				'validation' => $validation,
 				'genre' => $genreList
 			);
-			$this->load->view('register', $musicGenreList);
+			$this->load->view('register', $bagOfValues);
 		}
 	}
 
@@ -45,7 +52,7 @@ Class UserController extends CI_Controller
 	{
 		if ($this->input->post()) {
 			if ($this->registrationFormValidation()) {
-				$this->load->view('register');
+				$this->registrationView();
 			} else {
 				$userName = $this->input->post('userName');
 				if (!$this->newUser->userExists($userName)) {
@@ -58,72 +65,12 @@ Class UserController extends CI_Controller
 
 					$this->newUser->userRegistration($firstName, $lastName, $userName, $email, $password, $photoUrl, $selectedGenreList);
 					$this->session->set_flashdata('registerValidation', 'You have registered Successfully. Please Login!');
-					$this->load->view('register');
+					redirect('register');
 				}else{
 					$this->session->set_flashdata('registerValidation', 'A user with that username already exists!');
-					$this->load->view('register');
+					redirect('register');
 				}
 			}
-		}
-	}
-
-	/**
-	 * Validate the firstName and lastName fields
-	 *
-	 * @param string $userInput
-	 *
-	 * @return bool if inputs are in correct format
-	 */
-	function registrationFieldValidation($userInput= ''){
-		$userInput = trim($userInput);
-		$regex_number = '/[0-9]/';
-		$regex_special = '/[!@#$%^&*()\-_=+{};:,<.>§~]/';
-		if (empty($userInput)) {
-			$this->form_validation->set_message('registrationFieldValidation', 'The {field} field is required.');
-			return FALSE;
-		}
-		if (preg_match_all($regex_number, $userInput) > 1) {
-			$this->form_validation->set_message('registrationFieldValidation', 'The {field} field should not have any numbers.');
-			return FALSE;
-		}
-		if (preg_match_all($regex_special, $userInput) > 1) {
-			$this->form_validation->set_message('registrationFieldValidation', 'The {field} field should not have any special characters.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>§~'));
-			return FALSE;
-		}
-	}
-
-	/**
-	 * Validate the username
-	 *
-	 * @param string $userName
-	 *
-	 * @return bool if username format is valid
-	 */
-	function userNameFieldValidate($userName= ''){
-		$userName = trim($userName);
-		$regex_lowercase = '/[a-z]/';
-		$regex_uppercase = '/[A-Z]/';
-		$regex_number = '/[0-9]/';
-		$regex_special = '/[!@#$%^&*()\-_=+{};:,<.>§~]/';
-		if (empty($userName)) {
-			$this->form_validation->set_message('userNameFieldValidate', 'The {field} field is required.');
-			return FALSE;
-		}
-		if (preg_match_all($regex_uppercase, $userName) > 1) {
-			$this->form_validation->set_message('userNameFieldValidate', 'Capital letters are not allowed for {field} field.');
-			return FALSE;
-		}
-		if (preg_match_all($regex_lowercase, $userName) < 3) {
-			$this->form_validation->set_message('userNameFieldValidate', 'The {field} field must be at least three lowercase letters.');
-			return FALSE;
-		}
-		if (preg_match_all($regex_special, $userName) > 1) {
-			$this->form_validation->set_message('userNameFieldValidate', 'The {field} field should not have any special characters.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>§~'));
-			return FALSE;
-		}
-		if (strlen($userName) < 5) {
-			$this->form_validation->set_message('userNameFieldValidate', 'The {field} field must be at least 5 characters in length.');
-			return FALSE;
 		}
 	}
 
@@ -138,17 +85,17 @@ Class UserController extends CI_Controller
 			array(
 				'field' => 'firstName',
 				'label' => 'First Name',
-				'rules' => 'callback_registrationFieldValidation',
+				'rules' => 'required',
 			),
 			array(
 				'field' => 'lastName',
 				'label' => 'Last Name',
-				'rules' => 'callback_registrationFieldValidation',
+				'rules' => 'required',
 			),
 			array(
 				'field' => 'userName',
 				'label' => 'User Name',
-				'rules' => 'callback_userNameFieldValidate'
+				'rules' => 'required'
 			),
 			array(
 				'field' => 'email',
@@ -218,7 +165,6 @@ Class UserController extends CI_Controller
 			return FALSE;
 		}
 	}
-
 
 	/**
 	 * Validate login details with the user credentials

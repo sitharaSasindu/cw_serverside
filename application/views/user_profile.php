@@ -15,14 +15,13 @@
 	<script type="text/javascript">
         $(window).on('load', function () { // makes sure the whole site is loaded
             $('#status').fadeOut(); // will first fade out the loading animation
-            $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
+            $('#preloader').delay(650).fadeOut('slow'); // will fade out the white DIV that covers the website.
             $('body').delay(550).css({'overflow': 'visible'});
         })
 	</script>
 	<style>
 		.container{
 			padding-bottom: 100px;
-			/*height: 100%;*/
 		}
 		.background {
 			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
@@ -38,7 +37,6 @@
 <div id="preloader">
 	<div id="status">&nbsp;</div>
 </div>
-
 <div class="background">
 	<div class='container' style="background-color: #e2e0e0">
 		<div class="wall-profile">
@@ -61,10 +59,9 @@
 
 		<div class="navbar" style="background-color: #999999">
 			<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-			<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
+			<a class="active" href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
 			<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
-			<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i>
-				Friends</a>
+			<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
 			<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
 			<a href="/2016372/cw_serverside/index.php/followings"><i class="fa fa-fw fa-user"></i> Followings</a>
 			<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
@@ -75,67 +72,105 @@
 			</form>
 		</div>
 
-		<h1>
-			<div style="text-align: -webkit-center; display: flex;">
-				<!--check if search result is empty-->
-				<?php if (empty($userListByGenre)) { ?>
-					<div class='page-small-title'>No Users Follow this Genre</div>
-					<?php
-				} else {
-					foreach ($userListByGenre as $key => $user) { //if it's not empty check one by one
-						if ($user->getUserId() !== $this->session->userdata('userId')) {//check whether current user exists in the search result?>
-							<!--select results where current user is not existing-->
-							<div class="panel panel-default" style="width: 75%">
-								<div class="panel-body">
-
-									<!--View search result's User profiles with the names-->
-									<form
-										action="/2016372/cw_serverside/index.php/PublicHomePageController/RedirectToUserProfile"
-										method="POST" class='form-group'>
-										<?php echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
-										<img src="<?php echo $user->getProfilePhotoUrl() ?>" class='avatar-search'>
-										<label class="label-profile"><h2>
-												<?php echo $user->getFirstName(); ?>
-												<?php echo $user->getLastName(); ?></h2>
-										</label>
-										<input id="submit-p" class="btn btn-outline-success" type="submit"
-											   value="View Profile">
-									</form>
-
-									<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser'
-										  method='POST' class='form-group'>
-										<div style="disply:inline:Block">
-											<!--check whether user particular user is already followed or not-->
-											<?php
-											if (in_array($user->getUserId(), $alreadyFollowedUsers)) {
-												echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
-												<input id="submit-p" class="btn btn-outline-success" type="submit"
-													   value="UnFollow">
-											<?php } else {
-												echo "<input type='hidden' name='userId' value='" . $user->getUserId() . "' >" ?>
-												<input id="submit-p" class="btn btn-outline-success" type="submit"
-													   value="Follow">
-
-											<?php } ?>
-										</div>
-									</form>
-								</div>
-							</div>
-						<?php }
-					}
-				} ?>
-
-
-			</div>
-		</h1>
-
-
-
-		<div class="page-footer">
-			<div class="footer-copyright" style="color: #938c8c;">
-				© Copyright 2019. All Rights Reserved.
+		<div class="row">
+			<div class="col-md-9">
+				<div class="widget-area no-padding blank">
+					<div class="status-upload">
+						<form action="/2016372/cw_serverside/index.php/HomePageController/NewPost"
+							  method="post">
+							<textarea name='newpost' placeholder="What are you doing right now?"></textarea>
+							<button type="submit" class="btn btn-success green"><i class="fa fa-share"></i> Share</button>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
+
+		<div class="timeline-centered">
+			<?php
+			if (empty($allPosts)) { ?>
+				<div class='page-small-title'>You have No Posts. Start Posting Today,</div>
+			<?php	} else {
+				foreach ($allPosts as $key => $row) {
+					$date = date('Y-m-d', strtotime($row->getTimestamp()));
+					$time = date('H:i:s', strtotime($row->getTimestamp()));
+
+					if ($key % 2 == 0) { ?>
+
+						<article class="timeline-entry">
+
+							<div class="timeline-entry-inner">
+								<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time ?></span>
+									<span>	<?php echo $date ?></span>
+								</time>
+
+								<div class="timeline-icon bg-success">
+									<i class="entypo-feather"></i>
+								</div>
+
+								<div class="timeline-label">
+									<h2>
+										<img src=" <?php echo $currentlyPostedUsersDetails->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
+											<?php	echo $currentlyPostedUsersDetails->getFirstName()." ".$currentlyPostedUsersDetails->getLastName();
+											?>
+									</span></h2>
+
+									<p><?php
+										echo $row->getPostBody() ?></p>
+								</div>
+							</div>
+
+						</article>
+
+					<?php } else { ?>
+
+						<article class="timeline-entry left-aligned">
+
+							<div class="timeline-entry-inner">
+								<time class="timeline-time" datetime="2014-01-10T03:45"><span><?php echo $time ?></span>
+									<span><?php echo $date ?></span>
+								</time>
+
+								<div class="timeline-icon bg-warning">
+									<i class="entypo-camera"></i>
+								</div>
+
+								<div class="timeline-label">
+									<h2>
+										<img src=" <?php echo $currentlyPostedUsersDetails->getProfilePhotoUrl() ?>" style='width: 40px; height: 40px; border-radius: 50%;'><span>
+											<?php	echo $currentlyPostedUsersDetails->getFirstName()." ".$currentlyPostedUsersDetails->getLastName();
+											?>
+									</span></h2>
+									<p><?php echo $row->getPostBody()
+										?></p>
+								</div>
+							</div>
+
+						</article>
+					<?php }
+				}
+			} ?>
+
+			<article class="timeline-entry begin">
+
+				<div class="timeline-entry-inner">
+
+					<div class="timeline-icon"
+						 style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
+						<i class="entypo-flight"></i>
+					</div>
+
+				</div>
+
+			</article>
+		</div>
 	</div>
+	<div class="page-footer">
+		<div class="footer-copyright" style="color: #938c8c;">
+			© Copyright 2019. All Rights Reserved.
+		</div>
+	</div>
+
+
 </body>
 </html>

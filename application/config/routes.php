@@ -62,7 +62,7 @@ $route['home'] = 'HomePageController/homePage';
 $route['logout'] = 'UserController/logOut';
 $route['publicHome'] = 'PageController/showPublicHomePage';
 $route['userProfile'] = 'HomePageController/userProfile';
-$route['contacts'] = 'ContactController';
+$route['contacts'] = 'ContactsController';
 
 $route['showFriends'] = 'FriendsController/showFriends';
 $route['showHome'] = 'HomePageController/homePage';

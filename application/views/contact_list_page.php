@@ -7,13 +7,16 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/time-line.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/home_page.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/select2.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/select2.js'); ?>"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="<?php echo base_url('assets/js/underscore.js'); ?>"></script>
+	<meta charset="UTF-8">
+	<script src="<?php echo base_url('assets/js/backbone.js'); ?>"></script>
 	<script type="text/javascript">
         $(window).on('load', function () { // makes sure the whole site is loaded
             $('#status').fadeOut(); // will first fade out the loading animation
@@ -22,10 +25,11 @@
         })
 	</script>
 	<style>
-		.container{
+		.container {
 			padding-bottom: 100px;
 			/*height: 100%;*/
 		}
+
 		.background {
 			background-image: url("<?php echo base_url('assets/image/back3.jpg'); ?>");
 			background-position: center;
@@ -78,104 +82,55 @@
 
 		<div style="background-color: #ffffff">
 
-		<form id="createContact" name="createContactForm"
-			  action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
-			  method="post">
-			<div class="form-group">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Address</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Action</th>
+				</tr>
+				<tr>
+<!--					<td><input class="form-control contactID-input"></td>-->
+					<td><input class="form-control firstName-input"></td>
+					<td><input class="form-control lastName-input"></td>
+					<td><input class="form-control address-input"></td>
+					<td><input class="form-control email-input"></td>
+					<td><input class="form-control phone-input"></td>
+					<td>
+						<button class="btn btn-primary add-blog">Add</button>
+					</td>
+				</tr>
+				</thead>
+				<tbody class="blogs-list"></tbody>
+			</table>
 
-				<br> <span class="form-title">Create Contact<br><br></span>
-				<div class="wrap-input">
-					<input id="name" class="input" type="userName" name="userName"
-						   placeholder="UserName">
-					<span class="focus-input"></span>
-				</div>
-			</div>
+			<script type="text/template" class="blogs-list-template">
+				<td class="hidden"><span class="contactID"><%= contactID %></span></td>
+				<td><span class="firstName"><%= firstName %></span></td>
+				<td><span class="lastName"><%= lastName %></span></td>
+				<td><span class="address"><%= address %></span></td>
+				<td><span class="email"><%= email %></span></td>
+				<td><span class="phone"><%= phone %></span></td>
+				<td>
+					<button class="btn btn-warning edit-blog">Edit</button>
+					<button class="btn btn-danger delete-blog">Delete</button>
+					<button class="btn btn-success update-blog" style="display:none">Update</button>
+					<button class="btn btn-danger cancel" style="display:none">Cancel</button>
+				</td>
 
-			<div class="form-group">
-				<div class="wrap-input">
-					<input type="Password" class="input" name="password" id="password"
-						   placeholder="Password">
-					<span class="focus-input"></span>
-				</div>
-			</div>
-
-			<center>
-				<input type="submit" id="loginbtn" value="Create"
-					   class="btn btn-xs btn-success btn-block">
-			</center>
-		</form>
-
-<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
-
-		<form id="createContact" name="createContactForm"
-			  action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
-			  method="post">
-			<div class="form-group">
-				<br> <span class="form-title">Show Contact<br><br></span>
-
-				<label class="label">Last Name</label>
-			</div>
-
-		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
-
-			<form id="createContact" name="createContactForm"
-				  action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
-				  method="post">
-				<div class="form-group">
-
-					<br> <span class="form-title">Delete Contact<br><br></span>
-					<div class="wrap-input">
-						<input id="name" class="input" type="userName" name="userName"
-							   placeholder="UserName">
-						<span class="focus-input"></span>
-					</div>
-				</div>
-
-				<center>
-					<input type="submit" id="loginbtn" value="Delete"
-						   class="btn btn-xs btn-success btn-block">
-				</center>
-			</form>
-
-		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
-
-			<form id="createContact" name="createContactForm"
-				  action="/2016372/cw_serverside/index.php/UserController/CheckLogin"
-				  method="post">
-				<div class="form-group">
-
-					<br> <span class="form-title">Update Contact<br><br></span>
-					<div class="wrap-input">
-						<input id="name" class="input" type="userName" name="userName"
-							   placeholder="UserName">
-						<span class="focus-input"></span>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="wrap-input">
-						<input type="Password" class="input" name="password" id="password"
-							   placeholder="Password">
-						<span class="focus-input"></span>
-					</div>
-				</div>
-
-				<center>
-					<input type="submit" id="loginbtn" value="Update"
-						   class="btn btn-xs btn-success btn-block">
-				</center>
-			</form>
+			</script>
+			<script src="<?php echo base_url('assets/js/backbone_script.js'); ?>"></script>
 
 
-</div>
-
-		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
-	</div>
-	<div class="page-footer">
-		<div class="footer-copyright" style="color: #938c8c;">
-			© Copyright 2019. All Rights Reserved.
 		</div>
-	</div>
+		<div class="page-footer">
+			<div class="footer-copyright" style="color: #938c8c;">
+				© Copyright 2019. All Rights Reserved.
+			</div>
+		</div>
 </body>
 </html>
 

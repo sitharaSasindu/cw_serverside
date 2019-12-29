@@ -12,6 +12,9 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/main.css'); ?>">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/preloader.css'); ?>">
 	<script type='text/javascript' src="<?php echo base_url('assets/js/main.js'); ?>"></script>
+
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/select2.css'); ?>">
+	<script type='text/javascript' src="<?php echo base_url('assets/js/select2.js'); ?>"></script>
 	<script type="text/javascript">
         $(window).on('load', function () { // makes sure the whole site is loaded
             $('#status').fadeOut(); // will first fade out the loading animation
@@ -84,6 +87,35 @@
 					</div>
 				</div>
 			</div>
+		</div>
+
+
+		<script type="text/javascript">
+            $(document).ready(function() {
+                $('.user_data').select2({
+                    ajax: {
+                        url: "<?php echo base_url(); ?>index.php/ContactsAPI/tag/",
+                        dataType: 'json',
+                        processResults: function (data) {
+                          var data_array = [];
+                            data.forEach(function(value,key){
+                                data_array.push({id:value.tagID,text:value.tagName})
+                            });
+
+                            return {
+                                results: data_array
+                            }
+                        }
+                    }
+                });
+            });
+		</script>
+
+		<div id="banner-message">
+			<p>Hello World</p>
+			<select class="user_data" name='selectedGenres[]' multiple='multiple'>
+				<option value="">Select User</option>
+			</select>
 		</div>
 
 		<div class="timeline-centered">

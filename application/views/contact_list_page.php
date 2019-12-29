@@ -39,6 +39,12 @@
 			/*height: 100%;*/
 		}
 	</style>
+	<script type="text/javascript">
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2();
+        });
+
+	</script>
 </head>
 <body onload="onload()">
 <div id="preloader">
@@ -82,48 +88,103 @@
 
 		<div style="background-color: #ffffff">
 
-			<table class="table">
+			<button class="btn btn-warning show">Add Contact</button>
+			<button style="text-align: right" class="btn btn-warning tagsShow"> Tags
+			</button>
+			<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
+			<table class="table-tag" style="text-align-last: right;">
+				<thead>
+				<tr class="insert-tag">
+					<td><input placeholder="Tag Name" class="form-control tagName-input"></td>
+					<td>
+						<button class="btn btn-primary add-tag">Add</button>
+					</td>
+				</tr>
+				</thead>
+				<tbody class="tag-list"></tbody>
+			</table>
+
+			<br><br>
+
+			<table class="table" style="text-align-last: center;">
 				<thead>
 				<tr>
 					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Address</th>
-					<th>Email</th>
+					<th class="">Last Name</th>
+					<th class="tb-header-address">Address</th>
+					<th class="tb-header-email">Email</th>
 					<th>Phone</th>
+					<th class="tb-header-tags">Tags</th>
 					<th>Action</th>
 				</tr>
-				<tr>
-<!--					<td><input class="form-control contactID-input"></td>-->
+				<tr class="insert-contact">
 					<td><input class="form-control firstName-input"></td>
 					<td><input class="form-control lastName-input"></td>
 					<td><input class="form-control address-input"></td>
 					<td><input class="form-control email-input"></td>
 					<td><input class="form-control phone-input"></td>
 					<td>
-						<button class="btn btn-primary add-blog">Add</button>
+						<script type="text/javascript">
+                            $(document).ready(function() {
+                                $('.selected_tags').select2({
+                                    ajax: {
+                                        url: "<?php echo base_url(); ?>index.php/ContactsAPI/tag/",
+                                        dataType: 'json',
+                                        processResults: function (data) {
+                                            var data_array = [];
+                                            data.forEach(function(value,key){
+                                                data_array.push({id:value.tagID,text:value.tagName})
+                                            });
+
+                                            return {
+                                                results: data_array
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+						</script>
+							<select class="selected_tags" name='selectedGenres[]' multiple='multiple' style="width: 100% ">
+								<option value="">Select Tags</option>
+							</select>
+					</td>
+					<td>
+						<button class="btn btn-primary add-contact">Add</button>
 					</td>
 				</tr>
 				</thead>
-				<tbody class="blogs-list"></tbody>
+				<tbody class="contact-list"></tbody>
 			</table>
 
-			<script type="text/template" class="blogs-list-template">
+			<script type="text/template" class="contacts-list">
 				<td class="hidden"><span class="contactID"><%= contactID %></span></td>
-				<td><span class="firstName"><%= firstName %></span></td>
+				<td><span class="firstName"><%= firstName  %></span></td>
 				<td><span class="lastName"><%= lastName %></span></td>
-				<td><span class="address"><%= address %></span></td>
-				<td><span class="email"><%= email %></span></td>
+				<td class="td-address"><span class="address"><%= address %></span></td>
+				<td class="td-email"><span class="email"><%= email %></span></td>
 				<td><span class="phone"><%= phone %></span></td>
 				<td>
-					<button class="btn btn-warning edit-blog">Edit</button>
-					<button class="btn btn-danger delete-blog">Delete</button>
-					<button class="btn btn-success update-blog" style="display:none">Update</button>
+					<button class="btn btn-warning moreDetails-contact">Show-more</button>
+					<button class="btn btn-warning edit-contact">Edit</button>
+					<button class="btn btn-danger delete-contact">Delete</button>
+					<button class="btn btn-success update-contact" style="display:none">Update</button>
 					<button class="btn btn-danger cancel" style="display:none">Cancel</button>
 				</td>
-
 			</script>
-			<script src="<?php echo base_url('assets/js/backbone_script.js'); ?>"></script>
 
+			<script type="text/template" class="tags-list">
+				<td class="hidden"><span class="tagID"><%= tagID %></span></td>
+				<td><span class="tagName"><%= tagName  %></span></td>
+				<td>
+					<button class="btn btn-warning edit-tag">Edit</button>
+					<button class="btn btn-danger delete-tag">Delete</button>
+					<button class="btn btn-success update-tag" style="display:none">Update</button>
+					<button class="btn btn-danger cancel" style="display:none">Cancel</button>
+				</td>
+			</script>
+
+			<script src="<?php echo base_url('assets/js/contacts_script.js'); ?>"></script>
+			<script src="<?php echo base_url('assets/js/tags_script.js'); ?>"></script>
 
 		</div>
 		<div class="page-footer">

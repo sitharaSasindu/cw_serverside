@@ -13,23 +13,84 @@ class ContactsManager extends CI_Model {
 	 */
 	function fetchDetails($id = ""){
 		if(!empty($id)){
-			$query = $this->db->get_where('contacts', array('contactID' => $id));
-			return $query->row_array();
+			$this->db->select('tagName, tagID');
+			$this->db->where('tagName', $id);
+			$query = $this->db->get('contacts_tags');
+			if($query->num_rows() >= 1)
+			{
+				foreach($query->result() as $row){
+					$str = json_encode($row->tagID);
+					return $this->fetchContactsByTags(trim($str, '"'));
+				}
+			}else {
+				$query1 = $this->db->get_where('contacts', array('firstName' => $id))->result_array();
+				$query2 = $this->db->get_where('contacts', array('lastName' => $id))->result_array();
+				$query = array_merge($query1, $query2);
+				return $query;
+			}
+
+
+
+//			$this->db->select('contactID, tagID');
+//			$query = $this->db->get('contacts_connection');
+//
+//			$selectedContacts = Array();
+//			foreach ($query->result() as $row) {
+//
+//				if ($id === $row->tagID) {
+//					$selectedContacts[] = $row->contactID;
+//				}
+//			}
+//			return $selectedContacts;
+
+
+
 		}else{
 			$query = $this->db->get('contacts');
 			return $query->result_array();
 		}
 	}
 
+	function fetchContactsByTags($tagID){
+		$this->db->select("*");
+		$this->db->from("contacts_connection");
+		$this->db->where('tagID', $tagID);
+
+		$query_data = $this->db->get()->result_array();
+		return $query_data;
+
+
+
+
+//		$this->db->select('contactID, tagID');
+//		$query = $this->db->get('contacts_connection');
+//
+//		$selectedContacts = Array();
+//		foreach ($query->result() as $row) {
+//
+//			if ($tagID === $row->tagID) {
+//				$selectedContacts[] = $row->contactID;
+//			}
+//		}
+//		return $selectedContacts;
+	}
+
 	/**
 	 * Insert new contact details to database
 	 * @param array $data
+	 * @param $contactTags
 	 * @return bool
 	 */
-	public function insertDetails($data = array()) {
+	public function insertDetails($data = array(), $contactTags) {
 		$data['created'] = date("Y-m-d H:i:s");
 		$data['modified'] = date("Y-m-d H:i:s");
 		$insertDetails = $this->db->insert('contacts', $data);
+
+		foreach ($contactTags as $key => $item1) {//insert particular contact's tags to database
+			$tagsOfContact = array('contactID' => $data['contactID'], 'tagID' => $contactTags[$key]);
+			$this->db->insert('contacts_connection', $tagsOfContact);
+		}
+
 		return $insertDetails?true:false;
 	}
 

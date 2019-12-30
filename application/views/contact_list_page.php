@@ -91,7 +91,9 @@
 			<button class="btn btn-warning show">Add Contact</button>
 			<button style="text-align: right" class="btn btn-warning tagsShow"> Tags
 			</button>
-			<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
+			<input class="form-control search" name="search" type="text" placeholder="Search">
+			<button style="text-align: right" class="btn btn-warning searchBtn"> Search
+			</button>
 			<table class="table-tag" style="text-align-last: right;">
 				<thead>
 				<tr class="insert-tag">
@@ -145,7 +147,6 @@
                             });
 						</script>
 							<select class="selected_tags" name='selectedGenres[]' multiple='multiple' style="width: 100% ">
-								<option value="">Select Tags</option>
 							</select>
 					</td>
 					<td>

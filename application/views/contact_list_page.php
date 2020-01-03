@@ -164,6 +164,7 @@
 				<td class="td-address"><span class="address"><%= address %></span></td>
 				<td class="td-email"><span class="email"><%= email %></span></td>
 				<td><span class="phone"><%= phone %></span></td>
+				<td><span class="contactTags"><%= contactTags %></span></td>
 				<td>
 					<button class="btn btn-warning moreDetails-contact">Show-more</button>
 					<button class="btn btn-warning edit-contact">Edit</button>

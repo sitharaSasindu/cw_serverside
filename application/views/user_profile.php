@@ -89,35 +89,6 @@
 			</div>
 		</div>
 
-
-		<script type="text/javascript">
-            $(document).ready(function() {
-                $('.user_data').select2({
-                    ajax: {
-                        url: "<?php echo base_url(); ?>index.php/ContactsAPI/tag/",
-                        dataType: 'json',
-                        processResults: function (data) {
-                          var data_array = [];
-                            data.forEach(function(value,key){
-                                data_array.push({id:value.tagID,text:value.tagName})
-                            });
-
-                            return {
-                                results: data_array
-                            }
-                        }
-                    }
-                });
-            });
-		</script>
-
-		<div id="banner-message">
-			<p>Hello World</p>
-			<select class="user_data" name='selectedGenres[]' multiple='multiple'>
-				<option value="">Select User</option>
-			</select>
-		</div>
-
 		<div class="timeline-centered">
 			<?php
 			if (empty($allPosts)) { ?>

@@ -11,10 +11,11 @@ class ContactsManager extends CI_Model
 	/**
 	 * Fetch contacts details from the database
 	 * @param string $id
-	 * @return
+	 * @return array
 	 */
 	function fetchDetails($id = "")
 	{
+		$userId = $this->session->userdata('userId');
 		if (!empty($id)) {
 			$this->db->select('tagName, tagID');
 			$this->db->where('tagName', $id);
@@ -22,22 +23,95 @@ class ContactsManager extends CI_Model
 			if ($query->num_rows() >= 1) {
 				foreach ($query->result() as $row) {
 					$str = json_encode($row->tagID);
-					return $this->fetchContactsByTags(trim($str, '"'));
+					$result = $this->fetchContactsByTags(trim($str, '"'));
+					return $this->getContactTags($result);
 				}
 			} else {
-				$query1 = $this->db->get_where('contacts', array('firstName' => $id))->result_array();
-				$query2 = $this->db->get_where('contacts', array('lastName' => $id))->result_array();
+				$query1 = $this->db->get_where('contacts', array('firstName' => $id, 'userId' => $userId))->result();
+				$query2 = $this->db->get_where('contacts', array('lastName' => $id, 'userId' => $userId))->result();
 				$query = array_merge($query1, $query2);
-				return $query;
+				return $this->getContactTags($query);
 			}
 		} else {
+//			$query = $this->db->get_where('contacts', array('userId' => $userId));
 			$query = $this->db->get('contacts');
-			return $query->result_array();
+			return $this->getContactTags($query->result());
 		}
 	}
 
+	/**
+	 * Add particular tags to user details array
+	 * @param $queryResult
+	 * @return array
+	 */
+	function getContactTags($queryResult)
+	{
+		$queriedContactIds = array();
+		$userDetails = array();
+		$arrayOfTagNames = array();
+		foreach ($queryResult as $row) {
+			if ($this->getTagsByContact($row->contactID)->num_rows() <= 1) {
+				foreach ($this->getTagsByContact($row->contactID)->result() as $row2) {
+					$tagId = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', $row2->tagID);
+					$tagNamesOfContact = $this->getTagNameByID($tagId);
+					$queriedContactIds[] = $tagNamesOfContact;
+					$array = json_decode(json_encode($row), True);
+					$array['contactTags'] = $tagNamesOfContact;
+					$userDetails[] = $array;
+				}
+			} else {
+				foreach ($this->getTagsByContact($row->contactID)->result() as $row2) {
+					$tagId = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', $row2->tagID);
+					$tagNamesOfContact = $this->getTagNameByID($tagId);
+					$arrayOfTagNames[] = $tagNamesOfContact;
+				}
+				$array = json_decode(json_encode($row), True);
+				$array['contactTags'] = implode(", ", $arrayOfTagNames);
+				$userDetails[] = $array;
+				unset($arrayOfTagNames);
+			}
+		}
+		return $userDetails;
+	}
+
+	/**
+	 * Fetch tag ids under one particular contact id
+	 * @param $contactID
+	 * @return array
+	 */
+	function getTagsByContact($contactID)
+	{
+		$this->db->select('tagID');
+		$this->db->from("contacts_connection");
+		$this->db->where('contactID', $contactID);
+		$query_data = $this->db->get();
+		return $query_data;
+	}
+
+	/**
+	 * Find tag Name by it's id
+	 * @param $tagID
+	 * @return array
+	 */
+	function getTagNameByID($tagID)
+	{
+		$this->db->select("tagName");
+		$this->db->from("contacts_tags");
+		$this->db->where('tagID', $tagID);
+		$query_data = $this->db->get();
+		foreach ($query_data->result() as $row) {
+			return $row->tagName;
+		}
+	}
+
+	/**
+	 * Fetch contacts under one particular tag id
+	 * @param $tagID
+	 * @return array
+	 */
 	function fetchContactsByTags($tagID)
 	{
+		$userId = $this->session->userdata('userId');
 		$this->db->select("*");
 		$this->db->from("contacts_connection");
 		$this->db->where('tagID', $tagID);
@@ -46,10 +120,16 @@ class ContactsManager extends CI_Model
 		$selectedContactsOfTag = array();
 		foreach ($query_data->result() as $row) {
 			$myJsonString = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', $row->contactID);
-			$query = $this->db->get_where('contacts', array('contactID' => ($myJsonString)))->result_array();
-			$selectedContactsOfTag[] = $query;
+			$query = $this->db->get_where('contacts', array('contactID' => ($myJsonString), 'userId' => $userId))->result();
+			if (!empty($query)) {
+				$selectedContactsOfTag[] = $query;
+			}
 		}
-		return $selectedContactsOfTag;
+		$selected = array();
+		foreach ($selectedContactsOfTag as $row) {
+			$selected[] = $row[0];
+		}
+		return $selected;
 	}
 
 	/**
@@ -75,14 +155,37 @@ class ContactsManager extends CI_Model
 	/**
 	 * Update details of a selected contact
 	 * @param $data
-	 * @param $id
+	 * @param $contactID
+	 * @param $updatedTags
 	 * @return bool
 	 */
-	public function updateDetails($data, $id)
+	public function updateDetails($data, $contactID, $updatedTags)
 	{
-		if (!empty($data) && !empty($id)) {
+		if (!empty($data) && !empty($contactID)) {
 			$data['modified'] = date("Y-m-d H:i:s");
-			$update = $this->db->update('contacts', $data, array('contactID' => $id));
+			$update = $this->db->update('contacts', $data, array('contactID' => $contactID));
+
+
+			foreach ($updatedTags as $key => $item1) {
+
+
+
+				$tagsOfContact = array('contactID' => $data['contactID'], 'tagID' => $updatedTags[$key]);
+				$this->db->insert('contacts_connection', $tagsOfContact);
+			}
+
+			print_r($contactTags = $this->getTagsByContact($contactID)->result_array());
+
+
+
+
+
+
+
+
+
+
+
 			return $update ? true : false;
 		} else {
 			return false;

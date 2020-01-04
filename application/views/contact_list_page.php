@@ -94,17 +94,6 @@
 			<input class="form-control search" name="search" type="text" placeholder="Search">
 			<button style="text-align: right" class="btn btn-warning searchBtn"> Search
 			</button>
-			<table class="table-tag" style="text-align-last: right;">
-				<thead>
-				<tr class="insert-tag">
-					<td><input placeholder="Tag Name" class="form-control tagName-input"></td>
-					<td>
-						<button class="btn btn-primary add-tag">Add</button>
-					</td>
-				</tr>
-				</thead>
-				<tbody class="tag-list"></tbody>
-			</table>
 
 			<br><br>
 
@@ -127,26 +116,26 @@
 					<td><input class="form-control phone-input"></td>
 					<td>
 						<script type="text/javascript">
+						//fetch tag names from db and show it in a dropdown
                             $(document).ready(function() {
                                 $('.selected_tags').select2({
                                     ajax: {
                                         url: "<?php echo base_url(); ?>index.php/ContactsAPI/tag/",
                                         dataType: 'json',
                                         processResults: function (data) {
-                                            var data_array = [];
+                                            var tag_data_array = [];
                                             data.forEach(function(value,key){
-                                                data_array.push({id:value.tagID,text:value.tagName})
+                                                tag_data_array.push({id:value.tagID,text:value.tagName})
                                             });
-
                                             return {
-                                                results: data_array
+                                                results: tag_data_array
                                             }
                                         }
                                     }
                                 });
                             });
 						</script>
-							<select class="selected_tags" name='selectedGenres[]' multiple='multiple' style="width: 100% ">
+							<select class="selected_tags" name="selectedGenres[]" multiple="multiple" style="width: 100% ">
 							</select>
 					</td>
 					<td>
@@ -154,9 +143,11 @@
 					</td>
 				</tr>
 				</thead>
+				<!--where new contact data injects from backbone-->
 				<tbody class="contact-list"></tbody>
 			</table>
 
+<!--			table row script template which injects to html-->
 			<script type="text/template" class="contacts-list">
 				<td class="hidden"><span class="contactID"><%= contactID %></span></td>
 				<td><span class="firstName"><%= firstName  %></span></td>
@@ -189,6 +180,27 @@
 			<script src="<?php echo base_url('assets/js/tags_script.js'); ?>"></script>
 
 		</div>
+
+		<script type="text/javascript">
+            //fetch tag names from db and show it in a dropdown
+            $(document).ready(function() {
+                $('.xxxx').select2({
+                    ajax: {
+                        url: "<?php echo base_url(); ?>index.php/ContactsAPI/tag/",
+                        dataType: 'json',
+                        processResults: function (data) {
+                            var tag_data_array = [];
+                            data.forEach(function(value,key){
+                                tag_data_array.push({id:value.tagID,text:value.tagName})
+                            });
+                            return {
+                                results: tag_data_array
+                            }
+                        }
+                    }
+                });
+            });
+		</script>
 		<div class="page-footer">
 			<div class="footer-copyright" style="color: #938c8c;">
 				© Copyright 2019. All Rights Reserved.

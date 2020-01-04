@@ -14,48 +14,39 @@ var contactTags = Backbone.Collection.extend({
 // instantiate the Collection
 var tags = new contactTags();
 
-// Backbone View for one contact
-var TagEditView = Backbone.View.extend({
+// Backbone View for single tag
+var SingleTagView = Backbone.View.extend({
 	defaults: {
 		id: "",
 	},
 	model: new ContactTag(),
-	idAttribute: "id",
+	idAttribute: "id", //id attribute add the end of the rest URL
 	tagName: 'tr',
-	initialize: function () {
+	initialize: function () {  //initialize tags script of the tag table
 		this.template = _.template($('.tags-list').html());
 	},
-	events: {
+	events: {  //button events
 		'click .edit-tag': 'edit',
 		'click .update-tag': 'update',
 		'click .cancel': 'cancel',
 		'click .delete-tag': 'delete',
 	},
-	showAdd: function(){
-		$('.insert-contact').toggle();
-	},
-	edit: function () {
+	edit: function () { //This will show up the edit text on the particular tag
 		$('.edit-tag').hide();
 		$('.delete-tag').hide();
 		this.$('.update-tag').show();
 		this.$('.cancel').show();
 
 		var tagName = this.$('.tagName').html();
-
 		this.$('.tagName').html('<input type="text" class="form-control tagName-update" value="' + tagName + '">');
 	},
-	update: function () {
+	update: function () {  //updating the tagName
 		this.model.set('id', this.$('.tagID').html());
-		console.log(this.$('.tagID').html());
 		this.model.set('tagName', $('.tagName-update').val());
 
 		this.model.save(null, {
-			success: function(response){
-				console.log('update success');
-			},
-			error: function(){
-				console.log('fail update');
-			}
+			success: function(response){},
+			error: function(){}
 		});
 	},
 	cancel: function () {
@@ -64,12 +55,8 @@ var TagEditView = Backbone.View.extend({
 	delete: function () {
 		this.model.set('id', this.$('.tagID').html());
 		this.model.destroy({
-			success: function(response){
-				console.log('successful delete');
-			},
-			error: function(){
-				console.log('delete failed');
-			}
+			success: function(response){},
+			error: function(){}
 		});
 	},
 	render: function () {
@@ -79,8 +66,7 @@ var TagEditView = Backbone.View.extend({
 });
 
 
-// Backbone View for all contacts
-
+// Backbone View for all tags
 var tagView = Backbone.View.extend({
 	model: tags,
 	el: $('.tag-list'),
@@ -96,20 +82,15 @@ var tagView = Backbone.View.extend({
 		this.model.fetch({
 			success: function (response) {
 				$('.table-tag').hide();
-				_.each(response.toJSON(), function (item) {
-					console.log('fetch succesful');
-				});
 			},
-			error: function () {
-				console.log('fetch fail');
-			}
+			error: function () {}
 		});
 	},
 	render: function () {
 		var self = this;
 		this.$el.html('');
 		_.each(this.model.toArray(), function (tag) {
-			self.$el.append((new TagEditView({model: tag})).render().$el);
+			self.$el.append((new SingleTagView({model: tag})).render().$el);
 		});
 		return this;
 	}
@@ -117,26 +98,22 @@ var tagView = Backbone.View.extend({
 
 var tagView = new tagView();
 
-$(document).ready(function () {
+$(document).ready(function () { //Tag add function
 	$('.add-tag').on('click', function () {
 		var tag = new ContactTag({
 			tagID: 'C' + Math.random().toString(36).substr(2, 9),
-			// contactID: $('.contactID-input').val(),
 			tagName: $('.tagName-input').val(),
 		});
-			$('.tagName-input').val(''),
-		tags.add(tag);
+			$('.tagName-input').val(''), //clear current value on text box
+				tags.add(tag);
 
 		tag.save(null, {
-			success: function(response) {
-				console.log('success insert');
-			},
-			error: function () {
-				console.log('faile insert');
-			}
+			success: function(response) {},
+			error: function () {}
 		});
 	});
-	$('.tagsShow').on('click', function () {
+
+	$('.tagsShow').on('click', function () { //show and hide tags table
 		$('.table-tag').toggle();
 	});
 });

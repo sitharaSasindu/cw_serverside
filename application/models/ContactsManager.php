@@ -194,12 +194,12 @@ class ContactsManager extends CI_Model
 
 	/**
 	 * Delete a contact
-	 * @param $id
+	 * @param $contactId
 	 * @return bool
 	 */
-	public function deleteDetails($id)
+	public function deleteDetails($contactId)
 	{
-		$delete = $this->db->delete('contacts', array('contactID' => $id));
+		$delete = $this->db->delete('contacts', array('contactID' => $contactId));
 		return $delete ? true : false;
 	}
 
@@ -211,7 +211,7 @@ class ContactsManager extends CI_Model
 	 */
 	function fetchTags($tagID = "")
 	{
-		if (!empty($id)) {
+		if (!empty($tagID)) {
 			$query = $this->db->get_where('contacts_tags', array('tagID' => $tagID));
 			return $query->row_array();
 		} else {

@@ -74,91 +74,120 @@ var contactEditView = Backbone.View.extend({
 		this.$('.address').html('<input type="text" class="form-control address-update" value="' + address + '">');
 		this.$('.email').html('<input type="text" class="form-control email-update" value="' + email + '">');
 		this.$('.phone').html('<input type="text" class="form-control phone-update" value="' + phone + '">');
-		this.$('.contactTags').html('<input type="text" class="form-control contactTags-update" value="' + contactTags + '">');
+		this.$('.contactTags').html('<select class="selected_tagss" name="selectedGenres[]" multiple="multiple" style="width: 100% ">' +
+			'</select>');
 
 		var contactTag = [];
-		var $select = $('.contactTags');
-		var array2 = []
 		getTagData(function (tagdata) {
+			$(".selected_tagss").select2({
+				data: tagdata,
+				multiple: true,
+				placeholder: ''
+			});
+			tagDataArr = [];
 
 			var tagArr = contactTags.split(', ');
 			tagArr.forEach(function (item, index) {
 				tagdata.forEach(function (value, key) {
-					if(item == value.text){
+					if (item == value.text) {
 						console.log('mathed')
 						contactTag.push(
-							{id: value.id, text: value.text}
+							value.id
 						)
-						var $option = $('<option selected></option>').val(value.id).text(value.text);
-						$select.append($option).trigger('change');
-
-					} else{
-
-						function add(arr, name) {
-							const { length } = arr;
-							const id = value.id;
-							const found = arr.some(el => el.text === name);
-							if (!found) arr.push({ id, text: name });
-							return arr;
-						}
-
-						add(array2, value.text)
 
 
-						// array2.push(
-						// 	{id: value.id, text: value.text}
-						// )
+						// console.log(value.id);
 
-
-						data_array2= []
 					}
 				});
-
-
-			});
-			console.log(array2)
-
-			array2.forEach(function (value, key) {
-				var $option = $('<option></option>').val(value.id).text(value.text);
-				$select.append($option).trigger('change');
-
 			});
 
-			// array2 = []
-			$(".contactTags").select2({
-				// data: contactTag,
-				multiple: true,
-				placeholder: ''
-			});
-			// array2 = []
+			// console.log(contactTag);
+			// var arr =
 
+			var $contactSelectedAlready = $(".selected_tagss").select2();
+			$contactSelectedAlready.val(contactTag).trigger("change");
 
-
-			tagArr = [];
-			contactTag= []
-			contactTags =[]
-			tagDataArr= []
-			data_array2= []
 		});
+
+
+		var $select = $('.contactTags');
+		var array2 = []
+		// getTagData(function (tagdata) {
+		//
+		// 	var tagArr = contactTags.split(', ');
+		// 	tagArr.forEach(function (item, index) {
+		// 		tagdata.forEach(function (value, key) {
+		// 			if(item == value.text){
+		// 				console.log('mathed')
+		// 				contactTag.push(
+		// 					{id: value.id, text: value.text}
+		// 				)
+		// 				var $option = $('<option selected></option>').val(value.id).text(value.text);
+		// 				$select.append($option).trigger('change');
+		//
+		// 			} else{
+		//
+		// 				function add(arr, name) {
+		// 					const { length } = arr;
+		// 					const id = value.id;
+		// 					const found = arr.some(el => el.text === name);
+		// 					if (!found) arr.push({ id, text: name });
+		// 					return arr;
+		// 				}
+		//
+		// 				add(array2, value.text)
+		//
+		//
+		// 				// array2.push(
+		// 				// 	{id: value.id, text: value.text}
+		// 				// )
+		//
+		//
+		// 				data_array2= []
+		// 			}
+		// 		});
+		//
+		//
+		// 	});
+		// 	console.log(array2)
+		//
+		// 	array2.forEach(function (value, key) {
+		// 		var $option = $('<option></option>').val(value.id).text(value.text);
+		// 		$select.append($option).trigger('change');
+		//
+		// 	});
+		//
+		// 	// array2 = []
+		// 	$(".contactTags").select2({
+		// 		// data: contactTag,
+		// 		multiple: true,
+		// 		placeholder: ''
+		// 	});
+		// 	// array2 = []
+		//
+		//
+		//
+		// 	tagArr = [];
+		// 	contactTag= []
+		// 	contactTags =[]
+		// 	tagDataArr= []
+		// 	data_array2= []
+		// });
 
 	},
 	update: function () {
-		// $('.contactTags').on('change', function() {
-			var data = $(".contactTags option:selected").val();
-			console.log(data)
-		// })
-		var selectedTagsArray = ($('.contactTags').val())
+		var selectedTagsArray = ($('.selected_tagss').val())
 		console.log(selectedTagsArray)
 
-		console.log($('.contactTags').find(':selected'));
 		this.model.set('id', this.$('.contactID').html());
 		this.model.set('firstName', $('.firstName-update').val());
 		this.model.set('lastName', $('.lastName-update').val());
 		this.model.set('address', $('.address-update').val());
 		this.model.set('phone', $('.phone-update').val());
 		this.model.set('email', $('.email-update').val());
-		// this.model.set('email', $('.email-update').val());
-
+		this.model.set('email', $('.email-update').val());
+5
 		this.model.save(null, {
 			success: function (response) {
 				console.log('update success');
@@ -281,7 +310,7 @@ $('.searchBtn').on('click', function () {
 					address: item.address,
 					email: item.email,
 					phone: item.phone,
-					contactTags : item.contactTags
+					contactTags: item.contactTags
 				});
 				contacts.add(contact2);
 				console.log(item);

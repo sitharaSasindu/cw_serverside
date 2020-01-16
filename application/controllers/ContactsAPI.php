@@ -73,13 +73,13 @@ class ContactsAPI extends \chriskacerguis\RestServer\RestController
 		$contactData['userId'] = $this->session->userdata('userId');
 		$contactData['contactID'] = $this->post('contactID');
 		$contactData['firstName'] = $this->post('firstName');
-		$contactData['lastName'] = $this->post('lastName');
+		$contactData['surName'] = $this->post('surName');
 		$contactData['address'] = $this->post('address');
 		$contactData['email'] = $this->post('email');
 		$contactData['phone'] = $this->post('phone');
 		$contactTags = $this->post('tags');
 
-		if (!empty($contactData['firstName']) && !empty($contactData['lastName']) && !empty($contactData['email']) && !empty($contactData['phone'])) {
+		if (!empty($contactData['firstName']) && !empty($contactData['surName']) && !empty($contactData['email']) && !empty($contactData['phone'])) {
 			if (empty($contactData['address'])){
 				$contactData['address'] = "No address";
 			}
@@ -107,11 +107,11 @@ class ContactsAPI extends \chriskacerguis\RestServer\RestController
 	{
 		$updatedContactData = array();
 		$updatedContactData['firstName'] = $this->put('firstName');
-		$updatedContactData['lastName'] = $this->put('lastName');
+		$updatedContactData['surName'] = $this->put('surName');
 		$updatedContactData['address'] = $this->put('address');
 		$updatedContactData['email'] = $this->put('email');
 		$updatedContactData['phone'] = $this->put('phone');
-		$updatedTags = '[2, 5]';
+		$updatedTags = $this->put('tags');
 		$updatedDetails = $this->contact->updateDetails($updatedContactData, $contactID, $updatedTags);
 
 			if ($updatedDetails) {  //check if the contacts details are updated or not
@@ -224,7 +224,7 @@ class ContactsAPI extends \chriskacerguis\RestServer\RestController
 	/**
 	 * edit existing tag name
 	 * @param $tagID
-	 * @return void
+	 * @return void`
 	 */
 	public function tag_put($tagID)
 	{

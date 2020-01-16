@@ -101,7 +101,7 @@
 				<thead>
 				<tr>
 					<th>First Name</th>
-					<th class="">Last Name</th>
+					<th class="">SurName</th>
 					<th class="tb-header-address">Address</th>
 					<th class="tb-header-email">Email</th>
 					<th>Phone</th>
@@ -110,7 +110,7 @@
 				</tr>
 				<tr class="insert-contact">
 					<td><input class="form-control firstName-input"></td>
-					<td><input class="form-control lastName-input"></td>
+					<td><input class="form-control surName-input"></td>
 					<td><input class="form-control address-input"></td>
 					<td><input class="form-control email-input"></td>
 					<td><input class="form-control phone-input"></td>
@@ -151,7 +151,7 @@
 			<script type="text/template" class="contacts-list">
 				<td class="hidden"><span class="contactID"><%= contactID %></span></td>
 				<td><span class="firstName"><%= firstName  %></span></td>
-				<td><span class="lastName"><%= lastName %></span></td>
+				<td><span class="surName"><%= surName %></span></td>
 				<td class="td-address"><span class="address"><%= address %></span></td>
 				<td class="td-email"><span class="email"><%= email %></span></td>
 				<td><span class="phone"><%= phone %></span></td>

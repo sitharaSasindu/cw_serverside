@@ -27,10 +27,10 @@ class ContactsManager extends CI_Model
 					return $this->getContactTags($result);
 				}
 			} else {
-				$query1 = $this->db->get_where('contacts', array('firstName' => $id, 'userId' => $userId))->result();
-				$query2 = $this->db->get_where('contacts', array('lastName' => $id, 'userId' => $userId))->result();
-				$query = array_merge($query1, $query2);
-				return $this->getContactTags($query);
+				 $this->db->like('surName', $id);
+				$query2 = $this->db->get_where('contacts', array('userId' => $userId))->result();
+//				$query = array_merge($query1, $query2);
+				return $this->getContactTags($query2);
 			}
 		} else {
 //			$query = $this->db->get_where('contacts', array('userId' => $userId));
@@ -165,26 +165,23 @@ class ContactsManager extends CI_Model
 			$data['modified'] = date("Y-m-d H:i:s");
 			$update = $this->db->update('contacts', $data, array('contactID' => $contactID));
 
+			$contactCurrentTags = array();
+			foreach ($this->getTagsByContact($contactID)->result() as $row){
+				$contactCurrentTags[] = $row->tagID;
+			}
+			$updated = explode(', ',  str_replace(array( '[', ']' ), '', $updatedTags));
 
-			foreach ($updatedTags as $key => $item1) {
+			print_r($updated);
 
-
-
-				$tagsOfContact = array('contactID' => $data['contactID'], 'tagID' => $updatedTags[$key]);
-				$this->db->insert('contacts_connection', $tagsOfContact);
+			foreach ($contactCurrentTags as $value) {//delete current tags from contact
+				$tagsOfContact = array('contactID' => $contactID, 'tagID' => $value);
+				$this->db->delete('contacts_connection', $tagsOfContact);
 			}
 
-			print_r($contactTags = $this->getTagsByContact($contactID)->result_array());
-
-
-
-
-
-
-
-
-
-
+			foreach ($updated as $value) {//add new tags to contacts
+				$tagsOfContact = array('contactID' => $contactID, 'tagID' => $value);
+				$this->db->insert('contacts_connection', $tagsOfContact);
+			}
 
 			return $update ? true : false;
 		} else {

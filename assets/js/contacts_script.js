@@ -3,7 +3,7 @@ var userContact = Backbone.Model.extend({
 	defaults: {
 		ID: "",
 		firstName: '',
-		lastName: '',
+		surName: '',
 		address: '',
 		email: '',
 		phone: ''
@@ -63,14 +63,14 @@ var contactEditView = Backbone.View.extend({
 		this.$('.cancel').show();
 
 		var firstName = this.$('.firstName').html();
-		var lastName = this.$('.lastName').html();
+		var surName = this.$('.surName').html();
 		var address = this.$('.address').html();
 		var email = this.$('.email').html();
 		var phone = this.$('.phone').html();
 		var contactTags = this.$('.contactTags').html();
 
 		this.$('.firstName').html('<input type="text" class="form-control firstName-update" value="' + firstName + '">');
-		this.$('.lastName').html('<input type="text" class="form-control lastName-update" value="' + lastName + '">');
+		this.$('.surName').html('<input type="text" class="form-control surName-update" value="' + surName + '">');
 		this.$('.address').html('<input type="text" class="form-control address-update" value="' + address + '">');
 		this.$('.email').html('<input type="text" class="form-control email-update" value="' + email + '">');
 		this.$('.phone').html('<input type="text" class="form-control phone-update" value="' + phone + '">');
@@ -178,16 +178,19 @@ var contactEditView = Backbone.View.extend({
 	},
 	update: function () {
 		var selectedTagsArray = ($('.selected_tagss').val())
+		var selectedTags = JSON.parse("[" + selectedTagsArray.join() + "]");
 		console.log(selectedTagsArray)
+		console.log("selectedTags")
+		console.log(selectedTags)
 
 		this.model.set('id', this.$('.contactID').html());
 		this.model.set('firstName', $('.firstName-update').val());
-		this.model.set('lastName', $('.lastName-update').val());
+		this.model.set('surName', $('.surName-update').val());
 		this.model.set('address', $('.address-update').val());
 		this.model.set('phone', $('.phone-update').val());
 		this.model.set('email', $('.email-update').val());
-		this.model.set('email', $('.email-update').val());
-5
+		this.model.set('tags', selectedTags);
+
 		this.model.save(null, {
 			success: function (response) {
 				console.log('update success');
@@ -306,7 +309,7 @@ $('.searchBtn').on('click', function () {
 				var contact2 = new userContact({
 					contactID: item.contactID,
 					firstName: item.firstName,
-					lastName: item.lastName,
+					surName: item.surName,
 					address: item.address,
 					email: item.email,
 					phone: item.phone,
@@ -328,16 +331,21 @@ $(document).ready(function () {
 		var selectedTags = JSON.parse("[" + selectedTagsArray.join() + "]");
 
 		console.log(selectedTags);
-		console.log('selectedTagsArray');
+		console.log(selectedTagsArray);
 		var contact = new userContact({
 			contactID: 'C' + Math.random().toString(36).substr(2, 9),
 			firstName: $('.firstName-input').val(),
-			lastName: $('.lastName-input').val(),
+			surName: $('.surName-input').val(),
 			address: $('.address-input').val(),
 			email: $('.email-input').val(),
 			phone: $('.phone-input').val(),
 			tags: selectedTags
 		});
+		$('.phone-input').val();
+		$('.firstName-input').val();
+		$('.surName-input').val();
+		$('.address-input').val();
+		$('.email-input').val();
 		contacts.add(contact);
 		contact.save(null, {
 			success: function (response) {

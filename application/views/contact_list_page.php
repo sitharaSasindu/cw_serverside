@@ -88,13 +88,32 @@
 
 		<div style="background-color: #ffffff">
 
-			<button class="btn btn-warning show">Add Contact</button>
-			<button style="text-align: right" class="btn btn-warning tagsShow"> Tags
-			</button>
-			<input class="form-control search" name="search" type="text" placeholder="Search">
-			<button style="text-align: right" class="btn btn-warning searchBtn"> Search
+			<button class="btn btn-warning show"style="float : left; width: 200px">Add Contact</button>
+			<button style="float : right; width: 200px" class="btn btn-warning tagsShow"> Tags
 			</button>
 
+			<br>
+			<hr>
+			<div style=" text-align: center">
+				<input class="form-control search" style="width: 35%; display: inline-block;"    name="search" type="text" placeholder="Search">
+				<button style=" width: 200px" class="btn btn-warning searchBtn"> Search
+				</button></div>
+
+
+			<hr>
+			<div class="table-tag">
+			<table class="table" style="text-align-last: center; width: 40%">
+				<thead>
+				<tr class="insert-tag">
+					<td><input placeholder="Tag Name" style="text-align: center; width: 100%; margin-left=25px; display: inline-block" class="form-control tagName-input"></td>
+					<td>
+						<button class="btn btn-primary add-tag">Add</button>
+					</td>
+				</tr><br>
+				</thead>
+				<tbody class="tag-list"></tbody>
+			</table><hr><hr>
+			</div>
 			<br><br>
 
 			<table class="table" style="text-align-last: center;">
@@ -181,26 +200,7 @@
 
 		</div>
 
-		<script type="text/javascript">
-            //fetch tag names from db and show it in a dropdown
-            $(document).ready(function() {
-                $('.xxxx').select2({
-                    ajax: {
-                        url: "<?php echo base_url(); ?>index.php/ContactsAPI/tag/",
-                        dataType: 'json',
-                        processResults: function (data) {
-                            var tag_data_array = [];
-                            data.forEach(function(value,key){
-                                tag_data_array.push({id:value.tagID,text:value.tagName})
-                            });
-                            return {
-                                results: tag_data_array
-                            }
-                        }
-                    }
-                });
-            });
-		</script>
+
 		<div class="page-footer">
 			<div class="footer-copyright" style="color: #938c8c;">
 				© Copyright 2019. All Rights Reserved.

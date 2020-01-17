@@ -111,7 +111,7 @@ class ContactsAPI extends \chriskacerguis\RestServer\RestController
 		$updatedContactData['address'] = $this->put('address');
 		$updatedContactData['email'] = $this->put('email');
 		$updatedContactData['phone'] = $this->put('phone');
-		$updatedTags = $this->put('tags');
+		$updatedTags = $this->put('tagss');
 		$updatedDetails = $this->contact->updateDetails($updatedContactData, $contactID, $updatedTags);
 
 			if ($updatedDetails) {  //check if the contacts details are updated or not

@@ -18,17 +18,16 @@ var userContacts = Backbone.Collection.extend({
 
 // instantiate the Collection
 var contacts = new userContacts();
-var contacts2 = new userContacts();
 
 // Backbone View for one contact
 var contactEditView = Backbone.View.extend({
 	defaults: {
 		id: "",
 	},
-	model: contacts2,
+	model: new userContacts(),
 	idAttribute: "id",
 	tagName: 'tr',
-	initialize: function () {
+	initialize: function () { // initializing the template in the html
 		this.template = _.template($('.contacts-list').html());
 	},
 	events: {
@@ -39,10 +38,10 @@ var contactEditView = Backbone.View.extend({
 		'click .moreDetails-contact': 'showMore',
 		'click .show': 'showAdd'
 	},
-	showAdd: function () {
+	showAdd: function () { //toggle insert contacts form
 		$('.insert-contact').toggle();
 	},
-	showMore: function () {
+	showMore: function () {  //show/ hide extra fields on the contacts screen
 		$('.address').toggle();
 		$('.email').toggle();
 		$('.tb-header-email').toggle();
@@ -50,7 +49,7 @@ var contactEditView = Backbone.View.extend({
 		$('.td-address').toggle();
 		$('.td-email').toggle();
 	},
-	edit: function () {
+	edit: function () { //edit button to inject text fields in to html page
 		$('.edit-contact').hide();
 		$('.delete-contact').hide();
 		$('.address').show();
@@ -62,7 +61,7 @@ var contactEditView = Backbone.View.extend({
 		this.$('.update-contact').show();
 		this.$('.cancel').show();
 
-		var firstName = this.$('.firstName').html();
+		var firstName = this.$('.firstName').html();  //getting current values from current model
 		var surName = this.$('.surName').html();
 		var address = this.$('.address').html();
 		var email = this.$('.email').html();
@@ -78,7 +77,7 @@ var contactEditView = Backbone.View.extend({
 			'</select>');
 
 		var contactTag = [];
-		getTagData(function (tagdata) {
+		getTagData(function (tagdata) { //getting data for tag selection drop down menu
 			$(".selected_tagss").select2({
 				data: tagdata,
 				multiple: true,
@@ -87,111 +86,38 @@ var contactEditView = Backbone.View.extend({
 			tagDataArr = [];
 
 			var tagArr = contactTags.split(', ');
-			tagArr.forEach(function (item, index) {
+			tagArr.forEach(function (item, index) {  //getting current tags of the model
 				tagdata.forEach(function (value, key) {
 					if (item == value.text) {
 						console.log('mathed')
 						contactTag.push(
 							value.id
 						)
-
-
-						// console.log(value.id);
-
 					}
 				});
 			});
-
-			// console.log(contactTag);
-			// var arr =
-
-			var $contactSelectedAlready = $(".selected_tagss").select2();
+			var $contactSelectedAlready = $(".selected_tagss").select2(); //setting up current tags of the contact
 			$contactSelectedAlready.val(contactTag).trigger("change");
-
 		});
-
-
-		var $select = $('.contactTags');
-		var array2 = []
-		// getTagData(function (tagdata) {
-		//
-		// 	var tagArr = contactTags.split(', ');
-		// 	tagArr.forEach(function (item, index) {
-		// 		tagdata.forEach(function (value, key) {
-		// 			if(item == value.text){
-		// 				console.log('mathed')
-		// 				contactTag.push(
-		// 					{id: value.id, text: value.text}
-		// 				)
-		// 				var $option = $('<option selected></option>').val(value.id).text(value.text);
-		// 				$select.append($option).trigger('change');
-		//
-		// 			} else{
-		//
-		// 				function add(arr, name) {
-		// 					const { length } = arr;
-		// 					const id = value.id;
-		// 					const found = arr.some(el => el.text === name);
-		// 					if (!found) arr.push({ id, text: name });
-		// 					return arr;
-		// 				}
-		//
-		// 				add(array2, value.text)
-		//
-		//
-		// 				// array2.push(
-		// 				// 	{id: value.id, text: value.text}
-		// 				// )
-		//
-		//
-		// 				data_array2= []
-		// 			}
-		// 		});
-		//
-		//
-		// 	});
-		// 	console.log(array2)
-		//
-		// 	array2.forEach(function (value, key) {
-		// 		var $option = $('<option></option>').val(value.id).text(value.text);
-		// 		$select.append($option).trigger('change');
-		//
-		// 	});
-		//
-		// 	// array2 = []
-		// 	$(".contactTags").select2({
-		// 		// data: contactTag,
-		// 		multiple: true,
-		// 		placeholder: ''
-		// 	});
-		// 	// array2 = []
-		//
-		//
-		//
-		// 	tagArr = [];
-		// 	contactTag= []
-		// 	contactTags =[]
-		// 	tagDataArr= []
-		// 	data_array2= []
-		// });
 
 	},
 	update: function () {
-		var selectedTagsArray = ($('.selected_tagss').val())
-		var selectedTags = JSON.parse("[" + selectedTagsArray.join() + "]");
-		console.log(selectedTagsArray)
-		console.log("selectedTags")
-		console.log(selectedTags)
+		var selectedTagsArray = ($('.selected_tagss').val())  //getting all the currently selected tags from drop down menu
+		var selectedTags = selectedTagsArray.toString();
+		var tagsSelect = $('.selected_tagss').select2('data').map(function(elem){
+			return elem.text
+		});
 
-		this.model.set('id', this.$('.contactID').html());
+		this.model.set('id', this.$('.contactID').html());  //setting up the contact id to update
 		this.model.set('firstName', $('.firstName-update').val());
 		this.model.set('surName', $('.surName-update').val());
 		this.model.set('address', $('.address-update').val());
 		this.model.set('phone', $('.phone-update').val());
 		this.model.set('email', $('.email-update').val());
-		this.model.set('tags', selectedTags);
+		this.model.set('tagss', selectedTags);
+		this.model.set('contactTags', tagsSelect.toString());
 
-		this.model.save(null, {
+		this.model.save(null, {   //updating current contact on the model
 			success: function (response) {
 				console.log('update success');
 			},
@@ -204,8 +130,8 @@ var contactEditView = Backbone.View.extend({
 		contactView.render();
 	},
 	delete: function () {
-		this.model.set('id', this.$('.contactID').html());
-		this.model.destroy({
+		this.model.set('id', this.$('.contactID').html());  //setting contactId to delete
+		this.model.destroy({   //deleting the model from the view and database
 			success: function (response) {
 				console.log('successful delete');
 			},
@@ -226,7 +152,7 @@ var ContactView = Backbone.View.extend({
 	defaults: {
 		id: "",
 	},
-	idAttribute: "id",
+	idAttribute: "id", //id to set the end of the request url
 	el: $('.contact-list'),
 	initialize: function () {
 		var self = this;
@@ -238,11 +164,10 @@ var ContactView = Backbone.View.extend({
 			}, 30);
 		}, this);
 		this.model.on('remove', this.render, this);
-		this.model.fetch({
+		this.model.fetch({ //get all contacts as models
 			success: function (response) {
-				$('.address').hide();
+				$('.address').hide(); // hiding extra fields initially
 				$('.selected_tags').hide();
-				// $('.td-tags').hide();
 				$('.email').hide();
 				$('.tb-header-email').hide();
 				$('.tb-header-address').hide();
@@ -250,7 +175,7 @@ var ContactView = Backbone.View.extend({
 				$('.td-email').hide();
 				$('.insert-contact').hide();
 				_.each(response.toJSON(), function (item) {
-					console.log('fetch succesful');
+					console.log('fetch Success');
 				});
 			},
 			error: function () {
@@ -269,15 +194,13 @@ var ContactView = Backbone.View.extend({
 });
 
 
-var Book = Backbone.Model.extend({
+var SearchModel  = Backbone.Model.extend({
 	defaults: {
 		ID: "",
 	},
 	idAttribute: "ID",
 	initialize: function () {
-		console.log('Book has been initialized');
 		this.on("invalid", function (model, error) {
-			console.log("Houston, we have a problem: " + error)
 		});
 	},
 	urlRoot: 'http://localhost/2016372/cw_serverside/index.php/ContactsAPI/contact/'
@@ -285,53 +208,42 @@ var Book = Backbone.Model.extend({
 
 $('.searchBtn').on('click', function () {
 	var searchTerm = $('.search').val();
-	var book1 = new Book({ID: searchTerm});
+	var search  = new SearchModel ({ID: searchTerm});
 
-
-	console.log(contacts.models);
-	_.each(_.clone(contacts.models), function (model) {
+	_.each(_.clone(contacts.models), function (model) {  //fetching contact search response  view
 		model.destroy();
 	});
-	// contacts.each(function(model) {
-	// 		model.destroy();
-	// 	});
-	// contacts.models.destroy();
-	// _.each(contacts.models, function (item) {
-	// 	item.destroy();
-	//
-	//
-	// });
 
-	book1.fetch({
+	search .fetch({ //fetching contact search response
 		success: function (response) {
-			console.log("Found " + response);
 			_.each(response.toJSON(), function (item) {
-				var contact2 = new userContact({
-					contactID: item.contactID,
-					firstName: item.firstName,
-					surName: item.surName,
-					address: item.address,
-					email: item.email,
-					phone: item.phone,
-					contactTags: item.contactTags
-				});
-				contacts.add(contact2);
-				console.log(item);
+				if(item!= searchTerm) {
+					var contact2 = new userContact({
+						contactID: item.contactID,
+						firstName: item.firstName,
+						surName: item.surName,
+						address: item.address,
+						email: item.email,
+						phone: item.phone,
+						contactTags: item.contactTags
+					});
+					contacts.add(contact2);  //add searched results to view
+				}
 			});
 		}
 	});
 });
 
-
 var contactView = new ContactView();
 
 $(document).ready(function () {
-	$('.add-contact').on('click', function () {
+	$('.add-contact').on('click', function () {  //new contact add function
 		var selectedTagsArray = ($('.selected_tags').val());
 		var selectedTags = JSON.parse("[" + selectedTagsArray.join() + "]");
+		var tagsSelect = $('.selected_tags').select2('data').map(function(elem){
+			return elem.text
+		});
 
-		console.log(selectedTags);
-		console.log(selectedTagsArray);
 		var contact = new userContact({
 			contactID: 'C' + Math.random().toString(36).substr(2, 9),
 			firstName: $('.firstName-input').val(),
@@ -339,26 +251,23 @@ $(document).ready(function () {
 			address: $('.address-input').val(),
 			email: $('.email-input').val(),
 			phone: $('.phone-input').val(),
-			tags: selectedTags
+			tags: selectedTags,
+			contactTags: tagsSelect.toString()
 		});
-		$('.phone-input').val();
-		$('.firstName-input').val();
-		$('.surName-input').val();
-		$('.address-input').val();
-		$('.email-input').val();
+		$('.phone-input').val(''); //clearing text box values in the input fields
+		$('.firstName-input').val('');
+		$('.surName-input').val('');
+		$('.address-input').val('');
+		$('.email-input').val('');
+		$('.selected_tags').empty();
 		contacts.add(contact);
 		contact.save(null, {
 			success: function (response) {
 				console.log('success insert');
 			},
 			error: function () {
-				console.log(selectedTags);
-				console.log('selectedTagsArray');
-				console.log('faile insert');
 			}
 		});
-
-
 	});
 	$('.show').on('click', function () {
 		$('.insert-contact').toggle();
@@ -369,11 +278,10 @@ $(document).ready(function () {
 		$('.td-address').show();
 		$('.td-email').show();
 	});
+
 });
 
-
 var tagDataArr = [];
-
 
 function getTagData(callback) {
 	$.ajax({

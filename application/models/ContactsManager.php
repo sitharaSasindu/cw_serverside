@@ -17,23 +17,25 @@ class ContactsManager extends CI_Model
 	{
 		$userId = $this->session->userdata('userId');
 		if (!empty($id)) {
-			$this->db->select('tagName, tagID');
-			$this->db->where('tagName', $id);
-			$query = $this->db->get('contacts_tags');
-			if ($query->num_rows() >= 1) {
+			$searchResult = array();
+			$searchTerm = explode('%20', $id); //creating an array of search words
+
+			foreach ($searchTerm as $value) {  //loop through search words
+				$this->db->select('tagName, tagID');
+				$this->db->where('tagName', $value);
+				$query = $this->db->get('contacts_tags');
 				foreach ($query->result() as $row) {
 					$str = json_encode($row->tagID);
 					$result = $this->fetchContactsByTags(trim($str, '"'));
-					return $this->getContactTags($result);
+					$searchResult[] = $this->getContactTags($result);
 				}
-			} else {
-				 $this->db->like('surName', $id);
-				$query2 = $this->db->get_where('contacts', array('userId' => $userId))->result();
-//				$query = array_merge($query1, $query2);
-				return $this->getContactTags($query2);
+				$this->db->like('surName', $value);
+				$query2 = $this->db->get_where('contacts', array('userId' => $userId)) -> result();
+				$searchResult[] = $this->getContactTags($query2);
 			}
+			return $searchResult[0];
 		} else {
-//			$query = $this->db->get_where('contacts', array('userId' => $userId));
+			$query = $this->db->get_where('contacts', array('userId' => $userId));
 			$query = $this->db->get('contacts');
 			return $this->getContactTags($query->result());
 		}
@@ -166,12 +168,12 @@ class ContactsManager extends CI_Model
 			$update = $this->db->update('contacts', $data, array('contactID' => $contactID));
 
 			$contactCurrentTags = array();
-			foreach ($this->getTagsByContact($contactID)->result() as $row){
+			foreach ($this->getTagsByContact($contactID)->result() as $row) {
 				$contactCurrentTags[] = $row->tagID;
 			}
-			$updated = explode(', ',  str_replace(array( '[', ']' ), '', $updatedTags));
+			$updated = explode(',', str_replace(array('[', ']'), '', $updatedTags));
 
-			print_r($updated);
+			print_r($updatedTags);
 
 			foreach ($contactCurrentTags as $value) {//delete current tags from contact
 				$tagsOfContact = array('contactID' => $contactID, 'tagID' => $value);

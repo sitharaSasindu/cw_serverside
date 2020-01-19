@@ -68,11 +68,11 @@ var contactEditView = Backbone.View.extend({
 		var phone = this.$('.phone').html();
 		var contactTags = this.$('.contactTags').html();
 
-		this.$('.firstName').html('<input type="text" class="form-control firstName-update" value="' + firstName + '">');
-		this.$('.surName').html('<input type="text" class="form-control surName-update" value="' + surName + '">');
+		this.$('.firstName').html('<input type="text" class="form-control firstName-update" value="' + firstName + '" required>');
+		this.$('.surName').html('<input type="text" class="form-control surName-update" value="' + surName + '" required>');
 		this.$('.address').html('<input type="text" class="form-control address-update" value="' + address + '">');
-		this.$('.email').html('<input type="text" class="form-control email-update" value="' + email + '">');
-		this.$('.phone').html('<input type="text" class="form-control phone-update" value="' + phone + '">');
+		this.$('.email').html('<input type="text" class="form-control email-update" value="' + email + '" required>');
+		this.$('.phone').html('<input type="text" class="form-control phone-update" value="' + phone + '" required>');
 		this.$('.contactTags').html('<select class="selected_tagss" name="selectedGenres[]" multiple="multiple" style="width: 100% ">' +
 			'</select>');
 
@@ -179,7 +179,8 @@ var ContactView = Backbone.View.extend({
 				});
 			},
 			error: function () {
-				console.log('fetch fail');
+				document.getElementById("error").style.display = 'block';
+				document.getElementById("error").innerHTML = 'No Contacts Found.';
 			}
 		});
 	},
@@ -230,6 +231,10 @@ $('.searchBtn').on('click', function () {
 					contacts.add(contact2);  //add searched results to view
 				}
 			});
+		},
+		error: function () {
+			document.getElementById("error").style.display = 'block';
+			document.getElementById("error").innerHTML = 'No Contacts Found.';
 		}
 	});
 });

@@ -19,9 +19,11 @@
 	<script src="<?php echo base_url('assets/js/backbone.js'); ?>"></script>
 	<script type="text/javascript">
         $(window).on('load', function () { // makes sure the whole site is loaded
+            document.getElementById("error").style.display = 'none';
             $('#status').fadeOut(); // will first fade out the loading animation
             $('#preloader').delay(450).fadeOut('slow'); // will fade out the white DIV that covers the website.
             $('body').delay(550).css({'overflow': 'visible'});
+
         })
 	</script>
 	<style>
@@ -198,6 +200,8 @@
 			<script src="<?php echo base_url('assets/js/contacts_script.js'); ?>"></script>
 			<script src="<?php echo base_url('assets/js/tags_script.js'); ?>"></script>
 
+
+			<label id='error'></label>
 		</div>
 
 

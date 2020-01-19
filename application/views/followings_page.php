@@ -45,48 +45,65 @@
 </div>
 
 <div class="background">
-<div class='container' style="background-color: #e2e0e0">
-	<div class="wall-profile">
-		<img align="left" class="wall-image-lg"
-			 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
-		<img align="left" class="wall-image-profile thumbnail"
-			 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
-		<div class="wall-profile-text">
-			<h1><?php echo $this->session->userdata('firstName'); ?>
-				<?php echo $this->session->userdata('lastName'); ?></h1>
-			<p><?php
-				$favGenreList = $this->session->userdata('musicGenre');
-				foreach ($favGenreList as $key => $item) {
-					echo $favGenreList[$key];
-					echo " ";
-				}
-				?></p>
+	<div class='container' style="background-color: #e2e0e0">
+		<div class="wall-profile">
+			<img align="left" class="wall-image-lg"
+				 src="http://kmit.in/emagazine/wp-content/uploads/2017/10/1260-music.jpg"/>
+			<img align="left" class="wall-image-profile thumbnail"
+				 src="<?php echo $this->session->userdata('avatarUrl') ?>" "/>
+			<div class="wall-profile-text">
+				<h1><?php echo $this->session->userdata('firstName'); ?>
+					<?php echo $this->session->userdata('lastName'); ?></h1>
+				<p><?php
+					$favGenreList = $this->session->userdata('musicGenre');
+					foreach ($favGenreList as $key => $item) {
+						echo $favGenreList[$key];
+						echo " ";
+					}
+					?></p>
+			</div>
 		</div>
-	</div>
 
-	<div class="navbar" style="background-color: #999999">
-		<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
-		<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
-		<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
-		<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
-		<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
-		<a class="active" href="/2016372/cw_serverside/index.php/contact"><i class="fa fa-fw fa-user"></i> Followings</a>
-		<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
-		<form class="form-inline" method="post"
-			  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
-			<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
-			<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
-		</form>
-	</div>
+		<div class="navbar" style="background-color: #999999">
+			<a href="/2016372/cw_serverside/index.php/home"><i class="fa fa-fw fa-home"></i> Home</a>
+			<a href="/2016372/cw_serverside/index.php/userProfile"><i class="fa fa-fw fa-home"></i> My Profile</a>
+			<a href="/2016372/cw_serverside/index.php/contacts"><i class="fa fa-fw fa-user"></i> Contacts</a>
+			<a href="/2016372/cw_serverside/index.php/friends"><i class="fa fa-fw fa-user"></i> Friends</a>
+			<a href="/2016372/cw_serverside/index.php/followers"><i class="fa fa-fw fa-user"></i> Followers</a>
+			<a class="active" href="/2016372/cw_serverside/index.php/contact"><i class="fa fa-fw fa-user"></i> Followings</a>
+			<a href="/2016372/cw_serverside/index.php/logout"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+			<form class="form-inline" method="post"
+				  action="/2016372/cw_serverside/index.php/FriendsController/ShowUsersByGenre">
+				<input class="form-control mr-sm-2" name="genreSearch" type="text" placeholder="Search">
+				<button class="btn btn-success" type="submit"><i class="fa fa-fw fa-search"></i>Search</button>
+			</form>
+		</div>
 
-	<?php
-	if(!empty($followings)){ ?>
+		<div id='page-small-title' class="page-small-title">Your Followers,</div>
+		<div class='page-small-title' id='page-small-title-no'>You have no Followers.</div>
+		<script>
+            $('#page-small-title').hide();
+            $('#page-small-title-no').hide();
+		</script>
 		<?php
+		if (!empty($followings)) { ?>
+			<?php
 		foreach ($followings as $row) {
-			foreach ($friends as $row2){
-				if($row != $row2){
+		if(!empty($friends)){
+		foreach ($friends as $row2) {
+		if (in_array($row, $friends)) {
+		if (count($followings) == count($friends)) {
 			?>
-					<div class='page-small-title'>You are Following,</div>
+			<script>
+                $('#page-small-title').hide();
+                $('#page-small-title-no').show();
+			</script>
+		<?php }
+		}else { ?>
+			<script>
+                $('#page-small-title').show();
+                $('#page-small-title-no').hide();
+			</script>
 			<div class='profile' style="">
 				<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
 				<label class="label-profile">
@@ -104,20 +121,42 @@
 					</div>
 				</form>
 			</div>
-		<?php
-			}else if(count($followings) == count($friends)){ ?>
-					<div class='page-small-title'>You are not Following Anyone.</div>
-				<?php	}
-			}
+		<?php }
+		} }else{ ?>
+			<script>
+                $('#page-small-title').show();
+                $('#page-small-title-no').hide();
+			</script>
+			<div class='profile' style="">
+				<img src="<?php echo $row->getProfilePhotoUrl() ?>" class='avatar' >
+				<label class="label-profile">
+					<?php echo $row->getFirstName(); ?>
+					<?php echo $row->getLastName(); ?>
+				</label>
+				<form action='/2016372/cw_serverside/index.php/FriendsController/followAUser'
+					  method='POST' class='form-group'>
+					<div style="disply:inline:Block">
+						<?php
+						echo "<input type='hidden' name='userId' value='" . $row->getUserId() . "' >" ?>
+						<input id="submit-p" class="btn btn-warning" type="submit"
+							   value="UnFollow">
+						<?php ?>
+					</div>
+				</form>
+			</div>
+		<?php	}
 		} ?>
+		<?php } else{ ?>
+			<script>
+                $('#page-small-title').hide();
+                $('#page-small-title-no').show();
+			</script>
+		<?php } ?>
 
-	<?php }else{ ?>
-		<div class='page-small-title'>You are not Following Anyone.</div>
-	<?php } ?>
 
 
 
-</div>
+	</div>
 	<div class="page-footer">
 		<div class="footer-copyright" style="color: #938c8c;">
 			© Copyright 2019. All Rights Reserved.
